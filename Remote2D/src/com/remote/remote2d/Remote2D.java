@@ -24,7 +24,7 @@ public class Remote2D {
 	public DisplayHandler displayHandler;
 	private Remote2DGame game;
 	private static final Remote2D instance = new Remote2D();
-	public static final boolean RESIZING_ENABLED = false;
+	public static final boolean RESIZING_ENABLED = true;
 	
 	/*----------GAMELOOP VARIABLES----------*/
 	public boolean running = true;
