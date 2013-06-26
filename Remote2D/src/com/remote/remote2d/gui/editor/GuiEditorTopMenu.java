@@ -178,7 +178,7 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				Remote2D.getInstance().displayHandler.setDisplayMode(Display.getDesktopDisplayMode().getWidth(),
 						Display.getDesktopDisplayMode().getHeight(), !Display.isFullscreen(), 
-						!Display.isFullscreen() && System.getProperty("os.name").toLowerCase().indexOf("mac") < 0);
+						false);
 			}else if(secSubTitle.equalsIgnoreCase("Exit"))
 			{
 				Remote2D.getInstance().guiList.pop();

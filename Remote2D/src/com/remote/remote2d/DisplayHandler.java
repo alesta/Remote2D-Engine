@@ -20,9 +20,6 @@ public class DisplayHandler {
 	public boolean fullscreen;
 	public boolean borderless;
 	
-	private boolean isResizing = false;
-	private int resizeTimer = 10;
-	
 	public DisplayHandler(int width, int height, boolean fullscreen, boolean borderless)
 	{
 		this.width = borderless ? Display.getDesktopDisplayMode().getWidth() : width;
@@ -48,22 +45,12 @@ public class DisplayHandler {
 	{
 		if(Display.getWidth() != width || Display.getHeight() != height)
 		{
-			isResizing = true;
 			width = Display.getWidth();
 			height = Display.getHeight();
-			resizeTimer = 10;
-		} else if(isResizing)
-		{
-			if(resizeTimer == 0)
-			{
-				setDisplayMode(width,height,fullscreen,false);
-				isResizing = false;
-				
-				//for(int x=0;x<Remote2D.getInstance().guiList.size();x++)
-				//	Remote2D.getInstance().guiList.get(x).initGui();
-				
-			} else
-				resizeTimer--;
+			initGL();
+			
+			for(int x=0;x<Remote2D.getInstance().guiList.size();x++)
+				Remote2D.getInstance().guiList.get(x).initGui();
 		}
 	}
 	
@@ -127,19 +114,19 @@ public class DisplayHandler {
 	        DisplayMode targetDisplayMode = null;
 			
 		if (fullscreen) {
-		    DisplayMode[] modes = Display.getAvailableDisplayModes();
-		    int freq = 0;
-					
-		    for (int i=0;i<modes.length;i++) {
-		        DisplayMode current = modes[i];
+		DisplayMode[] modes = Display.getAvailableDisplayModes();
+		int freq = 0;
+		
+		for (int i=0;i<modes.length;i++) {
+			DisplayMode current = modes[i];
 						
 			if ((current.getWidth() == width) && (current.getHeight() == height)) {
-			    if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
-			        if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
-				    targetDisplayMode = current;
-				    freq = targetDisplayMode.getFrequency();
-	                        }
-	                    }
+				if ((targetDisplayMode == null) || (current.getFrequency() >= freq)) {
+					if ((targetDisplayMode == null) || (current.getBitsPerPixel() > targetDisplayMode.getBitsPerPixel())) {
+						targetDisplayMode = current;
+						freq = targetDisplayMode.getFrequency();
+                }
+            }
 
 			    // if we've found a match for bpp and frequence against the 
 			    // original display mode then it's probably best to go for this one
@@ -159,11 +146,11 @@ public class DisplayHandler {
 	            Log.warn("Failed to find value mode: "+width+"x"+height+" fs="+fullscreen);
 	            return;
 	        }
-	        
+	        	        
 	        this.width = targetDisplayMode.getWidth();
 	        this.height = targetDisplayMode.getHeight();
 	        this.fullscreen = fullscreen;
-	        
+	        	        
 	        Display.destroy();
 	        System.setProperty("org.lwjgl.opengl.Window.undecorated", borderless ? "true" : "false");
 	        Display.setDisplayMode(targetDisplayMode);

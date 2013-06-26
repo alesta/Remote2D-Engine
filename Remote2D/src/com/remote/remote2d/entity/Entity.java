@@ -345,10 +345,6 @@ public class Entity extends EditorObject implements Cloneable {
 	{
 		Entity e = new Entity();
 		e.alpha = this.alpha;
-		for(int x=0;x<children.size();x++)
-			e.children.add(children.get(x));
-		for(int x=0;x<components.size();x++)
-			e.components.add(components.get(x));
 		e.parent = this.parent;
 		e.color = new Color(color.getRGB());
 		e.pos = this.pos.copy();
@@ -358,6 +354,19 @@ public class Entity extends EditorObject implements Cloneable {
 		e.name = this.name;
 		e.repeatTex = this.repeatTex;
 		e.resourcePath = this.resourcePath;
+		
+		for(int x=0;x<children.size();x++)
+		{
+			Entity c = children.get(x).clone();
+			c.parent = e;
+			e.children.add(e);
+		}
+		for(int x=0;x<components.size();x++)
+		{
+			Component c = components.get(x).clone();
+			c.setEntity(e);
+			e.components.add(c);
+		}
 		return e;
 	}
 

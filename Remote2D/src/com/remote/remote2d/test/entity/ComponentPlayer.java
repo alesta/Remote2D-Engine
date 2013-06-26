@@ -130,22 +130,7 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void renderBefore(boolean editor) {
-		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT)){
-			GL11.glPushMatrix();
-			GL11.glScalef(1, 1, 1);
-			//GL11.glNormal3f(entity.pos.x+entity.getDim().x/2, entity.pos.y+entity.getDim().y/2, 1);
-		}
 		
-		if(currentAnimation != null)
-		{
-			Vector2D posVec = new Vector2D(0,0);
-			posVec.x = entity.pos.x+entity.getDim().x/2-currentAnimation.getSpriteDim().x/2;
-			posVec.y = entity.pos.y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
-			currentAnimation.render(posVec, currentAnimation.getSpriteDim());
-		}
-		
-		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT))
-			GL11.glPopMatrix();
 	}
 
 	@Override
@@ -173,7 +158,22 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void renderAfter(boolean editor) {
+		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT)){
+			GL11.glPushMatrix();
+			GL11.glScalef(1, 1, 1);
+			//GL11.glNormal3f(entity.pos.x+entity.getDim().x/2, entity.pos.y+entity.getDim().y/2, 1);
+		}
 		
+		if(currentAnimation != null)
+		{
+			Vector2D posVec = new Vector2D(0,0);
+			posVec.x = entity.pos.x+entity.getDim().x/2-currentAnimation.getSpriteDim().x/2;
+			posVec.y = entity.pos.y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
+			currentAnimation.render(posVec, currentAnimation.getSpriteDim());
+		}
+		
+		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT))
+			GL11.glPopMatrix();
 	}
 
 	@Override
