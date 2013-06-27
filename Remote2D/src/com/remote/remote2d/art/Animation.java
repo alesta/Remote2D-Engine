@@ -13,7 +13,7 @@ import com.remote.remote2d.logic.Vector2DF;
 
 public class Animation implements R2DFileSaver {
 	
-	private Texture tex;
+	private String texPath;
 	private Vector2D startPos;
 	private Vector2D spriteDim;
 	private Vector2D padding;
@@ -28,9 +28,9 @@ public class Animation implements R2DFileSaver {
 	public boolean flippedY = false;
 	
 	
-	public Animation(Texture tex, Vector2D startPos, Vector2D spriteDim, Vector2D padding, Vector2D frames, int framelength)
+	public Animation(String tex, Vector2D startPos, Vector2D spriteDim, Vector2D padding, Vector2D frames, int framelength)
 	{
-		this.tex = tex;
+		this.texPath = texPath;
 		this.startPos = startPos;
 		this.spriteDim = spriteDim;
 		this.padding = padding;
@@ -49,7 +49,7 @@ public class Animation implements R2DFileSaver {
 	
 	@Override
 	public void saveR2DFile(R2DTypeCollection collection) {
-		collection.setString("texture", tex.textureLocation);
+		collection.setString("texture", texPath);
 		collection.setInteger("startPos.x", startPos.x);
 		collection.setInteger("startPos.y", startPos.y);
 		collection.setInteger("spriteDim.x", spriteDim.x);
@@ -63,7 +63,7 @@ public class Animation implements R2DFileSaver {
 
 	@Override
 	public void loadR2DFile(R2DTypeCollection collection) {
-		tex = Remote2D.getInstance().artLoader.getTexture(collection.getString("texture"));
+		texPath = collection.getString("texture");
 		startPos = new Vector2D(collection.getInteger("startPos.x"),collection.getInteger("startPos.y"));
 		spriteDim = new Vector2D(collection.getInteger("spriteDim.x"),collection.getInteger("spriteDim.y"));
 		padding = new Vector2D(collection.getInteger("padding.x"),collection.getInteger("padding.y"));
@@ -105,6 +105,8 @@ public class Animation implements R2DFileSaver {
 				currentframe = 0;
 			lastFrameTime = System.currentTimeMillis();
 		}
+		
+		Texture tex = Remote2D.getInstance().artLoader.getTexture(texPath);
 		
 		ColliderBox collider = framePos[currentframe];
 		Vector2DF imgPos = collider.pos.divideSensitive(new Vector2DF(tex.image.getWidth(),tex.image.getHeight()));
@@ -193,12 +195,6 @@ public class Animation implements R2DFileSaver {
 	public void setLastFrameTime(long lastFrameTime) {
 		this.lastFrameTime = lastFrameTime;
 		generateFrames();
-	}
-	
-	public void reload()
-	{
-		GL11.glDeleteTextures(tex.glId);
-		tex = Remote2D.getInstance().artLoader.getTexture(tex.textureLocation);
 	}
 
 	public void renderFrames() {

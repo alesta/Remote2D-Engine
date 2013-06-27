@@ -71,13 +71,6 @@ public class ArtLoader {
 		for(int x=0;x<artList.size();x++)
 			artList.get(x).removeTexture();
 		artList.clear();
-		
-		Iterator<Entry<String,Animation>> animIterator = animList.entrySet().iterator();
-		while(animIterator.hasNext())
-		{
-			Entry<String,Animation> entry = animIterator.next();
-			animList.get(entry.getKey()).reload();
-		}
 	}
 	
 	public boolean textureExists(String s)

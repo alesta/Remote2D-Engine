@@ -224,7 +224,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			if(isReady())
 			{
 				animation = new Animation(
-						Remote2D.getInstance().artLoader.getTexture(texID.text),
+						texID.text,
 						new Vector2D(Integer.parseInt(startX.text),Integer.parseInt(startY.text)),
 						new Vector2D(Integer.parseInt(dimX.text),Integer.parseInt(dimY.text)),
 						new Vector2D(Integer.parseInt(paddingX.text),Integer.parseInt(paddingY.text)),
