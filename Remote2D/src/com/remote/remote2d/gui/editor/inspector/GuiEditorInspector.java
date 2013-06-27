@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiButton;
@@ -20,6 +21,7 @@ public class GuiEditorInspector extends GuiMenu {
 	private GuiButton button;
 	private GuiButton componentButton;
 	private GuiEditor editor;
+	public int offset = 0;
 	public Vector2D pos;
 	public Vector2D dim;
 
@@ -54,8 +56,22 @@ public class GuiEditorInspector extends GuiMenu {
 	@Override
 	public void tick(int i, int j, int k, double delta) {
 		super.tick(i, j, k, delta);
+		
+		if(pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
+		{
+			if(Remote2D.getInstance().getDeltaWheel() > 0)
+				offset += 5;
+			if(Remote2D.getInstance().getDeltaWheel() < 0)
+				offset -= 5;
+			
+			if(offset > getTotalComponentHeight()-dim.y+40)
+				offset = getTotalComponentHeight()-dim.y+40;
+			if(offset < 0)
+				offset = 0;
+		}
+		
 		for(int x=0;x<components.size();x++)
-			components.get(x).tick(i,j,k,delta);
+			components.get(x).tick(i,j+offset,k,delta);
 	}
 	
 	@Override
@@ -78,7 +94,15 @@ public class GuiEditorInspector extends GuiMenu {
 		super.render();
 		
 		for(int x=0;x<components.size();x++)
+		{
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0, -offset, 0);
+			GL11.glEnable(GL11.GL_SCISSOR_TEST);
+			GL11.glScissor(pos.x, Remote2D.getInstance().displayHandler.height-dim.y+pos.y, dim.x, dim.y-40);
 			components.get(x).render();
+			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+			GL11.glPopMatrix();
+		}
 	}
 	
 	public void setCurrentEntity(Entity e)
@@ -120,6 +144,16 @@ public class GuiEditorInspector extends GuiMenu {
 			if(components.get(x).isFieldSelected())
 				return true;
 		return false;
+	}
+	
+	public int getTotalComponentHeight()
+	{
+		int height = 0;
+		for(int x=0;x<components.size();x++)
+		{
+			height += components.get(x).getHeight();
+		}
+		return height;
 	}
 	
 	@Override

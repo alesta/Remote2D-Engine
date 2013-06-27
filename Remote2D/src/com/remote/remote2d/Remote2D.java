@@ -41,6 +41,7 @@ public class Remote2D {
 	public InsertableComponentList componentList;
 	
 	private boolean mousePressed = false;
+	private int deltaWheel = 0;
 	private ArrayList<Character> charList;
 	private ArrayList<Character> charListLimited;
 	private String allowedChars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+\\][';:\"/.,?><`~ ";
@@ -198,6 +199,9 @@ public class Remote2D {
 				mousePressed = true;
 			}
 		}
+		
+		deltaWheel = Mouse.getDWheel();
+		
 		charList.clear();
 		charListLimited.clear();
 		while(Keyboard.next())
@@ -220,6 +224,11 @@ public class Remote2D {
 	public ArrayList<Character> getLimitedKeyboardList()
 	{
 		return charListLimited;
+	}
+	
+	public int getDeltaWheel()
+	{
+		return deltaWheel;
 	}
 	
 	public void render()
