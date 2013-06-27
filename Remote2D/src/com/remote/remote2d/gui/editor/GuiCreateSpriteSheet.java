@@ -34,6 +34,8 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	
 	Vector2D offset;
 	
+	int scale = 1;
+	
 	public GuiCreateSpriteSheet()
 	{
 		backgroundColor = 0x7f9ddf;
@@ -127,6 +129,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			
 			GL11.glPushMatrix();
 				GL11.glTranslatef(offset.x, offset.y, 0);
+				GL11.glScalef(scale, scale, 1);
 				GL11.glBegin(GL11.GL_QUADS);
 					GL11.glTexCoord2f(0, 0);
 					GL11.glVertex2f(0, 0);
@@ -142,6 +145,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			{
 				GL11.glPushMatrix();
 					GL11.glTranslatef(offset.x, offset.y, 0);
+					GL11.glScalef(scale, scale, 1);
 					animation.renderFrames();
 				GL11.glPopMatrix();
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
@@ -170,6 +174,11 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		animSave.tick(i, j, k, delta);
 		
 		createButton.setDisabled(!isReady());
+		
+		if(Remote2D.getInstance().getKeyboardList().contains('[') && scale >= 2)
+			scale /= 2;
+		else if(Remote2D.getInstance().getKeyboardList().contains(']'))
+			scale *= 2;
 
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text) )
 		{
@@ -187,9 +196,9 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			if(right)
 				offset.x -= 5*delta;
 			
-			if(offset.x+tex.image.getWidth() < getWidth())
+			if(offset.x+tex.image.getWidth()*scale < getWidth())
 				offset.x = getWidth()-tex.image.getWidth();
-			if(offset.y+tex.image.getHeight() < getHeight())
+			if(offset.y+tex.image.getHeight()*scale < getHeight())
 				offset.y = getHeight()-tex.image.getHeight();
 			
 			if(offset.x > 300)
