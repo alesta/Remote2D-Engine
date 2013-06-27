@@ -66,7 +66,7 @@ public class TextureLoader {
 		    try {
 			   return ImageIO.read(new File(Remote2D.getJarPath().getPath()+loc));
 			} catch (IOException e) {
-				throw new Remote2DException(e,"Failed to load image!");
+				throw new Remote2DException(e,"Failed to load image: "+Remote2D.getJarPath().getPath()+loc+"!");
 			}
 	   }
 }

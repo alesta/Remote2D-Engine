@@ -316,6 +316,8 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 
 	public void setMap(Map map) {
 		this.map = map;
+		
+		inspector.setCurrentEntity(null);
 	}
 
 	public Entity getSelectedEntity() {

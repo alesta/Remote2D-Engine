@@ -242,6 +242,11 @@ public class Remote2D {
 		CursorLoader.render();
 	}
 	
+	public Remote2DGame getGame()
+	{
+		return game;
+	}
+	
 	public void shutDown()
 	{
 		Log.info("Remote2D Engine Shutting Down");

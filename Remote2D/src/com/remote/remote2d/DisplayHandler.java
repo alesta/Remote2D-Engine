@@ -1,8 +1,11 @@
 package com.remote.remote2d;
 
 import java.awt.Window;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -11,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.CursorLoader;
 import com.remote.remote2d.art.Texture;
+import com.remote.remote2d.art.TextureLoader;
 import com.remote.remote2d.logic.Vector2D;
 
 public class DisplayHandler {
@@ -33,12 +37,47 @@ public class DisplayHandler {
 			Display.setResizable(Remote2D.RESIZING_ENABLED);
 			Display.setFullscreen(fullscreen && !borderless);
 			
+			setIcons(Remote2D.getInstance().getGame().getIconPath());
+			
 			Display.create();
 		} catch (LWJGLException e) {
 			throw new Remote2DException(e,"Failed to create LWJGL Display");
 		}
 		
 		initGL();
+	}
+	
+	public void setIcons(String[] icons)
+	{
+		if(icons == null)
+			return;
+		ByteBuffer[] buffers = new ByteBuffer[icons.length];
+		for(int x=0;x<icons.length;x++)
+			buffers[x] = getBufferFromImage(TextureLoader.loadImage(icons[x]),4);
+		
+		Display.setIcon(buffers);
+	}
+	
+	public ByteBuffer getBufferFromImage(BufferedImage image, int BYTES_PER_PIXEL)
+	{
+		int[] pixels = new int[image.getWidth() * image.getHeight()];
+        image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+
+        ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * BYTES_PER_PIXEL); //4 for RGBA, 3 for RGB
+        
+        for(int y = 0; y < image.getHeight(); y++){
+            for(int x = 0; x < image.getWidth(); x++){
+                int pixel = pixels[y * image.getWidth() + x];
+                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
+                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
+                buffer.put((byte) (pixel & 0xFF));               // Blue component
+                buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
+            }
+        }
+
+        buffer.flip();
+        
+        return buffer;
 	}
 	
 	public void checkDisplayResolution()
@@ -151,13 +190,13 @@ public class DisplayHandler {
 	        this.height = targetDisplayMode.getHeight();
 	        this.fullscreen = fullscreen;
 	        	        
-	        Display.destroy();
+	        //Display.destroy();
 	        System.setProperty("org.lwjgl.opengl.Window.undecorated", borderless ? "true" : "false");
 	        Display.setDisplayMode(targetDisplayMode);
 	        Display.setFullscreen(fullscreen);
 	        Display.setLocation(posX, posY);
 	        Display.setVSyncEnabled(fullscreen);
-	        Display.create();
+	       // Display.create();
 	        
 	        initGL();
 				
