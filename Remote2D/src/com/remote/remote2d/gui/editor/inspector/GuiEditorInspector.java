@@ -59,9 +59,9 @@ public class GuiEditorInspector extends GuiMenu {
 		
 		if(pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
 		{
-			if(Remote2D.getInstance().getDeltaWheel() > 0)
-				offset += 5;
 			if(Remote2D.getInstance().getDeltaWheel() < 0)
+				offset += 5;
+			if(Remote2D.getInstance().getDeltaWheel() > 0)
 				offset -= 5;
 			
 			if(offset > getTotalComponentHeight()-dim.y+40)

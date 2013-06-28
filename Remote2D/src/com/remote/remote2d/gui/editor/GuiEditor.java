@@ -106,9 +106,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(map != null)
 		{
-			map.render(true);
 			if(gridSnap)
 				map.drawGrid();
+			map.render(true);
 		}
 		GL11.glColor4f(1, 1, 1, 0.5f);
 		if(stampEntity != null)
@@ -315,8 +315,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	}
 
 	public void setMap(Map map) {
+		if(map != null && !this.map.equals(map))
+			map.camera.y = -20;
 		this.map = map;
-		
 		inspector.setCurrentEntity(null);
 	}
 

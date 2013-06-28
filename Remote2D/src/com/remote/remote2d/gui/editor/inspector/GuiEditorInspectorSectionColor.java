@@ -50,7 +50,8 @@ public class GuiEditorInspectorSectionColor extends GuiEditorInspectorSection {
 	public void setData(Object o) {
 		if(o instanceof Color)
 		{
-			textField.text = Integer.toString(((Color)o).getRGB(), 16);
+			
+			textField.text = Integer.toHexString(((Color)o).getRGB()).substring(2);
 		}
 	}
 	

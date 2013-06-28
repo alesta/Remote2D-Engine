@@ -11,6 +11,7 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
 import com.remote.remote2d.logic.Vector2D;
@@ -38,7 +39,7 @@ public class Entity extends EditorObject implements Cloneable {
 	public String resourcePath = "";
 	public boolean repeatTex = false;
 	public boolean linearScaling = false;
-	public Color color = new Color(0xffff00);
+	public Color color = new Color(0xaaaaaa);
 	public float alpha = 1.0f;
 	
 	private static final String slashLoc = "/res/gui/slash.png";
@@ -270,13 +271,21 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public void render(boolean editor)
 	{
+		boolean selected = false;
+		if(editor)
+			if(Remote2D.getInstance().guiList.peek() instanceof GuiEditor)
+				if(((GuiEditor)Remote2D.getInstance().guiList.peek()).getSelectedEntity() == this)
+					selected = true;
 		if(editor)
 		{
 			Texture tex = Remote2D.getInstance().artLoader.getTexture(slashLoc, false, true);
 			float maxX = ((float)dim.x)/32f;
 			float maxY = ((float)dim.y)/32f;
 			tex.bind();
-			Gui.bindRGB(0xffff00);
+			if(selected)
+				Gui.bindRGB(0xff0000);
+			else
+				Gui.bindRGB(0xffaaaa);
 			GL11.glBegin(GL11.GL_QUADS);
 				GL11.glTexCoord2f(0, 0);
 				GL11.glVertex2f(pos.x,pos.y);
@@ -287,15 +296,6 @@ public class Entity extends EditorObject implements Cloneable {
 				GL11.glTexCoord2f(0, maxY);
 				GL11.glVertex2f(pos.x, pos.y+dim.y);
 			GL11.glEnd();
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glBegin(GL11.GL_LINE_STRIP);
-				GL11.glVertex2f(pos.x,pos.y);
-				GL11.glVertex2f(pos.x+dim.x, pos.y);
-				GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-				GL11.glVertex2f(pos.x, pos.y+dim.y);
-				GL11.glVertex2f(pos.x,pos.y);
-			GL11.glEnd();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			Gui.bindRGB(0xffffff);
 		}
 		
@@ -337,6 +337,23 @@ public class Entity extends EditorObject implements Cloneable {
 			GL11.glEnd();
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
+		
+		if(editor && selected)
+		{
+			Gui.bindRGB(0xff0000);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glBegin(GL11.GL_LINE_STRIP);
+				GL11.glVertex2f(pos.x,pos.y);
+				GL11.glVertex2f(pos.x+dim.x, pos.y);
+				GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
+				GL11.glVertex2f(pos.x, pos.y+dim.y);
+				GL11.glVertex2f(pos.x,pos.y);
+			GL11.glEnd();
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			Gui.bindRGB(0xffffff);
+		}
+		
+		Gui.bindRGB(0xffffff);
 		
 		
 	}
