@@ -16,6 +16,22 @@ public abstract class Vector {
 	public abstract int getVectorLength();
 	public abstract Vector convertElementsToVector(float[] elements);
 	
+	public boolean equals(Object o)
+	{
+		if(!(o instanceof Vector))
+			return false;
+		
+		Vector v = (Vector)o;
+		
+		if(getElements().length != v.getElements().length)
+			return false;
+		
+		for(int x=0;x<getElements().length;x++)
+			if(getElements()[x] != v.getElements()[x])
+				return false;
+		return true;
+	}
+	
 	public float[] removeExcessElements(float[] elements)
 	{
 		int sizeToUse = Math.min(elements.length, getVectorLength());
