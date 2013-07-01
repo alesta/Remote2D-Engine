@@ -34,6 +34,7 @@ public abstract class EditorObject implements R2DFileSaver {
 	 * Called when this object is changed in the editor.
 	 */
 	public abstract void apply();
+	
 	public void saveR2DFile(R2DTypeCollection collection)
 	{
 		Field[] fields = this.getClass().getFields();

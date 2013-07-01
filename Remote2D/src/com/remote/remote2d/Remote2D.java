@@ -44,6 +44,7 @@ public class Remote2D {
 	private int deltaWheel = 0;
 	private ArrayList<Character> charList;
 	private ArrayList<Character> charListLimited;
+	private ArrayList<Integer> keyboardList;
 	private String allowedChars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+\\][';:\"/.,?><`~ ";
 	
 	public static void startRemote2D(Remote2DGame game) {
@@ -88,6 +89,7 @@ public class Remote2D {
 		guiList = new Stack<GuiMenu>();
 		charList = new ArrayList<Character>();
 		charListLimited = new ArrayList<Character>();
+		keyboardList = new ArrayList<Integer>();
 		
 		componentList = new InsertableComponentList();
 		componentList.addInsertableComponent("Box Collider", new ComponentColliderBox(null));
@@ -204,6 +206,7 @@ public class Remote2D {
 		
 		charList.clear();
 		charListLimited.clear();
+		keyboardList.clear();
 		while(Keyboard.next())
 		{
 			if(Keyboard.getEventKeyState())
@@ -212,6 +215,7 @@ public class Remote2D {
 				if(allowedChars.contains((""+c)) || c == '\b')
 					charListLimited.add(c);
 				charList.add(c);
+				keyboardList.add(Keyboard.getEventKey());
 			}
 		}
 	}
@@ -224,6 +228,11 @@ public class Remote2D {
 	public ArrayList<Character> getLimitedKeyboardList()
 	{
 		return charListLimited;
+	}
+	
+	public ArrayList<Integer> getIntegerKeyboardList()
+	{
+		return keyboardList;
 	}
 	
 	public int getDeltaWheel()

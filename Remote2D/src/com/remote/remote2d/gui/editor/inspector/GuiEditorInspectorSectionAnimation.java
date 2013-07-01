@@ -1,5 +1,7 @@
 package com.remote.remote2d.gui.editor.inspector;
 
+import org.lwjgl.input.Keyboard;
+
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
@@ -39,7 +41,7 @@ public class GuiEditorInspectorSectionAnimation extends GuiEditorInspectorSectio
 
 	@Override
 	public void render() {
-		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, 0xffffff);
+		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
 		textField.render();
 	}
 	
@@ -59,6 +61,16 @@ public class GuiEditorInspectorSectionAnimation extends GuiEditorInspectorSectio
 	@Override
 	public boolean isSelected() {
 		return textField.isSelected();
+	}
+
+	@Override
+	public boolean isComplete() {
+		return Remote2D.getInstance().artLoader.R2DExists(textField.text);
+	}
+
+	@Override
+	public boolean hasFieldBeenChanged() {
+		return textField.isSelected() && isComplete() && Remote2D.getInstance().getIntegerKeyboardList().contains(Keyboard.KEY_RETURN);
 	}
 
 }

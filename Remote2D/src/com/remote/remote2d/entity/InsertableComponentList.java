@@ -42,4 +42,9 @@ public class InsertableComponentList {
 		}
 		return null;
 	}
+	
+	public Iterator<Entry<String,Component>> getIterator()
+	{
+		return insertableComponents.entrySet().iterator();
+	}
 }

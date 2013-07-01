@@ -23,5 +23,6 @@ public abstract class GuiEditorInspectorSection extends Gui {
 	public abstract void setData(Object o);
 	public abstract void deselect();
 	public abstract boolean isSelected();
-	
+	public abstract boolean isComplete();
+	public abstract boolean hasFieldBeenChanged();
 }

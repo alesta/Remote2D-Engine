@@ -107,17 +107,22 @@ public class EditorObjectWizard {
 	{
 		for(int x=0;x<sections.size();x++)
 		{
-			try {
-				Field field = component.getClass().getField(sections.get(x).name);
-				field.set(component, sections.get(x).getData());
-			} catch (NoSuchFieldException e) {
-				Log.error("Field doesn't exist: "+sections.get(x).name);
-			} catch (Exception e) {
-				throw new Remote2DException(e);
-			}
+			setComponentField(x);
 		}
 		
 		component.apply();
+	}
+	
+	public void setComponentField(int x)
+	{
+		try {
+			Field field = component.getClass().getField(sections.get(x).name);
+			field.set(component, sections.get(x).getData());
+		} catch (NoSuchFieldException e) {
+			Log.error("Field doesn't exist: "+sections.get(x).name);
+		} catch (Exception e) {
+			throw new Remote2DException(e);
+		}
 	}
 	
 	public void deselectFields()
@@ -140,6 +145,14 @@ public class EditorObjectWizard {
 		for(int x=0;x<sections.size();x++)
 			height += sections.get(x).getHeight();
 		return height;
+	}
+	
+	public int hasFieldBeenChanged()
+	{
+		for(int x=0;x<sections.size();x++)
+			if(sections.get(x).hasFieldBeenChanged())
+				return x;
+		return -1;
 	}
 	
 	public void tick(int i, int j, int k, double delta)

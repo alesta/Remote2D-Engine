@@ -43,6 +43,7 @@ public class ParticleSystem extends EditorObject {
 	public long particleLifeDeviation = 10l;
 	
 	private Map map;
+	private long startTime;
 	private Random random;
 	
 	public ParticleSystem(Map map)
@@ -50,6 +51,7 @@ public class ParticleSystem extends EditorObject {
 		this.map = map;
 		particles = new ArrayList<Particle>();
 		random = new Random();
+		startTime = System.currentTimeMillis();
 	}
 	
 	public boolean spawnParticle()
@@ -75,13 +77,23 @@ public class ParticleSystem extends EditorObject {
 		return true;
 	}
 	
-	public void tick(double delta)
+	public void tick(double delta, boolean preview)
 	{
-		for(int x=0;x<maxSpawnRate;x++)
-			spawnParticle();
+		if(System.currentTimeMillis()-startTime < systemLength)
+		{
+			for(int x=0;x<maxSpawnRate;x++)
+				spawnParticle();
+		}
 		
 		for(int x=0;x<particles.size();x++)
-			particles.get(x).tick(map, delta);
+		{
+			boolean despawn = particles.get(x).tick(map, delta);
+			if(despawn)
+			{
+				particles.remove(x);
+				x--;
+			}
+		}
 	}
 	
 	public void render()

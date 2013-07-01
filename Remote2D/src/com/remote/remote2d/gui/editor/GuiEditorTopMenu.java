@@ -1,6 +1,8 @@
 package com.remote.remote2d.gui.editor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -8,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.entity.Entity;
+import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiInGame;
 import com.remote.remote2d.io.R2DFileManager;
@@ -44,6 +47,17 @@ public class GuiEditorTopMenu extends Gui {
 		if(world.getEnabled())
 			currentX += world.width;
 		
+		Iterator<Entry<String,Component>> iterator = Remote2D.getInstance().componentList.getIterator();
+		ArrayList<String> contents = new ArrayList<String>();
+		while(iterator.hasNext())
+			contents.add(iterator.next().getKey());
+		
+		String[] componentContents = new String[contents.size()];
+		componentContents = contents.toArray(componentContents);
+		GuiEditorTopMenuSection component = new GuiEditorTopMenuSection(currentX, 0, height, componentContents, "Component", this);
+		if(component.getEnabled())
+			currentX += component.width;
+		
 		String[] windowContents = {"Toggle Fullscreen","Exit"};
 		GuiEditorTopMenuSection window = new GuiEditorTopMenuSection(currentX, 0, height, windowContents, "Window", this);
 		if(window.getEnabled())
@@ -57,6 +71,7 @@ public class GuiEditorTopMenu extends Gui {
 		sections.add(file);
 		sections.add(world);
 		sections.add(edit);
+		sections.add(component);
 		sections.add(window);
 		sections.add(dev);
 	}
@@ -118,6 +133,7 @@ public class GuiEditorTopMenu extends Gui {
 	@Override
 	public void tick(int i, int j, int k, double delta) {
 		getSectionWithName("World").setEnabled(editor.getMap() != null);
+		getSectionWithName("Component").setEnabled(editor.getMap() != null);
 		
 		if(isMenuHovered(i,j))
 			editor.disableElementPlace();
@@ -214,6 +230,13 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				Remote2D.getInstance().map = editor.getMap().copy();
 				Remote2D.getInstance().guiList.push(new GuiInGame());
+			}
+		} else if(secTitle.equalsIgnoreCase("Component"))
+		{
+			if(editor.getSelectedEntity() != null)
+			{
+				editor.getSelectedEntity().addComponent(Remote2D.getInstance().componentList.getComponent(secSubTitle));
+				editor.getInspector().setCurrentEntity(editor.getSelectedEntity());
 			}
 		}
 	}

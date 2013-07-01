@@ -19,7 +19,6 @@ public class GuiEditorInspector extends GuiMenu {
 	public Entity currentEntity;
 	private ArrayList<EditorObjectWizard> components;
 	private GuiButton button;
-	private GuiButton componentButton;
 	private GuiEditor editor;
 	public int offset = 0;
 	public Vector2D pos;
@@ -44,10 +43,6 @@ public class GuiEditorInspector extends GuiMenu {
 			button = new GuiButton(0,new Vector2D(pos.x+dim.x/2-100,pos.y+dim.y-20),new Vector2D(200,20),"Apply");
 			button.setDisabled(currentEntity == null);
 			buttonList.add(button);
-			
-			componentButton = new GuiButton(1,new Vector2D(pos.x+dim.x/2-100,pos.y+dim.y-40),new Vector2D(200,20),"Add Component");
-			componentButton.setDisabled(currentEntity == null);
-			buttonList.add(componentButton);
 		}
 		
 		
@@ -64,14 +59,20 @@ public class GuiEditorInspector extends GuiMenu {
 			if(Remote2D.getInstance().getDeltaWheel() > 0)
 				offset -= 5;
 			
-			if(offset > getTotalComponentHeight()-dim.y+40)
-				offset = getTotalComponentHeight()-dim.y+40;
+			if(offset > getTotalComponentHeight()-dim.y+20)
+				offset = getTotalComponentHeight()-dim.y+20;
 			if(offset < 0)
 				offset = 0;
 		}
 		
 		for(int x=0;x<components.size();x++)
+		{
 			components.get(x).tick(i,j+offset,k,delta);
+			
+			int changed = components.get(x).hasFieldBeenChanged();
+			if(changed != -1)
+				components.get(x).setComponentField(changed);
+		}
 	}
 	
 	@Override
@@ -98,7 +99,7 @@ public class GuiEditorInspector extends GuiMenu {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, -offset, 0);
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			GL11.glScissor(pos.x, Remote2D.getInstance().displayHandler.height-dim.y+pos.y, dim.x, dim.y-40);
+			GL11.glScissor(pos.x, pos.y, dim.x, dim.y-20);
 			components.get(x).render();
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 			GL11.glPopMatrix();
@@ -110,7 +111,6 @@ public class GuiEditorInspector extends GuiMenu {
 		this.currentEntity = e;
 		components.clear();
 		button.setDisabled(currentEntity == null);
-		componentButton.setDisabled(currentEntity == null);
 		if(currentEntity==null)
 			return;
 		//Log.debug("Setting Inspector Entity:"+e.name);

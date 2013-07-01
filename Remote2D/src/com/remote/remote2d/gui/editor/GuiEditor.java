@@ -315,7 +315,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	}
 
 	public void setMap(Map map) {
-		if(map != null && !this.map.equals(map))
+		if(map != null && !map.equals(map))
 			map.camera.y = -20;
 		this.map = map;
 		inspector.setCurrentEntity(null);

@@ -1,5 +1,6 @@
 package com.remote.remote2d.gui.editor.inspector;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
@@ -84,7 +85,7 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 
 	@Override
 	public void render() {
-		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, 0xffffff);
+		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
 		textField1.render();
 		textField2.render();
 		
@@ -126,6 +127,16 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 	@Override
 	public boolean isSelected() {
 		return textField1.isSelected() || textField2.isSelected();
+	}
+
+	@Override
+	public boolean isComplete() {
+		return !textField1.text.trim().equals("") && !textField2.text.trim().equals("");
+	}
+	
+	@Override
+	public boolean hasFieldBeenChanged() {
+		return (textField1.isSelected() || textField2.isSelected()) && isComplete() && Remote2D.getInstance().getIntegerKeyboardList().contains(Keyboard.KEY_RETURN);
 	}
 
 }
