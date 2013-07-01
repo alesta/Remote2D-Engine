@@ -94,16 +94,17 @@ public class GuiEditorInspector extends GuiMenu {
 	public void render() {
 		super.render();
 		
+		GL11.glPushMatrix();
+		GL11.glScissor(pos.x, getHeight()-dim.y, dim.x, dim.y-20);
+		GL11.glTranslatef(0, -offset, 0);
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		
 		for(int x=0;x<components.size();x++)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0, -offset, 0);
-			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			GL11.glScissor(pos.x, pos.y, dim.x, dim.y-20);
 			components.get(x).render();
-			GL11.glDisable(GL11.GL_SCISSOR_TEST);
-			GL11.glPopMatrix();
 		}
+		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		GL11.glPopMatrix();
 	}
 	
 	public void setCurrentEntity(Entity e)

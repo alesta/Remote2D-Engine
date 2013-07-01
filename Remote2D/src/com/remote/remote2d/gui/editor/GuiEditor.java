@@ -22,6 +22,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	private GuiEditorTopMenu menu;
 	private GuiEditorInspector inspector;
+	private GuiEditorPreview preview;
 	private GuiEditorBrowser browser;
 	private Stack<GuiWindow> windowStack;
 	
@@ -52,9 +53,15 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		{
 			inspector = new GuiEditorInspector(
 					new Vector2D(0,20),
-					new Vector2D(300,getHeight()-20), this);
+					new Vector2D(300,getHeight()-320), this);
 		} else
-			inspector.dim = new Vector2D(300,getHeight()-20);
+			inspector.dim = new Vector2D(300,getHeight()-320);
+		
+		if(preview == null)
+		{
+			preview = new GuiEditorPreview(inspector,new Vector2D(0,getHeight()-300),new Vector2D(300,300));
+		} else
+			preview.pos.y = getHeight()-300;
 		
 		inspector.initGui();
 		
@@ -123,7 +130,10 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		GL11.glColor4f(1, 1, 1, 1);
 		
 		if(selectedEntity != null)
+		{
 			inspector.render();
+			preview.render();
+		}
 		if(map != null)
 			browser.render();
 		

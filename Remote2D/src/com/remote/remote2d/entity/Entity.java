@@ -393,8 +393,18 @@ public class Entity extends EditorObject implements Cloneable {
 
 	@Override
 	public void apply() {
-		// TODO Auto-generated method stub
 		
+	}
+
+	public void renderPreview() {
+		GL11.glPushMatrix();
+		GL11.glTranslatef(-pos.x, -pos.y, 0);
+		for(int x=0;x<getComponents().size();x++)
+			getComponents().get(x).renderBefore(false);
+		render(false);
+		for(int x=0;x<getComponents().size();x++)
+			getComponents().get(x).renderAfter(false);
+		GL11.glPopMatrix();
 	}
 		
 }
