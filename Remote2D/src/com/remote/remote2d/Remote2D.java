@@ -28,8 +28,9 @@ public class Remote2D {
 	
 	/*----------GAMELOOP VARIABLES----------*/
 	public boolean running = true;
-	int fps = 0;
-	int lastFpsTime = 0;
+	private int fpsCounter = 0;
+	private int fps = 0;
+	private int lastFpsTime = 0;
 	
 	/*----------GAME VARIABLES--------------*/
 	public Map map;
@@ -121,7 +122,7 @@ public class Remote2D {
 	
 		    // update the frame counter
 		    lastFpsTime += updateLength;
-		    fps++;
+		    fpsCounter++;
 		      
 		    // update our FPS counter if a second has passed since
 		    // we last recorded
@@ -129,7 +130,8 @@ public class Remote2D {
 		    {
 		       //System.out.println("(FPS: "+fps+")");
 		       lastFpsTime = 0;
-		       fps = 0;
+		       fps = fpsCounter;
+		       fpsCounter = 0;
 		    }
 		      
 		    // update the game logic
@@ -263,6 +265,11 @@ public class Remote2D {
 	public Remote2DGame getGame()
 	{
 		return game;
+	}
+	
+	public int getFPS()
+	{
+		return fps;
 	}
 	
 	public void shutDown()

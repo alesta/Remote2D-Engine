@@ -2,11 +2,9 @@ package com.remote.remote2d.entity;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
@@ -385,6 +383,17 @@ public class Entity extends EditorObject implements Cloneable {
 			e.components.add(c);
 		}
 		return e;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T extends Component> ArrayList<T> getComponentsOfType(Class<T> type)
+	{
+		ArrayList<T> returnComponents = new ArrayList<T>();
+		for(int x=0;x<components.size();x++)
+			if(type.isInstance(components.get(x)))
+				returnComponents.add((T) components.get(x));
+		
+		return returnComponents;
 	}
 
 	public int getColliderSize() {

@@ -2,7 +2,6 @@ package com.remote.remote2d.entity;
 
 import java.util.ArrayList;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.entity.component.Component;
 
 public class EntityList {

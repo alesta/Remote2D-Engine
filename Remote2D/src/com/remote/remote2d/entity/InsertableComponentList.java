@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.entity.component.Component;
 
 public class InsertableComponentList {

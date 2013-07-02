@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Fonts;
 
 public class GuiInGame extends GuiMenu {
 	
@@ -23,6 +24,7 @@ public class GuiInGame extends GuiMenu {
 	public void render()
 	{
 		Remote2D.getInstance().map.render(false);
+		Fonts.get("Arial").drawString("FPS: "+Remote2D.getInstance().getFPS(), 10, 10, 20, 0x000000);
 	}
 	
 	@Override

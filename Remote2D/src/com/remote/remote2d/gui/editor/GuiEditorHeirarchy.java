@@ -8,13 +8,13 @@ import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.logic.Vector2D;
 
-public class GuiEditorBrowser extends GuiMenu {
+public class GuiEditorHeirarchy extends GuiMenu {
 	
 	public Vector2D pos = new Vector2D(0,20);
 	public Vector2D dim;
 	private GuiEditor editor;
 	
-	public GuiEditorBrowser(Vector2D pos, Vector2D dim, GuiEditor editor)
+	public GuiEditorHeirarchy(Vector2D pos, Vector2D dim, GuiEditor editor)
 	{
 		this.editor = editor;
 		this.pos = pos;
@@ -56,7 +56,7 @@ public class GuiEditorBrowser extends GuiMenu {
 			GL11.glVertex2f(pos.x+dim.x,pos.y+dim.y);
 			GL11.glVertex2f(pos.x,pos.y+dim.y);
 		GL11.glEnd();
-		GL11.glColor4f(1, 1, 1, 0.5f);
+		GL11.glColor4f(1, 1, 1, 1f);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
 		if(editor.getMap() == null)

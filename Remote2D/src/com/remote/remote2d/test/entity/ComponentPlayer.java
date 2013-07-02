@@ -10,6 +10,7 @@ import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.logic.Vector2D;
 import com.remote.remote2d.logic.Vector2DF;
+import com.remote.remote2d.particles.ParticleSystem;
 
 public class ComponentPlayer extends Component {
 	
@@ -25,6 +26,8 @@ public class ComponentPlayer extends Component {
 	private Animation currentAnimation;
 	private int stateTimer = 0;
 	
+	private ParticleSystem testParticles;
+	
 	private Vector2DF velocity = new Vector2DF(0,0);
 	private Vector2DF acceleration = new Vector2DF(0,1);
 	private Vector2D maxVelocity = new Vector2D(5,-1);
@@ -32,6 +35,8 @@ public class ComponentPlayer extends Component {
 	public ComponentPlayer(Entity entity)
 	{
 		super(entity);
+		
+		testParticles = new ParticleSystem(Remote2D.getInstance().map);
 	}
 
 	@Override
@@ -120,6 +125,10 @@ public class ComponentPlayer extends Component {
 		
 		if(currentAnimation != null)
 			currentAnimation.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
+		
+		
+		testParticles.pos = entity.pos.copy();
+		testParticles.tick(delta, false);
 			
 	}
 	
@@ -174,6 +183,8 @@ public class ComponentPlayer extends Component {
 		
 		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT))
 			GL11.glPopMatrix();
+		
+		testParticles.render();
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2D;
@@ -48,22 +49,26 @@ public class Particle {
 	public boolean tick(Map map, double delta)
 	{
 		life = System.currentTimeMillis()-startTime;
+		
 		if(life >= lifeLength)
 			return false;
+			
 		
-		velocity.add(environment);
+		velocity = velocity.add(environment);
 		Vector2D correction = new Vector2D(0,0);
 		if(map != null)
-			map.getCorrection(pos.subtract(new Vector2D(dim/2,dim/2)).getColliderWithDim(new Vector2D(dim,dim)), velocity);
+			correction = map.getCorrection(pos.subtract(new Vector2D(dim/2,dim/2)).getColliderWithDim(new Vector2D(dim,dim)), velocity);
 		pos = pos.add(velocity.add(correction));
 		
 		if(!correction.equals(new Vector2D(0,0)))
-			velocity = velocity.multiply(new Vector2D(-1,-1));
+		{
+			velocity = velocity.add(velocity.multiply(correction.normalize()).multiply(new Vector2D(2,2)));
+		}
 		
 		float percentage = ((float)life)/((float)lifeLength);
-		float red = (float) Interpolator.linearInterpolate(startColor.getRed(), endColor.getRed(), percentage);
-		float green = (float) Interpolator.linearInterpolate(startColor.getGreen(), endColor.getGreen(), percentage);
-		float blue = (float) Interpolator.linearInterpolate(startColor.getBlue(), endColor.getBlue(), percentage);
+		float red = (float) Interpolator.linearInterpolate(startColor.getRed(), endColor.getRed(), percentage)/255f;
+		float green = (float) Interpolator.linearInterpolate(startColor.getGreen(), endColor.getGreen(), percentage)/255f;
+		float blue = (float) Interpolator.linearInterpolate(startColor.getBlue(), endColor.getBlue(), percentage)/255f;
 		color = new Color(red,green,blue);
 		
 		dim = (int) Interpolator.linearInterpolate(startSize, endSize, percentage);
@@ -75,6 +80,7 @@ public class Particle {
 	public void render()
 	{
 		float[] color = Gui.getRGB(this.color.getRGB());
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(color[0],color[1],color[2],alpha);
 		GL11.glBegin(GL11.GL_QUADS);
 			GL11.glVertex2f(pos.x-dim/2, pos.y-dim/2);
@@ -83,6 +89,7 @@ public class Particle {
 			GL11.glVertex2f(pos.x-dim/2, pos.y+dim/2);
 		GL11.glEnd();
 		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
 }

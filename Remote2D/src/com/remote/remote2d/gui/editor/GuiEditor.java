@@ -23,7 +23,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private GuiEditorTopMenu menu;
 	private GuiEditorInspector inspector;
 	private GuiEditorPreview preview;
-	private GuiEditorBrowser browser;
+	private GuiEditorHeirarchy heirarchy;
 	private Stack<GuiWindow> windowStack;
 	
 	private Map map;
@@ -65,17 +65,17 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		inspector.initGui();
 		
-		if(browser == null)
+		if(heirarchy == null)
 		{
-			browser = new GuiEditorBrowser(new Vector2D(getWidth()-300,20),
+			heirarchy = new GuiEditorHeirarchy(new Vector2D(getWidth()-300,20),
 					new Vector2D(300,getHeight()-20), this);
 		} else
 		{
-			browser.pos = new Vector2D(getWidth()-300,20);
-			browser.dim = new Vector2D(300,getHeight()-20);
+			heirarchy.pos = new Vector2D(getWidth()-300,20);
+			heirarchy.dim = new Vector2D(300,getHeight()-20);
 		}
 		
-		browser.initGui();
+		heirarchy.initGui();
 		
 		if(map != null)
 			map.getEntityList().reloadTextures();
@@ -135,7 +135,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			preview.render();
 		}
 		if(map != null)
-			browser.render();
+			heirarchy.render();
 		
 		for(int x=0;x<windowStack.size();x++)
 		{
@@ -178,12 +178,12 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(windowStack.size() == 0)
 		{
 			inspector.tick(i, j, k, delta);
-			browser.tick(i, j, k, delta);
+			heirarchy.tick(i, j, k, delta);
 		}
 		else if(!windowStack.peek().isSelected())
 		{
 			inspector.tick(i, j, k, delta);
-			browser.tick(i, j, k, delta);
+			heirarchy.tick(i, j, k, delta);
 		}
 		
 		if(!inspector.isTyping())
@@ -218,7 +218,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				inspector.setCurrentEntity(selectedEntity);
 			} else if(map != null && !(selectedEntity != null && (
 				   inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2D(i,j))
-					|| browser.pos.getColliderWithDim(browser.dim).isPointInside(new Vector2D(i,j)))))
+					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2D(i,j)))))
 			{
 				selectedEntity = map.getTopEntityAtPoint(new Vector2D( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale)));
 				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2D( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale))));
