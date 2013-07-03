@@ -28,7 +28,7 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		if(editor.getMap() == null)
 			return;
 		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
@@ -47,7 +47,7 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	}
 
 	@Override
-	public void render() {
+	public void render(float interpolation) {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0,0,0,0.5f);
 		GL11.glBegin(GL11.GL_QUADS);

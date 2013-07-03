@@ -38,7 +38,7 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 	}
 
 	@Override
-	public void renderContents() {
+	public void renderContents(float interpolation) {
 		if(mainCollider != null)
 			mainCollider.drawCollider();
 		if(moveCollider != null)
@@ -66,9 +66,9 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
+		super.tick(i, j, k);
 		altMoveCollider = null;
 		rawMoveCollider = null;
 		if(mainCollider != null && moveCollider != null)

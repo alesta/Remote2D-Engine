@@ -13,8 +13,8 @@ public abstract class Gui {
 		
 	}
 	
-	public abstract void tick(int i, int j, int k, double delta);
-	public abstract void render();
+	public abstract void tick(int i, int j, int k);
+	public abstract void render(float interpolation);
 	
 	public static float[] getRGB(int rgb)
 	{

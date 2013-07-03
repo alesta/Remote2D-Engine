@@ -46,7 +46,7 @@ public abstract class GuiWindow extends Gui {
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		boolean buttonOverride = false;
 		
 		if(!pos.getColliderWithDim(dim.add(new Vector2D(20,20))).isPointInside(new Vector2D(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
@@ -96,7 +96,7 @@ public abstract class GuiWindow extends Gui {
 		
 		for(int x=0;x<buttonList.size();x++)
 		{
-			buttonList.get(x).tick(getMouseInWindow(i,j).x, getMouseInWindow(i,j).y, k, delta);
+			buttonList.get(x).tick(getMouseInWindow(i,j).x, getMouseInWindow(i,j).y, k);
 			if(buttonList.get(x).selectState == 2 || buttonList.get(x).selectState == 3)
 			{
 				if(Remote2D.getInstance().hasMouseBeenPressed() && !buttonOverride)
@@ -107,7 +107,7 @@ public abstract class GuiWindow extends Gui {
 		}
 	}
 	
-	public abstract void renderContents();
+	public abstract void renderContents(float interpolation);
 	
 	public Vector2D getMouseInWindow(int i, int j)
 	{
@@ -115,7 +115,7 @@ public abstract class GuiWindow extends Gui {
 	}
 
 	@Override
-	public void render() {
+	public void render(float interpolation) {
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		float[] rgbtop = getRGB(isSelected ? windowTopColor : windowMainColor);
@@ -143,9 +143,9 @@ public abstract class GuiWindow extends Gui {
 		
 		GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x,pos.y+20,0);
-			renderContents();
+			renderContents(interpolation);
 			for(int x=0;x<buttonList.size();x++)
-				buttonList.get(x).render();
+				buttonList.get(x).render(interpolation);
 			GL11.glTranslatef(-pos.x,-pos.y-20,0);
 		GL11.glPopMatrix();
 		

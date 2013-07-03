@@ -46,7 +46,7 @@ public class Particle {
 		startTime = System.currentTimeMillis();
 	}
 	
-	public boolean tick(Map map, double delta)
+	public boolean tick(Map map)
 	{
 		life = System.currentTimeMillis()-startTime;
 		

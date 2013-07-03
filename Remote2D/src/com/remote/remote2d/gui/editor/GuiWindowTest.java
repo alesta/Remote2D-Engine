@@ -18,7 +18,7 @@ public class GuiWindowTest extends GuiWindow {
 	}
 
 	@Override
-	public void renderContents() {
+	public void renderContents(float interpolation) {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor3f(1, 1, 1);
 		GL11.glBegin(GL11.GL_QUADS);
@@ -28,15 +28,15 @@ public class GuiWindowTest extends GuiWindow {
 			GL11.glVertex2f(0,  20);
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		field.render();
+		field.render(interpolation);
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
+		super.tick(i, j, k);
 		Vector2D mouseInWindow = getMouseInWindow(i,j);
-		field.tick(mouseInWindow.x, mouseInWindow.y, k, delta);
+		field.tick(mouseInWindow.x, mouseInWindow.y, k);
 	}
 
 }

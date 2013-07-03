@@ -28,8 +28,8 @@ public class GuiWindowViewArtAsset extends GuiWindow {
 	}
 
 	@Override
-	public void renderContents() {
-		field.render();
+	public void renderContents(float interpolation) {
+		field.render(interpolation);
 
 		if(Remote2D.getInstance().artLoader.textureExists(field.text))
 		{
@@ -49,10 +49,10 @@ public class GuiWindowViewArtAsset extends GuiWindow {
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
-		field.tick(getMouseInWindow(i, j).x, getMouseInWindow(i, j).y, k, delta);
+		super.tick(i, j, k);
+		field.tick(getMouseInWindow(i, j).x, getMouseInWindow(i, j).y, k);
 	}
 	
 	@Override

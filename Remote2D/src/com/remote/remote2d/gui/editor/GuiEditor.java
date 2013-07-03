@@ -102,9 +102,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	}
 	
 	@Override
-	public void render()
+	public void render(float interpolation)
 	{
-		super.render();
+		super.render(interpolation);
 		if(map == null)
 		{
 			int[] size = Fonts.get("Pixel_Arial").getStringDim("Remote2D Editor", 40);
@@ -115,7 +115,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		{
 			if(gridSnap)
 				map.drawGrid();
-			map.render(true);
+			map.render(true,interpolation);
 		}
 		GL11.glColor4f(1, 1, 1, 0.5f);
 		if(stampEntity != null)
@@ -123,7 +123,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(-map.camera.x, -map.camera.y, 0);
 			GL11.glScalef(map.scale, map.scale, 1);
-			stampEntity.render(true);
+			stampEntity.render(true,interpolation);
 			stampEntity.getGeneralCollider().drawCollider();
 			GL11.glPopMatrix();
 		}
@@ -131,18 +131,18 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(selectedEntity != null)
 		{
-			inspector.render();
-			preview.render();
+			inspector.render(interpolation);
+			preview.render(interpolation);
 		}
 		if(map != null)
-			heirarchy.render();
+			heirarchy.render(interpolation);
 		
 		for(int x=0;x<windowStack.size();x++)
 		{
-			windowStack.get(x).render();
+			windowStack.get(x).render(interpolation);
 		}
 		
-		menu.render();
+		menu.render(interpolation);
 	}
 	
 	private void poll()
@@ -162,28 +162,28 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
+		super.tick(i, j, k);
 		if(getMouseInWindow(i,j))
 			disableElementPlace();
 		
 		for(int x=0;x<windowStack.size();x++)
 		{
-			windowStack.get(x).tick(i,j,k,delta);
+			windowStack.get(x).tick(i,j,k);
 		}
 		if(map != null)
 			backgroundColor = map.backgroundColor;
-		menu.tick(i,j,k,delta);
+		menu.tick(i,j,k);
 		if(windowStack.size() == 0)
 		{
-			inspector.tick(i, j, k, delta);
-			heirarchy.tick(i, j, k, delta);
+			inspector.tick(i, j, k);
+			heirarchy.tick(i, j, k);
 		}
 		else if(!windowStack.peek().isSelected())
 		{
-			inspector.tick(i, j, k, delta);
-			heirarchy.tick(i, j, k, delta);
+			inspector.tick(i, j, k);
+			heirarchy.tick(i, j, k);
 		}
 		
 		if(!inspector.isTyping())
@@ -230,13 +230,13 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 		boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 		if(up)
-			map.camera.y += 5f*delta;
+			map.camera.y += 5f;
 		if(down)
-			map.camera.y -= 5f*delta;
+			map.camera.y -= 5f;
 		if(left)
-			map.camera.x += 5f*delta;
+			map.camera.x += 5f;
 		if(right)
-			map.camera.x -= 5f*delta;
+			map.camera.x -= 5f;
 		
 		allowEntityPlace = true;
 	}

@@ -15,8 +15,8 @@ public class ParticleSystem extends EditorObject {
 	public Vector2D pos;
 	
 	public ArrayList<Particle> particles;
-	public int maxParticles = 1000;
-	public int maxSpawnRate = 10;
+	public int maxParticles = 10000;
+	public int maxSpawnRate = 100;
 	public int spawnRateDeviation = 0;
 	public int systemLength = -1;
 	
@@ -102,7 +102,7 @@ public class ParticleSystem extends EditorObject {
 		return deviation*((random.nextFloat()-0.5f)*2f);
 	}
 	
-	public void tick(double delta, boolean preview)
+	public void tick(boolean preview)
 	{
 		if(System.currentTimeMillis()-startTime < systemLength || systemLength == -1)
 		{
@@ -112,7 +112,7 @@ public class ParticleSystem extends EditorObject {
 		
 		for(int x=0;x<particles.size();x++)
 		{
-			boolean despawn = !particles.get(x).tick(map, delta);
+			boolean despawn = !particles.get(x).tick(map);
 			if(despawn)
 			{
 				particles.remove(x);

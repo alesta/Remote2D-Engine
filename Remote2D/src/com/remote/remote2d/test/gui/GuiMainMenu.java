@@ -36,9 +36,9 @@ public class GuiMainMenu extends GuiMenu implements R2DFileSaver {
 	}
 	
 	@Override
-	public void render()
+	public void render(float interpolation)
 	{
-		super.render();
+		super.render(interpolation);
 		int[] remoteDim = Fonts.get("Logo").getStringDim("REMOTE", 100);
 		int[] otherDim = Fonts.get("Logo").getStringDim("2D", 50);
 		int remotePos = Remote2D.getInstance().displayHandler.width/2-(remoteDim[0]+otherDim[0])/2;

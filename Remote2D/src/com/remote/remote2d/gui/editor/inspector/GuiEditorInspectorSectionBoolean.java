@@ -33,7 +33,7 @@ public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection 
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		hasBeenChanged = false;
 		if(i > pos.x+width-20 && i < pos.x+width && j > pos.y && j < pos.y+20 && Remote2D.getInstance().hasMouseBeenPressed())
 		{
@@ -43,7 +43,7 @@ public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection 
 	}
 
 	@Override
-	public void render() {
+	public void render(float interpolation) {
 		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
 		GL11.glVertex2f(pos.x+width-20, pos.y);

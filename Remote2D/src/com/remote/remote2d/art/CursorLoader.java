@@ -38,7 +38,7 @@ public class CursorLoader {
 		}
 	}
 	
-	public static void render()
+	public static void render(float interpolation)
 	{
 		if(tex != null)
 		{

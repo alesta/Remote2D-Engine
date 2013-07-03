@@ -24,7 +24,7 @@ public class GuiWindowPerlin1D extends GuiWindow {
 	}
 	
 	@Override
-	public void renderContents() {
+	public void renderContents(float interpolation) {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
 		GL11.glColor3f(1, 1, 1);

@@ -22,7 +22,7 @@ public class GuiWindowCollisionTest extends GuiWindow {
 	}
 
 	@Override
-	public void renderContents() {
+	public void renderContents(float interpolation) {
 		GL11.glColor3f(collides ? 1 : 0, collides ? 0 : 1, 0);
 		collider.drawCollider();
 		GL11.glColor3f(1, 1, 1);
@@ -30,12 +30,12 @@ public class GuiWindowCollisionTest extends GuiWindow {
 	
 	boolean scaleUp = true;
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
+		super.tick(i, j, k);
 		
 		collides = collider.isPointInside(getMouseInWindow(i,j));
-		collider.setAngle(collider.getAngle()+0.01f*(float)delta);
+		collider.setAngle(collider.getAngle()+0.01f);
 		
 		if(collider.getScale().x > 2.5f || collider.getScale().x < 0.5f)
 		{
@@ -44,7 +44,7 @@ public class GuiWindowCollisionTest extends GuiWindow {
 			collider.setScale(new Vector2DF(y,y));
 		} else
 		{
-			float x = collider.getScale().x+(float)((scaleUp ? 0.05f : -0.05f)*delta);
+			float x = collider.getScale().x+(float)((scaleUp ? 0.05f : -0.05f));
 			collider.setScale(new Vector2DF(x,x));
 		}
 			

@@ -13,6 +13,7 @@ import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.io.R2DFileManager;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2D;
 
 public class GuiCreateSpriteSheet extends GuiMenu {
@@ -32,6 +33,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	
 	GuiButton createButton;
 	
+	Vector2D oldOffset;
 	Vector2D offset;
 	
 	int scale = 1;
@@ -76,6 +78,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		animSave = new GuiTextField(new Vector2D(100,280), new Vector2D(200,40), 20);
 		
 		offset = new Vector2D(300,0);
+		oldOffset = new Vector2D(300,0);
 	}
 	
 	@Override
@@ -90,20 +93,20 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	}
 	
 	@Override
-	public void render()
+	public void render(float interpolation)
 	{
-		super.render();
-		texID.render();
-		startX.render();
-		startY.render();
-		dimX.render();
-		dimY.render();
-		framesX.render();
-		framesY.render();
-		paddingX.render();
-		paddingY.render();
-		frameLength.render();
-		animSave.render();
+		super.render(interpolation);
+		texID.render(interpolation);
+		startX.render(interpolation);
+		startY.render(interpolation);
+		dimX.render(interpolation);
+		dimY.render(interpolation);
+		framesX.render(interpolation);
+		framesY.render(interpolation);
+		paddingX.render(interpolation);
+		paddingY.render(interpolation);
+		frameLength.render(interpolation);
+		animSave.render(interpolation);
 		
 		Fonts.get("Arial").drawString("Tex. Path", 5, 20, 20, 0xffffff);
 		Fonts.get("Arial").drawString("Start Pos", 5, 65, 20, 0xffffff);
@@ -115,8 +118,10 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	}
 	
 	@Override
-	public void renderBackground()
+	public void renderBackground(float interpolation)
 	{
+		Vector2D realOffset = Interpolator.linearInterpolate(oldOffset, offset, interpolation);
+		
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text))
 		{
@@ -128,7 +133,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			GL11.glScissor(300, 0, getWidth()-300, getHeight());
 			
 			GL11.glPushMatrix();
-				GL11.glTranslatef(offset.x, offset.y, 0);
+				GL11.glTranslatef(realOffset.x, realOffset.y, 0);
 				GL11.glScalef(scale, scale, 1);
 				GL11.glBegin(GL11.GL_QUADS);
 					GL11.glTexCoord2f(0, 0);
@@ -144,7 +149,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			if(animation != null)
 			{
 				GL11.glPushMatrix();
-					GL11.glTranslatef(offset.x, offset.y, 0);
+					GL11.glTranslatef(realOffset.x, realOffset.y, 0);
 					GL11.glScalef(scale, scale, 1);
 					animation.renderFrames();
 				GL11.glPopMatrix();
@@ -158,20 +163,22 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
-		texID.tick(i, j, k, delta);
-		startX.tick(i, j, k, delta);
-		startY.tick(i, j, k, delta);
-		dimX.tick(i, j, k, delta);
-		dimY.tick(i, j, k, delta);
-		framesX.tick(i, j, k, delta);
-		framesY.tick(i, j, k, delta);
-		paddingX.tick(i, j, k, delta);
-		paddingY.tick(i, j, k, delta);
-		frameLength.tick(i, j, k, delta);
-		animSave.tick(i, j, k, delta);
+		super.tick(i, j, k);
+		texID.tick(i, j, k);
+		startX.tick(i, j, k);
+		startY.tick(i, j, k);
+		dimX.tick(i, j, k);
+		dimY.tick(i, j, k);
+		framesX.tick(i, j, k);
+		framesY.tick(i, j, k);
+		paddingX.tick(i, j, k);
+		paddingY.tick(i, j, k);
+		frameLength.tick(i, j, k);
+		animSave.tick(i, j, k);
+		
+		oldOffset = offset.copy();
 		
 		createButton.setDisabled(!isReady());
 		
@@ -188,13 +195,13 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 			boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 			if(up)
-				offset.y += 5*delta;
+				offset.y += 5;
 			if(down)
-				offset.y -= 5*delta;
+				offset.y -= 5;
 			if(left)
-				offset.x += 5*delta;
+				offset.x += 5;
 			if(right)
-				offset.x -= 5*delta;
+				offset.x -= 5;
 			
 			if(offset.x+tex.image.getWidth()*scale < getWidth())
 				offset.x = getWidth()-tex.image.getWidth();

@@ -34,16 +34,16 @@ public class GuiWindowInsertComponent extends GuiWindow {
 	}
 
 	@Override
-	public void renderContents() {
-		textField.render();
+	public void renderContents(float interpolation) {
+		textField.render(interpolation);
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
+		super.tick(i, j, k);
 		Vector2D mouse = getMouseInWindow(i,j);
-		textField.tick(mouse.x, mouse.y, k, delta);
+		textField.tick(mouse.x, mouse.y, k);
 		
 		if(!Remote2D.getInstance().componentList.containsComponent(textField.text) && !doneButton.getDisabled())
 			doneButton.setDisabled(true);

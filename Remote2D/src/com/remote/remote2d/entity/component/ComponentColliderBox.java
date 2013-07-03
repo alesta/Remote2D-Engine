@@ -23,12 +23,12 @@ public class ComponentColliderBox extends Component {
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		
 	}
 
 	@Override
-	public void renderBefore(boolean editor) {
+	public void renderBefore(boolean editor, float interpolation) {
 		
 	}
 	
@@ -44,7 +44,7 @@ public class ComponentColliderBox extends Component {
  	}
 
 	@Override
-	public void renderAfter(boolean editor) {
+	public void renderAfter(boolean editor, float interpolation) {
 		if(currentCollider != null && editor)
 		{
 			GL11.glColor3f(1, 0, 0);

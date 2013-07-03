@@ -21,16 +21,16 @@ public class GuiInGame extends GuiMenu {
 	}
 	
 	@Override
-	public void render()
+	public void render(float interpolation)
 	{
-		Remote2D.getInstance().map.render(false);
+		Remote2D.getInstance().map.render(false,interpolation);
 		Fonts.get("Arial").drawString("FPS: "+Remote2D.getInstance().getFPS(), 10, 10, 20, 0x000000);
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		Remote2D.getInstance().map.tick(i,j,k,delta);
+		Remote2D.getInstance().map.tick(i,j,k);
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 			Remote2D.getInstance().guiList.pop();
 	}

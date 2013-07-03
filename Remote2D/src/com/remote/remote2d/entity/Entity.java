@@ -12,6 +12,7 @@ import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2D;
 
 /**
@@ -32,6 +33,7 @@ public class Entity extends EditorObject implements Cloneable {
 	 */
 	public boolean isStatic = true;
 	public String name;
+	private Vector2D oldPos;
 	public Vector2D pos;
 	public Vector2D dim;
 	public String resourcePath = "";
@@ -60,6 +62,7 @@ public class Entity extends EditorObject implements Cloneable {
 		colliders = new ArrayList<Collider>();
 		
 		pos = new Vector2D(0,0);
+		oldPos = new Vector2D(0,0);
 		dim = new Vector2D(50,50);
 	}
 	
@@ -70,6 +73,8 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public void spawnEntityInWorld()
 	{
+		oldPos = pos.copy();
+		
 		for(int x=0;x<components.size();x++)
 			components.get(x).onEntitySpawn();
 	}
@@ -267,8 +272,18 @@ public class Entity extends EditorObject implements Cloneable {
 		return dim;
 	}
 	
-	public void render(boolean editor)
+	public void tick(int i, int j, int k)
 	{
+		oldPos = pos.copy();
+		
+		for(int x=0;x<components.size();x++)
+			components.get(x).tick(i, j, k);
+	}
+	
+	public void render(boolean editor, float interpolation)
+	{
+		Vector2D pos = Interpolator.linearInterpolate(oldPos, this.pos, interpolation);
+		
 		boolean selected = false;
 		if(editor)
 			if(Remote2D.getInstance().guiList.peek() instanceof GuiEditor)
@@ -405,14 +420,14 @@ public class Entity extends EditorObject implements Cloneable {
 		
 	}
 
-	public void renderPreview() {
+	public void renderPreview(float interpolation) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-pos.x, -pos.y, 0);
 		for(int x=0;x<getComponents().size();x++)
-			getComponents().get(x).renderBefore(false);
-		render(false);
+			getComponents().get(x).renderBefore(false,interpolation);
+		render(false,interpolation);
 		for(int x=0;x<getComponents().size();x++)
-			getComponents().get(x).renderAfter(false);
+			getComponents().get(x).renderAfter(false,interpolation);
 		GL11.glPopMatrix();
 	}
 		

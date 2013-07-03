@@ -7,6 +7,11 @@ public class Interpolator {
 		return(y1*(1-mu)+y2*mu);
 	}
 	
+	public static Vector2D linearInterpolate(Vector2D y1, Vector2D y2, double mu)
+	{
+		return new Vector2D((int)linearInterpolate(y1.x,y2.x,mu),(int)linearInterpolate(y1.y,y2.y,mu));
+	}
+	
 	public static double cosineInterpolate(double y1, double y2, double mu)
 	{
 		double mu2 = (1-Math.cos(mu*3.1415926535d))/2;

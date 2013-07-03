@@ -47,28 +47,26 @@ public class EntityList {
 		}
 	}
 	
-	public void render(boolean editor)
+	public void render(boolean editor, float interpolation)
 	{
 		for(int i=0;i<entityList.size();i++)
 		{
 			ArrayList<Component> components = entityList.get(i).getComponents();
 			for(int x=0;x<components.size();x++)
-				components.get(x).renderBefore(editor);
-			entityList.get(i).render(editor);
+				components.get(x).renderBefore(editor, interpolation);
+			entityList.get(i).render(editor,interpolation);
 			for(int x=components.size()-1;x>=0;x--)
-				components.get(x).renderAfter(editor);
+				components.get(x).renderAfter(editor, interpolation);
 		}
 	}
 	
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
 		for(int x=0;x<entityList.size();x++)
 		{
 			if(!entityList.get(x).isStatic)
 			{
-				ArrayList<Component> components = entityList.get(x).getComponents();
-				for(int y=0;y<components.size();y++)
-					components.get(y).tick(i, j, k, delta);
+				entityList.get(x).tick(i, j, k);
 			}
 		}
 	}

@@ -16,12 +16,14 @@ import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
 import com.remote.remote2d.logic.CollisionComparator;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2D;
 import com.remote.remote2d.logic.Vector2DF;
 
 public class Map implements R2DFileSaver {
 	
 	private EntityList entities;
+	private Vector2D oldCamera = new Vector2D(0,0);
 	public Vector2D camera = new Vector2D(0,0);
 	public int backgroundColor = 0xffffff;
 	public int gridSize = 16;
@@ -39,13 +41,14 @@ public class Map implements R2DFileSaver {
 		entities = list;
 	}
 	
-	public void render(boolean editor)
+	public void render(boolean editor, float interpolation)
 	{
+		Vector2D iCamera = Interpolator.linearInterpolate(oldCamera, camera, interpolation);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-camera.x, -camera.y, 0);
 		if(editor)
 			GL11.glScalef(scale, scale, 1);
-		entities.render(editor);
+		entities.render(editor,interpolation);
 		GL11.glPopMatrix();
 	}
 	
@@ -100,9 +103,10 @@ public class Map implements R2DFileSaver {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		entities.tick(i, j, k, delta);
+		oldCamera = camera.copy();
+		entities.tick(i, j, k);
 	}
 	
 	/**

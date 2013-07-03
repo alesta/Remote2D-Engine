@@ -23,6 +23,7 @@ import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.logic.ColliderBox;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Matrix;
 import com.remote.remote2d.logic.Vector2D;
 
@@ -33,6 +34,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	GuiTextField savePath;
 	GuiButton button;
 	GuiButton bgButton;
+	Vector2D oldOffset;
 	Vector2D offset;
 	ArrayList<ColliderDefinerBox> frameDefiners;
 	ColliderDefinerBox activeDefiner = null;
@@ -53,6 +55,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		texturePath = new GuiTextField(new Vector2D(10,120),new Vector2D(280,40),20);
 		savePath = new GuiTextField(new Vector2D(10,270),new Vector2D(280,40),20);
 		offset = new Vector2D(300,0);
+		oldOffset = new Vector2D(300,0);
 	}
 	
 	@Override
@@ -72,13 +75,13 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	}
 	
 	@Override
-	public void render()
+	public void render(float interpolation)
 	{
-		super.render();
-		removeField.render();
+		super.render(interpolation);
+		removeField.render(interpolation);
 		Fonts.get("Arial").drawString("Texture Path", 10, 95, 20, 0xffffff);
-		texturePath.render();
-		savePath.render();
+		texturePath.render(interpolation);
+		savePath.render(interpolation);
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		bindRGB(bgColor);
@@ -123,8 +126,10 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	}
 	
 	@Override
-	public void renderBackground()
+	public void renderBackground(float interpolation)
 	{
+		Vector2D iOffset = Interpolator.linearInterpolate(oldOffset, offset, interpolation);
+		
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texturePath.text))
 		{
@@ -184,12 +189,14 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
-		super.tick(i, j, k, delta);
-		removeField.tick(i, j, k, delta);
-		texturePath.tick(i,j,k,delta);
-		savePath.tick(i,j,k,delta);
+		super.tick(i, j, k);
+		removeField.tick(i, j, k);
+		texturePath.tick(i,j,k);
+		savePath.tick(i,j,k);
+		
+		oldOffset = offset.copy();
 		
 		if(i > 300 && activeDefiner != null)
 		{
@@ -260,13 +267,13 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 			boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 			boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 			if(up)
-				offset.y += 5*delta;
+				offset.y += 5;
 			if(down)
-				offset.y -= 5*delta;
+				offset.y -= 5;
 			if(left)
-				offset.x += 5*delta;
+				offset.x += 5;
 			if(right)
-				offset.x -= 5*delta;
+				offset.x -= 5;
 			
 			if(offset.x+tex.image.getWidth()*scale < getWidth())
 				offset.x = getWidth()-tex.image.getWidth();

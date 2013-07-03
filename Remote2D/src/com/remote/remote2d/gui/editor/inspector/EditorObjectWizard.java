@@ -155,16 +155,16 @@ public class EditorObjectWizard {
 		return -1;
 	}
 	
-	public void tick(int i, int j, int k, double delta)
+	public void tick(int i, int j, int k)
 	{
 		for(int x=0;x<sections.size();x++)
-			sections.get(x).tick(i, j, k, delta);
+			sections.get(x).tick(i, j, k);
 	}
 	
-	public void render()
+	public void render(float interpolation)
 	{
 		for(int x=0;x<sections.size();x++)
-			sections.get(x).render();
+			sections.get(x).render(interpolation);
 		
 		Gui.bindRGB(0xffffff);
 		GL11.glBegin(GL11.GL_LINES);

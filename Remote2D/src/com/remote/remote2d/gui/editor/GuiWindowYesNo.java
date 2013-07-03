@@ -62,7 +62,7 @@ public class GuiWindowYesNo extends GuiWindow {
 	}
 
 	@Override
-	public void renderContents() {
+	public void renderContents(float interpolation) {
 		for(int x=0;x<contents.length;x++)
 			Fonts.get("Arial").drawString(contents[x], 10, 10+x*25, 20, 0xffffff);
 	}

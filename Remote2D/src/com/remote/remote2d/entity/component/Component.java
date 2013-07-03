@@ -28,12 +28,12 @@ public abstract class Component extends EditorObject{
 	 * A normal tick method for this component IN GAME.  Not in the editor!  Note:
 	 * if the entity is static then this isn't called.
 	 */
-	public abstract void tick(int i, int j, int k, double delta);
+	public abstract void tick(int i, int j, int k);
 	/**
 	 * A render method for before the entity renders (but not necessarily directly;
 	 * other components may get in between).
 	 */
-	public abstract void renderBefore(boolean editor);
+	public abstract void renderBefore(boolean editor, float interpolation);
 	/**
 	 * Triggered when the entity spawns into the world.  Mostly used for components
 	 * that set variables for the entity.
@@ -43,7 +43,7 @@ public abstract class Component extends EditorObject{
 	 * A render method for after the entity renders (again, not necessarily directly
 	 * after).
 	 */
-	public abstract void renderAfter(boolean editor);
+	public abstract void renderAfter(boolean editor, float interpolation);
 	
 	public abstract Component clone();
 	

@@ -20,11 +20,11 @@ public class GuiMenu extends Gui{
 	}
 	
 	@Override
-	public void render()
+	public void render(float interpolation)
 	{
-		renderBackground();
+		renderBackground(interpolation);
 		for(int x=0;x<buttonList.size();x++)
-			buttonList.get(x).render();
+			buttonList.get(x).render(interpolation);
 	}
 	
 	public void initGui()
@@ -42,7 +42,7 @@ public class GuiMenu extends Gui{
 		return Remote2D.getInstance().displayHandler.height;
 	}
 	
-	public void renderBackground()
+	public void renderBackground(float interpolation)
 	{
 		
 	}
@@ -89,10 +89,10 @@ public class GuiMenu extends Gui{
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		for(int x=0;x<buttonList.size();x++)
 		{
-			buttonList.get(x).tick(i, j, k, delta);
+			buttonList.get(x).tick(i, j, k);
 			if(buttonList.get(x).selectState == 2 || buttonList.get(x).selectState == 3)
 			{
 				if(Remote2D.getInstance().hasMouseBeenPressed())

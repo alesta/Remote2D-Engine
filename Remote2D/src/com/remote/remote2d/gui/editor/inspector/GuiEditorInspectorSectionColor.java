@@ -39,14 +39,14 @@ public class GuiEditorInspectorSectionColor extends GuiEditorInspectorSection {
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
-		textField.tick(i, j, k, delta);
+	public void tick(int i, int j, int k) {
+		textField.tick(i, j, k);
 	}
 
 	@Override
-	public void render() {
+	public void render(float interpolation) {
 		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
-		textField.render();
+		textField.render(interpolation);
 	}
 	
 	@Override

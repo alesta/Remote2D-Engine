@@ -33,7 +33,7 @@ public class GuiWindowPerlin2D extends GuiWindow {
 	}
 	
 	@Override
-	public void renderContents() {
+	public void renderContents(float interpolation) {
 		tex.bind();
 		GL11.glBegin(GL11.GL_QUADS);
 			GL11.glColor3f(1, 1, 1);

@@ -49,8 +49,8 @@ public class GuiEditorInspector extends GuiMenu {
 	}
 	
 	@Override
-	public void tick(int i, int j, int k, double delta) {
-		super.tick(i, j, k, delta);
+	public void tick(int i, int j, int k) {
+		super.tick(i, j, k);
 		
 		if(pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
 		{
@@ -67,7 +67,7 @@ public class GuiEditorInspector extends GuiMenu {
 		
 		for(int x=0;x<components.size();x++)
 		{
-			components.get(x).tick(i,j+offset,k,delta);
+			components.get(x).tick(i,j+offset,k);
 			
 			int changed = components.get(x).hasFieldBeenChanged();
 			if(changed != -1)
@@ -76,7 +76,7 @@ public class GuiEditorInspector extends GuiMenu {
 	}
 	
 	@Override
-	public void renderBackground()
+	public void renderBackground(float interpolation)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0,0,0,0.5f);
@@ -91,8 +91,8 @@ public class GuiEditorInspector extends GuiMenu {
 	}
 	
 	@Override
-	public void render() {
-		super.render();
+	public void render(float interpolation) {
+		super.render(interpolation);
 		
 		GL11.glPushMatrix();
 		GL11.glScissor(pos.x, getHeight()-dim.y, dim.x, dim.y-20);
@@ -101,7 +101,7 @@ public class GuiEditorInspector extends GuiMenu {
 		
 		for(int x=0;x<components.size();x++)
 		{
-			components.get(x).render();
+			components.get(x).render(interpolation);
 		}
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		GL11.glPopMatrix();

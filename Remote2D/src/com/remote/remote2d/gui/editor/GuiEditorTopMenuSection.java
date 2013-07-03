@@ -70,7 +70,7 @@ public class GuiEditorTopMenuSection extends Gui {
 	}
 
 	@Override
-	public void render() {
+	public void render(float interpolation) {
 		if(!isEnabled)
 			return;
 		int xPos = x+width/2-titledim[0]/2;
@@ -133,7 +133,7 @@ public class GuiEditorTopMenuSection extends Gui {
 	boolean isMouseDownAccountedFor = false;
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		if(!isEnabled)
 			return;
 		isHovered = i > x && j > y && i < x+width && j < y+height;

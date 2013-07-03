@@ -40,7 +40,7 @@ public class ComponentPlayer extends Component {
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		PlayerState oldState = state;
 		if(Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
@@ -64,7 +64,7 @@ public class ComponentPlayer extends Component {
 			if(state == PlayerState.WALK)
 				state = PlayerState.IDLE;
 		}
-		velocity = velocity.add(acceleration.multiplyVec(new Vector2DF((float)delta,(float)delta)));
+		velocity = velocity.add(acceleration);
 		
 		if(Math.abs(velocity.x) > maxVelocity.x && maxVelocity.x != -1)
 		{
@@ -128,7 +128,7 @@ public class ComponentPlayer extends Component {
 		
 		
 		testParticles.pos = entity.pos.copy();
-		testParticles.tick(delta, false);
+		testParticles.tick(false);
 			
 	}
 	
@@ -138,7 +138,7 @@ public class ComponentPlayer extends Component {
 	}
 
 	@Override
-	public void renderBefore(boolean editor) {
+	public void renderBefore(boolean editor, float interpolation) {
 		
 	}
 
@@ -166,7 +166,7 @@ public class ComponentPlayer extends Component {
 	}
 
 	@Override
-	public void renderAfter(boolean editor) {
+	public void renderAfter(boolean editor, float interpolation) {
 		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT)){
 			GL11.glPushMatrix();
 			GL11.glScalef(1, 1, 1);

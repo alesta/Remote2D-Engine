@@ -23,12 +23,12 @@ public class GuiEditorPreview extends Gui {
 	}
 
 	@Override
-	public void tick(int i, int j, int k, double delta) {
+	public void tick(int i, int j, int k) {
 		
 	}
 
 	@Override
-	public void render() {
+	public void render(float interpolation) {
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0,0,0,0.5f);
@@ -54,7 +54,7 @@ public class GuiEditorPreview extends Gui {
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x+dim.x/2-inspector.currentEntity.getDim().x/2, pos.y+dim.y/2-inspector.currentEntity.getDim().y/2, 0);
-			inspector.currentEntity.renderPreview();
+			inspector.currentEntity.renderPreview(interpolation);
 			GL11.glPopMatrix();
 		}
 		
