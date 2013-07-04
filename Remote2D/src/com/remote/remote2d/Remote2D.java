@@ -30,7 +30,31 @@ public class Remote2D {
 	public boolean running = true;
 	private int fpsCounter = 0;
 	private int fps = 0;
-	private int lastFpsTime = 0;
+	
+	/**
+	 * The speed at which the tick() function runs, in hertz.  In other words, the target "Ticks per second"
+	 */
+	private final double GAME_HERTZ = 30.0;
+	/**
+	 * The calculated value in nanoseconds on how much time <i>should</i> be in between tick functions, based on GAME_HERTZ.
+	 */
+	private final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
+	/**
+	 * An arbitrary value dictating the max amount of ticks() we should do if we are playing catchup.  The lower this is, the better
+	 * render quality on slower machines, but physics/game logic will appear to slow down.  Set this to -1 for 100% accuracy.
+	 */
+	private final int MAX_UPDATES_BEFORE_RENDER = 5;
+	/**
+	 * When the last time we ticked was.  This is used to determine how many times we need to tick().
+	 */
+	private double lastUpdateTime = System.nanoTime();
+	/**
+	 * The last time that we rendered, in nanoseconds.  This is used to maintain a stable FPS using TARGET_FPS.
+	 */
+	private double lastRenderTime = System.nanoTime();
+	
+	private final double TARGET_FPS = 60;
+	private final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 	
 	/*----------GAME VARIABLES--------------*/
 	public Map map;
@@ -102,23 +126,6 @@ public class Remote2D {
 	
 	public void gameLoop()
 	{
-		//This value would probably be stored elsewhere
-		final double GAME_HERTZ = 30.0;
-		//Calculate how many ns each frame should take for our target game hertz.
-		final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
-		//At the very most we will update the game this many times before a new render.
-		//If you're worried about visual hitches more than perfect timing, set this to 1.
-		final int MAX_UPDATES_BEFORE_RENDER = 5;
-		//We will need the last update time.
-		double lastUpdateTime = System.nanoTime();
-		//Store the last time we rendered.
-		double lastRenderTime = System.nanoTime();
-		
-		//If we are able to get as high as this FPS, don't render again.
-		final double TARGET_FPS = 60;
-		final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
-		
-		//Simple way of finding FPS.
 		int lastSecondTime = (int) (lastUpdateTime / 1000000000);
 		
 		while (running)
@@ -129,8 +136,7 @@ public class Remote2D {
 			double now = System.nanoTime();
 			int updateCount = 0;
 			
-			 //Do as many game updates as we need to, potentially playing catchup.
-			while( now - lastUpdateTime > TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BEFORE_RENDER )
+			while( now - lastUpdateTime > TIME_BETWEEN_UPDATES && (updateCount < MAX_UPDATES_BEFORE_RENDER || MAX_UPDATES_BEFORE_RENDER == -1) )
 			{
 				int i = getMouseCoords()[0];
 				int j = getMouseCoords()[1];
@@ -138,22 +144,18 @@ public class Remote2D {
 				lastUpdateTime += TIME_BETWEEN_UPDATES;
 				updateCount++;
 			}
-					   
-			//If for some reason an update takes forever, we don't want to do an insane number of catchups.
-			//If you were doing some sort of game that needed to keep EXACT time, you would get rid of this.
+			
 			if ( now - lastUpdateTime > TIME_BETWEEN_UPDATES)
 			{
 				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
 			}
-			   
-			//Render. To do so, we need to calculate interpolation for a smooth render.
+			
 			float interpolation = Math.min(1.0f, (float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES) );
 			render(interpolation);
 			fpsCounter++;
 			Display.update();
 			lastRenderTime = now;
 			   
-			//Update the frames we got.
 			int thisSecond = (int) (lastUpdateTime / 1000000000);
 			if (thisSecond > lastSecondTime)
 			{
@@ -162,14 +164,10 @@ public class Remote2D {
 				lastSecondTime = thisSecond;
 			}
 			   
-			//Yield until it has been at least the target time between renders. This saves the CPU from hogging.
 			while ( now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < TIME_BETWEEN_UPDATES)
 			{
 				Thread.yield();
 				
-				//This stops the app from consuming all your CPU. It makes this slightly less accurate, but is worth it.
-				//You can remove this line and it will still work (better), your CPU just climbs on certain OSes.
-				//FYI on some OS's this can cause pretty bad stuttering. Scroll down and have a look at different peoples' solutions to this.
 				try {Thread.sleep(1);} catch(Exception e) {} 
 				
 				now = System.nanoTime();

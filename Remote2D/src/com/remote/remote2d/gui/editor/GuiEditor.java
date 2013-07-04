@@ -13,6 +13,7 @@ import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.WindowHolder;
+import com.remote.remote2d.gui.editor.browser.GuiEditorBrowser;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2D;
@@ -23,6 +24,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private GuiEditorTopMenu menu;
 	private GuiEditorInspector inspector;
 	private GuiEditorPreview preview;
+	private GuiEditorBrowser browser;
 	private GuiEditorHeirarchy heirarchy;
 	private Stack<GuiWindow> windowStack;
 	
@@ -68,14 +70,19 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(heirarchy == null)
 		{
 			heirarchy = new GuiEditorHeirarchy(new Vector2D(getWidth()-300,20),
-					new Vector2D(300,getHeight()-20), this);
+					new Vector2D(300,300), this);
 		} else
-		{
 			heirarchy.pos = new Vector2D(getWidth()-300,20);
-			heirarchy.dim = new Vector2D(300,getHeight()-20);
-		}
 		
 		heirarchy.initGui();
+		
+		if(browser == null)
+			browser = new GuiEditorBrowser(new Vector2D(getWidth()-300,320),new Vector2D(300,getHeight()-320));
+		else
+		{
+			browser.pos.x = getWidth()-300;
+			browser.dim.y = getHeight()-320;
+		}
 		
 		if(map != null)
 			map.getEntityList().reloadTextures();
@@ -135,7 +142,10 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			preview.render(interpolation);
 		}
 		if(map != null)
+		{
+			browser.render(interpolation);
 			heirarchy.render(interpolation);
+		}
 		
 		for(int x=0;x<windowStack.size();x++)
 		{
@@ -173,17 +183,24 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			windowStack.get(x).tick(i,j,k);
 		}
 		if(map != null)
+		{
+			map.tick(i, j, k, true);
 			backgroundColor = map.backgroundColor;
+		}
 		menu.tick(i,j,k);
 		if(windowStack.size() == 0)
 		{
 			inspector.tick(i, j, k);
 			heirarchy.tick(i, j, k);
+			if(map != null)
+				browser.tick(i, j, k);
 		}
 		else if(!windowStack.peek().isSelected())
 		{
 			inspector.tick(i, j, k);
 			heirarchy.tick(i, j, k);
+			if(map != null)
+				browser.tick(i, j, k);
 		}
 		
 		if(!inspector.isTyping())

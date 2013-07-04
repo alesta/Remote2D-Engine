@@ -30,7 +30,7 @@ public class GuiInGame extends GuiMenu {
 	@Override
 	public void tick(int i, int j, int k)
 	{
-		Remote2D.getInstance().map.tick(i,j,k);
+		Remote2D.getInstance().map.tick(i,j,k,false);
 		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
 			Remote2D.getInstance().guiList.pop();
 	}

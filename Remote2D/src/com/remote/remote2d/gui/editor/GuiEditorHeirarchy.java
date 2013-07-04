@@ -68,13 +68,15 @@ public class GuiEditorHeirarchy extends GuiMenu {
 			int textColor = 0xffffff;
 			if(editor.getMap().getEntityList().get(x).equals(editor.getSelectedEntity()))
 			{
+				GL11.glColor4f(1, 1, 1, 0.5f);
 				GL11.glBegin(GL11.GL_QUADS);
 					GL11.glVertex2f(pos.x,currentYPos);
 					GL11.glVertex2f(pos.x+dim.x,currentYPos);
 					GL11.glVertex2f(pos.x+dim.x,currentYPos+20);
 					GL11.glVertex2f(pos.x,currentYPos+20);
 				GL11.glEnd();
-				textColor = 0x000000;
+				GL11.glColor4f(1, 1, 1, 1);
+				//textColor = 0x000000;
 			}
 			GL11.glBegin(GL11.GL_LINES);
 				GL11.glVertex2f(pos.x,currentYPos+20);

@@ -10,6 +10,7 @@ public class Folder {
 	ArrayList<File> files;
 	ArrayList<Folder> folders;
 	
+	
 	public Folder(String path)
 	{
 		files = new ArrayList<File>();
@@ -37,6 +38,11 @@ public class Folder {
 			else if(subFiles[x].isDirectory())
 				folders.add(new Folder(subFiles[x].getPath()));
 		}
+	}
+	
+	public Folder getParent()
+	{
+		return new Folder(new File(folderPath).getParent());
 	}
 	
 }

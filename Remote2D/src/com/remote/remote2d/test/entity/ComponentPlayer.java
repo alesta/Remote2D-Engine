@@ -8,6 +8,7 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2D;
 import com.remote.remote2d.logic.Vector2DF;
 import com.remote.remote2d.particles.ParticleSystem;
@@ -20,6 +21,7 @@ public class ComponentPlayer extends Component {
 	public String fallAnimation = "";
 	public String landAnimation = "";
 	public boolean spriteFacesRight = true;
+	public boolean particleTest = false;
 	
 	private PlayerState state = PlayerState.IDLE;
 	private FacingState facing = FacingState.RIGHT;
@@ -29,8 +31,8 @@ public class ComponentPlayer extends Component {
 	private ParticleSystem testParticles;
 	
 	private Vector2DF velocity = new Vector2DF(0,0);
-	private Vector2DF acceleration = new Vector2DF(0,1);
-	private Vector2D maxVelocity = new Vector2D(5,-1);
+	private Vector2DF acceleration = new Vector2DF(0,2);
+	private Vector2D maxVelocity = new Vector2D(10,-1);
 		
 	public ComponentPlayer(Entity entity)
 	{
@@ -47,14 +49,14 @@ public class ComponentPlayer extends Component {
 			if(state == PlayerState.IDLE)
 				state = PlayerState.WALK;
 			facing = FacingState.LEFT;
-			acceleration.x = -1;
+			acceleration.x = -2;
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
 			if(state == PlayerState.IDLE)
 				state = PlayerState.WALK;
 			facing = FacingState.RIGHT;
-			acceleration.x = 1;
+			acceleration.x = 2;
 		}
 		
 		if(!Keyboard.isKeyDown(Keyboard.KEY_A) && !Keyboard.isKeyDown(Keyboard.KEY_D))
@@ -127,8 +129,9 @@ public class ComponentPlayer extends Component {
 			currentAnimation.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
 		
 		
-		testParticles.pos = entity.pos.copy();
-		testParticles.tick(false);
+		testParticles.pos = new Vector2D(i,j);
+		if(particleTest)
+			testParticles.tick(false);
 			
 	}
 	
@@ -176,15 +179,16 @@ public class ComponentPlayer extends Component {
 		if(currentAnimation != null)
 		{
 			Vector2D posVec = new Vector2D(0,0);
-			posVec.x = entity.pos.x+entity.getDim().x/2-currentAnimation.getSpriteDim().x/2;
-			posVec.y = entity.pos.y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
+			posVec.x = entity.getPos(interpolation).x+entity.getDim().x/2-currentAnimation.getSpriteDim().x/2;
+			posVec.y = entity.getPos(interpolation).y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
 			currentAnimation.render(posVec, currentAnimation.getSpriteDim());
 		}
 		
 		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT))
 			GL11.glPopMatrix();
 		
-		testParticles.render();
+		if(particleTest)
+			testParticles.render();
 	}
 
 	@Override
@@ -200,6 +204,7 @@ public class ComponentPlayer extends Component {
 		player.jumpAnimation = jumpAnimation;
 		player.fallAnimation = jumpAnimation;
 		player.landAnimation = landAnimation;
+		player.particleTest = particleTest;
 		player.updateAnimation();
 		return player;
 	}

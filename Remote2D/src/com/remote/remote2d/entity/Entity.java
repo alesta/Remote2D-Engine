@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
@@ -107,6 +108,11 @@ public class Entity extends EditorObject implements Cloneable {
 	public void removeCollider(Collider c)
 	{
 		colliders.remove(c);
+	}
+	
+	public Vector2D getPos(float interpolation)
+	{
+		return Interpolator.linearInterpolate(oldPos, pos, interpolation);
 	}
 	
 	public void removeCollider(int c)

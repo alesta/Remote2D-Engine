@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.Gui;
@@ -14,7 +15,7 @@ public class GuiEditorBrowser extends Gui {
 	
 	private ArrayList<Folder> folderStack;
 	private int selectedFile = -1;
-	private int doubleClickTimer = 50;
+	private int doubleClickTimer = 0;
 	
 	public Vector2D pos;
 	public Vector2D dim;
@@ -31,7 +32,42 @@ public class GuiEditorBrowser extends Gui {
 	@Override
 	public void tick(int i, int j, int k) {
 		
+		Folder currentFolder = folderStack.get(folderStack.size()-1);
 		
+		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
+		{
+			int yPos = j-pos.y-20;
+			if(yPos < (currentFolder.files.size()+currentFolder.folders.size()+1)*20)
+			{
+				if(selectedFile != yPos/20)
+				{
+					selectedFile = yPos/20;
+					doubleClickTimer = 50;
+				} else if(doubleClickTimer > 0)
+				{
+					doubleClickTimer = 0;
+					if(selectedFile == 0)
+					{
+						if(folderStack.size() > 1)
+							folderStack.remove(folderStack.size()-1);
+					}
+					else if(selectedFile-1 < currentFolder.files.size())
+						Log.info("Browser is opening file: "+currentFolder.files.get(selectedFile-1).getPath());
+					else if(selectedFile-1-currentFolder.files.size() < currentFolder.folders.size())
+						folderStack.add(currentFolder.folders.get(selectedFile-1-currentFolder.files.size()));
+				}
+			} else
+			{
+				selectedFile = -1;
+				doubleClickTimer = 0;
+			}
+		} else if(Remote2D.getInstance().hasMouseBeenPressed())
+		{
+			selectedFile = -1;
+			doubleClickTimer = 0;
+		}
+		
+		doubleClickTimer--;
 		
 	}
 
@@ -60,19 +96,40 @@ public class GuiEditorBrowser extends Gui {
 		
 		Folder currentFolder = folderStack.get(folderStack.size()-1);
 		
-		Fonts.get("Arial").drawString("//..", 10, 20, 20, 0xffffff);
+		Fonts.get("Arial").drawString("...", pos.x+10, pos.y+20, 20, folderStack.size() == 1 ? 0x999999 : 0xffffff);
+		int yOffset = 20;
+		if(selectedFile == 0)
+		{
+			GL11.glColor4f(1,1,1,0.5f);
+			GL11.glBegin(GL11.GL_QUADS);
+			GL11.glVertex2f(pos.x,  pos.y+yOffset);
+			GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset);
+			GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset+20);
+			GL11.glVertex2f(pos.x,  pos.y+yOffset+20);
+			GL11.glEnd();
+			GL11.glColor4f(1,1,1,1);
+		}
+		yOffset = 40;
 		
-		int yOffset = 40;
 		for(int x=0;x<currentFolder.folders.size();x++)
 		{
 			if(selectedFile-1 == x)
+			{
 				GL11.glColor4f(1,1,1,0.5f);
+				GL11.glBegin(GL11.GL_QUADS);
+				GL11.glVertex2f(pos.x,  pos.y+yOffset);
+				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset);
+				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset+20);
+				GL11.glVertex2f(pos.x,  pos.y+yOffset+20);
+				GL11.glEnd();
+				GL11.glColor4f(1,1,1,1);
+			}
 			
-			Fonts.get("Arial").drawString(new File(currentFolder.folders.get(x).getPath()).getName(), 10, yOffset, 20, 0xffffff);
+			Fonts.get("Arial").drawString(new File(currentFolder.folders.get(x).getPath()).getName(), pos.x+10, pos.y+yOffset, 20, 0xffffff);
 			
 			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex2f(pos.x, yOffset+20);
-			GL11.glVertex2f(pos.x+dim.x, yOffset+20);
+			GL11.glVertex2f(pos.x, pos.y+yOffset+20);
+			GL11.glVertex2f(pos.x+dim.x, pos.y+yOffset+20);
 			GL11.glEnd();
 			
 			bindRGB(0xffffff);
@@ -82,14 +139,23 @@ public class GuiEditorBrowser extends Gui {
 		
 		for(int x=0;x<currentFolder.files.size();x++)
 		{
-			Fonts.get("Arial").drawString(currentFolder.files.get(x).getName(), 10, yOffset, 20, 0xffffff);
+			Fonts.get("Arial").drawString(currentFolder.files.get(x).getName(), pos.x+10, pos.y+yOffset, 20, 0xffffff);
 			
 			if(selectedFile-1-currentFolder.folders.size() == x)
+			{
 				GL11.glColor4f(1,1,1,0.5f);
+				GL11.glBegin(GL11.GL_QUADS);
+				GL11.glVertex2f(pos.x,  pos.y+yOffset);
+				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset);
+				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset+20);
+				GL11.glVertex2f(pos.x,  pos.y+yOffset+20);
+				GL11.glEnd();
+				GL11.glColor4f(1,1,1,1);
+			}
 			
 			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex2f(pos.x, yOffset+20);
-			GL11.glVertex2f(pos.x+dim.x, yOffset+20);
+			GL11.glVertex2f(pos.x, pos.y+yOffset+20);
+			GL11.glVertex2f(pos.x+dim.x, pos.y+yOffset+20);
 			GL11.glEnd();
 			
 			bindRGB(0xffffff);

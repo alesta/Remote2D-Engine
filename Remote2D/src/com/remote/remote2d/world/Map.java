@@ -45,7 +45,7 @@ public class Map implements R2DFileSaver {
 	{
 		Vector2D iCamera = Interpolator.linearInterpolate(oldCamera, camera, interpolation);
 		GL11.glPushMatrix();
-		GL11.glTranslatef(-camera.x, -camera.y, 0);
+		GL11.glTranslatef(-iCamera.x, -iCamera.y, 0);
 		if(editor)
 			GL11.glScalef(scale, scale, 1);
 		entities.render(editor,interpolation);
@@ -103,10 +103,11 @@ public class Map implements R2DFileSaver {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
-	public void tick(int i, int j, int k)
+	public void tick(int i, int j, int k, boolean editor)
 	{
 		oldCamera = camera.copy();
-		entities.tick(i, j, k);
+		if(!editor)
+			entities.tick(i, j, k);
 	}
 	
 	/**
@@ -250,6 +251,7 @@ public class Map implements R2DFileSaver {
 	{
 		EntityList entityList = entities.clone();
 		Map map = new Map(entityList);
+		map.oldCamera = camera.copy();
 		map.camera = camera.copy();
 		return map;
 	}
