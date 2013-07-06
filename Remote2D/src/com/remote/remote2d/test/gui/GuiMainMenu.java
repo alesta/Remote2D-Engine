@@ -18,13 +18,13 @@ import com.remote.remote2d.io.R2DFileSaver;
 import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.logic.Vector2D;
 
-public class GuiMainMenu extends GuiMenu implements R2DFileSaver {
+public class GuiMainMenu extends GuiMenu {
 	
 	private R2DFileManager manager;
 	
 	public GuiMainMenu()
 	{
-		manager = new R2DFileManager("options.r2d", "Options", this);
+		//manager = new R2DFileManager("options.r2d", "Options", this);
 	}
 	
 	@Override
@@ -60,18 +60,6 @@ public class GuiMainMenu extends GuiMenu implements R2DFileSaver {
 		{
 			Remote2D.getInstance().running = false;
 		}
-	}
-
-	@Override
-	public void saveR2DFile(R2DTypeCollection collection) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void loadR2DFile(R2DTypeCollection collection) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

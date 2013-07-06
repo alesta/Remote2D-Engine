@@ -129,7 +129,7 @@ public class ComponentPlayer extends Component {
 			currentAnimation.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
 		
 		
-		testParticles.pos = new Vector2D(i,j);
+		testParticles.pos = new Vector2D(i,j).add(Remote2D.getInstance().map.camera);
 		if(particleTest)
 			testParticles.tick(false);
 			

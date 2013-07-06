@@ -77,7 +77,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		heirarchy.initGui();
 		
 		if(browser == null)
-			browser = new GuiEditorBrowser(new Vector2D(getWidth()-300,320),new Vector2D(300,getHeight()-320));
+			browser = new GuiEditorBrowser(this,new Vector2D(getWidth()-300,320),new Vector2D(300,getHeight()-320));
 		else
 		{
 			browser.pos.x = getWidth()-300;
@@ -143,9 +143,10 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}
 		if(map != null)
 		{
-			browser.render(interpolation);
+			
 			heirarchy.render(interpolation);
 		}
+		browser.render(interpolation);
 		
 		for(int x=0;x<windowStack.size();x++)
 		{
@@ -192,15 +193,13 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		{
 			inspector.tick(i, j, k);
 			heirarchy.tick(i, j, k);
-			if(map != null)
-				browser.tick(i, j, k);
+			browser.tick(i, j, k);
 		}
 		else if(!windowStack.peek().isSelected())
 		{
 			inspector.tick(i, j, k);
 			heirarchy.tick(i, j, k);
-			if(map != null)
-				browser.tick(i, j, k);
+			browser.tick(i, j, k);
 		}
 		
 		if(!inspector.isTyping())

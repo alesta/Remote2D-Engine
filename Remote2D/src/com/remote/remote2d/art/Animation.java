@@ -30,7 +30,7 @@ public class Animation implements R2DFileSaver {
 	
 	public Animation(String tex, Vector2D startPos, Vector2D spriteDim, Vector2D padding, Vector2D frames, int framelength)
 	{
-		this.texPath = texPath;
+		this.texPath = tex;
 		this.startPos = startPos;
 		this.spriteDim = spriteDim;
 		this.padding = padding;
@@ -43,7 +43,8 @@ public class Animation implements R2DFileSaver {
 	
 	public Animation(String path)
 	{
-		new R2DFileManager(path,"Animation",this);
+		R2DFileManager manager = new R2DFileManager(path,this);
+		manager.read();
 		this.path = path;
 	}
 	
@@ -187,6 +188,11 @@ public class Animation implements R2DFileSaver {
 		this.framelength = framelength;
 		generateFrames();
 	}
+	
+	public String getTexPath()
+	{
+		return texPath;
+	}
 
 	public long getLastFrameTime() {
 		return lastFrameTime;
@@ -208,6 +214,10 @@ public class Animation implements R2DFileSaver {
 			framePos[x].drawCollider();
 		}
 		GL11.glColor3f(1, 1, 1);
+	}
+
+	public static String getExtension() {
+		return ".anim";
 	}
 	
 }

@@ -189,14 +189,16 @@ public class DisplayHandler {
 	        this.width = targetDisplayMode.getWidth();
 	        this.height = targetDisplayMode.getHeight();
 	        this.fullscreen = fullscreen;
-	        	        
-	        //Display.destroy();
+	        
+	        if(fullscreen == true)
+	        	Display.destroy();
 	        System.setProperty("org.lwjgl.opengl.Window.undecorated", borderless ? "true" : "false");
 	        Display.setDisplayMode(targetDisplayMode);
 	        Display.setFullscreen(fullscreen);
 	        Display.setLocation(posX, posY);
 	        Display.setVSyncEnabled(fullscreen);
-	       // Display.create();
+	        if(fullscreen == true)
+	        	Display.create();
 	        
 	        initGL();
 				

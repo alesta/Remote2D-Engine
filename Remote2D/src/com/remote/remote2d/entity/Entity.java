@@ -436,5 +436,9 @@ public class Entity extends EditorObject implements Cloneable {
 			getComponents().get(x).renderAfter(false,interpolation);
 		GL11.glPopMatrix();
 	}
+
+	public static String getExtension() {
+		return ".entity";
+	}
 		
 }

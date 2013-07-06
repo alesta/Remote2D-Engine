@@ -259,5 +259,9 @@ public class Map implements R2DFileSaver {
 	public EntityList getEntityList() {
 		return entities;
 	}
+
+	public static String getExtension() {
+		return ".r2d";
+	}
 	
 }

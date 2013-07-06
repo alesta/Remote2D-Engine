@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
 import com.remote.remote2d.logic.Vector2D;
@@ -53,8 +54,11 @@ public class GuiEditorPreview extends Gui {
 		if(inspector.currentEntity != null)
 		{
 			GL11.glPushMatrix();
-			GL11.glTranslatef(pos.x+dim.x/2-inspector.currentEntity.getDim().x/2, pos.y+dim.y/2-inspector.currentEntity.getDim().y/2, 0);
-			inspector.currentEntity.renderPreview(interpolation);
+			if(inspector.currentEntity instanceof Entity)
+			{
+				GL11.glTranslatef(pos.x+dim.x/2-((Entity)inspector.currentEntity).getDim().x/2, pos.y+dim.y/2-((Entity)inspector.currentEntity).getDim().y/2, 0);
+				((Entity)inspector.currentEntity).renderPreview(interpolation);
+			}
 			GL11.glPopMatrix();
 		}
 		

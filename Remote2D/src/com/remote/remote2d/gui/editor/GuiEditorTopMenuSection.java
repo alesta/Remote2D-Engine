@@ -3,6 +3,7 @@ package com.remote.remote2d.gui.editor;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.art.Fonts;
 
@@ -130,22 +131,15 @@ public class GuiEditorTopMenuSection extends Gui {
 		}
 	}
 	
-	boolean isMouseDownAccountedFor = false;
-
 	@Override
 	public void tick(int i, int j, int k) {
 		if(!isEnabled)
 			return;
 		isHovered = i > x && j > y && i < x+width && j < y+height;
-		if (k==1 && !isMouseDownAccountedFor)
+		if (Remote2D.getInstance().hasMouseBeenPressed() && isHovered)
 		{
-			if(isHovered)
-			{
-				isSelected = !isSelected;
-			}
-			isMouseDownAccountedFor = true;
-		} else if(k==0)
-			isMouseDownAccountedFor = false;
+			isSelected = !isSelected;
+		}
 		
 		if(isSelected && !isHovered)
 		{
@@ -174,7 +168,7 @@ public class GuiEditorTopMenuSection extends Gui {
 				
 				currentY += subheight;
 			}
-			if(!isHovered && k != 0)
+			if(!isHovered && Remote2D.getInstance().hasMouseBeenPressed())
 			{
 				isSelected = false;
 				if(hoveredBox != -1)

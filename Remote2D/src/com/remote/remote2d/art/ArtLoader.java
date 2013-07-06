@@ -8,11 +8,14 @@ import java.util.Map.Entry;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.io.R2DFileSaver;
 import com.remote.remote2d.io.R2DType;
 import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.io.R2DTypeString;
+import com.remote.remote2d.particles.ParticleSystem;
+import com.remote.remote2d.world.Map;
 
 /**
  * Loads textures for you, and also caches them in case a texture is used a lot.
@@ -89,7 +92,7 @@ public class ArtLoader {
 		String x = Remote2D.getJarPath().getPath().toString()+s;
 		File f = new File(x);
 
-		if(f.exists() && f.isFile() && f.getName().endsWith(".r2d"))
+		if(f.exists() && f.isFile() && (f.getName().endsWith(Entity.getExtension()) || f.getName().endsWith(Animation.getExtension()) || f.getName().endsWith(ParticleSystem.getExtension()) || f.getName().endsWith(Map.getExtension())))
 			return true;
 		else
 			return false;

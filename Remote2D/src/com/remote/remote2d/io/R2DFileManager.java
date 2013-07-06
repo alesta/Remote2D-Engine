@@ -21,20 +21,12 @@ public class R2DFileManager {
 	private R2DTypeCollection collection;
 	private R2DFileSaver saverClass;
 	
-	public R2DFileManager(String path, String name, R2DFileSaver saverClass, boolean read)
+	public R2DFileManager(String path, R2DFileSaver saverClass)
 	{
 		this.path = path;
 		file = new File(Remote2D.getJarPath()+path);
-		collection = new R2DTypeCollection(name);
+		collection = new R2DTypeCollection(file.getName());
 		this.saverClass = saverClass;
-		
-		if(read)
-			read();
-	}
-	
-	public R2DFileManager(String path, String name, R2DFileSaver saverClass)
-	{
-		this(path,name,saverClass,true);
 	}
 	
 	public void read()

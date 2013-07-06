@@ -170,12 +170,13 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				Log.info("Opening!");
 				Map newMap = new Map();
-				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", "Test Map", newMap);
+				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", newMap);
+				mapManager.read();
 				editor.setMap(newMap);
 			} else if(secSubTitle.equalsIgnoreCase("Save Map Files"))
 			{
 				Map map = editor.getMap();
-				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", "Test Map", map,false);
+				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", map);
 				mapManager.write();
 				editor.setMap(map);
 			}

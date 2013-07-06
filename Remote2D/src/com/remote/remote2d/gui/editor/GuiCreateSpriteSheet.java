@@ -81,6 +81,22 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		oldOffset = new Vector2D(300,0);
 	}
 	
+	public GuiCreateSpriteSheet(Animation anim)
+	{
+		this();
+		texID.text = anim.getTexPath();
+		startX.text = anim.getStartPos().x+"";
+		startY.text = anim.getStartPos().y+"";
+		dimX.text = anim.getSpriteDim().x+"";
+		dimY.text = anim.getSpriteDim().y+"";
+		framesX.text = anim.getFrames().x+"";
+		framesY.text = anim.getFrames().y+"";
+		paddingX.text = anim.getPadding().x+"";
+		paddingY.text = anim.getPadding().y+"";
+		frameLength.text = anim.getFramelength()+"";
+		animSave.text = anim.getPath();
+	}
+	
 	@Override
 	public void initGui()
 	{
@@ -220,7 +236,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	{
 		if(button.id == 0)
 		{
-			R2DFileManager manager = new R2DFileManager("/res/anim/"+animSave.text+".r2d","R2D Animation: "+animSave.text,animation);
+			R2DFileManager manager = new R2DFileManager("/res/anim/"+animSave.text+Animation.getExtension(),animation);
 			manager.write();
 			Remote2D.getInstance().guiList.pop();
 		} else if(button.id == 1)

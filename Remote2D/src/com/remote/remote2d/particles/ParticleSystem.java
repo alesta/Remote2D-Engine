@@ -132,4 +132,9 @@ public class ParticleSystem extends EditorObject {
 		
 	}
 
+	public static String getExtension() {
+		return ".particle";
+	}
+
+
 }

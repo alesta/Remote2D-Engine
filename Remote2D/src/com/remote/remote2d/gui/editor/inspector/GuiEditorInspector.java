@@ -6,21 +6,24 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.entity.EditorObject;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.gui.editor.GuiWindowInsertComponent;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2D;
 
 public class GuiEditorInspector extends GuiMenu {
 		
-	public Entity currentEntity;
+	public EditorObject currentEntity;
 	private ArrayList<EditorObjectWizard> components;
 	private GuiButton button;
 	private GuiEditor editor;
 	public int offset = 0;
+	private int lastOffset = 0;
 	public Vector2D pos;
 	public Vector2D dim;
 
@@ -52,12 +55,14 @@ public class GuiEditorInspector extends GuiMenu {
 	public void tick(int i, int j, int k) {
 		super.tick(i, j, k);
 		
+		lastOffset = offset;
+		
 		if(pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
 		{
 			if(Remote2D.getInstance().getDeltaWheel() < 0)
-				offset += 5;
+				offset += 20;
 			if(Remote2D.getInstance().getDeltaWheel() > 0)
-				offset -= 5;
+				offset -= 20;
 			
 			if(offset > getTotalComponentHeight()-dim.y+20)
 				offset = getTotalComponentHeight()-dim.y+20;
@@ -96,7 +101,7 @@ public class GuiEditorInspector extends GuiMenu {
 		
 		GL11.glPushMatrix();
 		GL11.glScissor(pos.x, getHeight()-dim.y, dim.x, dim.y-20);
-		GL11.glTranslatef(0, -offset, 0);
+		GL11.glTranslatef(0, -(float)Interpolator.linearInterpolate(lastOffset, offset, interpolation), 0);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		
 		for(int x=0;x<components.size();x++)
@@ -107,9 +112,9 @@ public class GuiEditorInspector extends GuiMenu {
 		GL11.glPopMatrix();
 	}
 	
-	public void setCurrentEntity(Entity e)
+	public void setCurrentEntity(EditorObject o)
 	{
-		this.currentEntity = e;
+		this.currentEntity = o;
 		components.clear();
 		button.setDisabled(currentEntity == null);
 		if(currentEntity==null)
@@ -119,12 +124,16 @@ public class GuiEditorInspector extends GuiMenu {
 		EditorObjectWizard ew = new EditorObjectWizard(currentEntity,currentPos,dim.x);
 		components.add(ew);
 		currentPos.y += ew.getHeight();
-		
-		for(int x=0;x<e.getComponents().size();x++)
+		if(o instanceof Entity)
 		{
-			EditorObjectWizard cw = new EditorObjectWizard(e.getComponents().get(x),currentPos,dim.x);
-			components.add(cw);
-			currentPos.y += cw.getHeight();
+			Entity e = (Entity)o;
+			
+			for(int x=0;x<e.getComponents().size();x++)
+			{
+				EditorObjectWizard cw = new EditorObjectWizard(e.getComponents().get(x),currentPos,dim.x);
+				components.add(cw);
+				currentPos.y += cw.getHeight();
+			}
 		}
 		
 		//Log.debug("Component Count: "+components.size());
@@ -136,7 +145,8 @@ public class GuiEditorInspector extends GuiMenu {
 		{
 			components.get(x).setComponentFields();
 		}
-		editor.replaceSelectedEntity(currentEntity);
+		if(currentEntity instanceof Entity)
+			editor.replaceSelectedEntity((Entity)currentEntity);
 	}
 	
 	public boolean isTyping()
@@ -163,11 +173,6 @@ public class GuiEditorInspector extends GuiMenu {
 		if(button.id == 0)
 		{
 			apply();
-		} else if(button.id == 1)
-		{
-			for(int x=0;x<components.size();x++)
-				components.get(x).deselectFields();
-			editor.attemptToPutWindowOnTop(new GuiWindowInsertComponent(editor, new Vector2D(50,50), editor.getWindowBounds(), currentEntity, editor));
 		}
 	}
 
