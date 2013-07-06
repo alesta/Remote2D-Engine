@@ -156,7 +156,8 @@ public abstract class Collider {
 	
 	protected boolean getOpposites(float x, float y)
 	{
-		return (x>0 && y<0) || (x<0 && y>0) || x==0 || y==0;
+		boolean opposite = (x>0 && y<0) || (x<0 && y>0) || x==0 || y==0;
+		return opposite;
 	}
 	
 	protected int[] calculateInterval(Vector2D axis)

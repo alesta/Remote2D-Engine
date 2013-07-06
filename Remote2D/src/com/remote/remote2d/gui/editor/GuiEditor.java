@@ -212,6 +212,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(stampEntity != null)
 		{
+			stampEntity.updatePos();
 			stampEntity.pos = new Vector2D((int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale));
 			if(gridSnap)
 			{

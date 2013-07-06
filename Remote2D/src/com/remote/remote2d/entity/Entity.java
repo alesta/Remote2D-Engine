@@ -425,6 +425,11 @@ public class Entity extends EditorObject implements Cloneable {
 	public void apply() {
 		
 	}
+	
+	public void updatePos()
+	{
+		oldPos = pos.copy();
+	}
 
 	public void renderPreview(float interpolation) {
 		GL11.glPushMatrix();

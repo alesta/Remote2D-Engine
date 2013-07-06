@@ -63,11 +63,19 @@ public class GuiTextField extends Gui {
 			for(int x=0;x<typedChars.size();x++)
 			{
 				char key = typedChars.get(x);
-				if((Character.isDigit(key) || limitToDigits == TextLimiter.FULL || (key == '.' && limitToDigits == TextLimiter.LIMIT_TO_FLOAT) || (hexList.contains(""+key) && limitToDigits == TextLimiter.LIMIT_TO_HEX)  || key == '\b') && (text.length() < maxLength || maxLength == -1) || key == '\b')
+				
+				boolean intLimit = Character.isDigit(key) || limitToDigits != TextLimiter.LIMIT_TO_INTEGER;
+				boolean floatLimit = (key == '.' || Character.isDigit(key)) || limitToDigits != TextLimiter.LIMIT_TO_FLOAT;
+				boolean hexLimit = hexList.contains(""+key) || limitToDigits != TextLimiter.LIMIT_TO_HEX;
+				boolean maxLimit = text.length() < maxLength || maxLength == -1;
+
+				if((intLimit && floatLimit && hexLimit && maxLimit) || key == '\b')
 				{
 					hasTyped = true;
 					if(key == '\b' && text.length() != 0)
+					{
 						text = text.substring(0, text.length() - 1);
+					}
 					else if(key != '\b')
 						text += key;
 				}
@@ -81,7 +89,7 @@ public class GuiTextField extends Gui {
 				} else
 					backTimer--;
 			}else
-				backTimer = 20;
+				backTimer = 10;
 			
 		}
 	}

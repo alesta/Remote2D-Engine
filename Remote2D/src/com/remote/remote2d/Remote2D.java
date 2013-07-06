@@ -229,8 +229,10 @@ public class Remote2D {
 			if(Keyboard.getEventKeyState())
 			{
 				char c = Keyboard.getEventCharacter();
-				if(allowedChars.contains((""+c)) || c == '\b')
+				if(allowedChars.contains((""+c)))
 					charListLimited.add(c);
+				if(Keyboard.getEventKey() == Keyboard.KEY_BACK)
+					charListLimited.add('\b');
 				charList.add(c);
 				keyboardList.add(Keyboard.getEventKey());
 			}
