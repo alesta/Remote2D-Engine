@@ -123,6 +123,7 @@ public class EditorObjectWizard {
 		} catch (Exception e) {
 			throw new Remote2DException(e);
 		}
+		component.apply();
 	}
 	
 	public void deselectFields()

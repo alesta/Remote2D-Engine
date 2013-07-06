@@ -19,7 +19,7 @@ import com.remote.remote2d.logic.Vector2D;
 public class GuiEditorInspector extends GuiMenu {
 		
 	public EditorObject currentEntity;
-	private ArrayList<EditorObjectWizard> components;
+	private ArrayList<EditorObjectWizard> wizards;
 	private GuiButton button;
 	private GuiEditor editor;
 	public int offset = 0;
@@ -33,7 +33,7 @@ public class GuiEditorInspector extends GuiMenu {
 		this.pos = pos;
 		this.dim = dim;
 		this.editor = editor;
-		components = new ArrayList<EditorObjectWizard>();
+		wizards = new ArrayList<EditorObjectWizard>();
 		initGui();
 	}
 	
@@ -70,13 +70,17 @@ public class GuiEditorInspector extends GuiMenu {
 				offset = 0;
 		}
 		
-		for(int x=0;x<components.size();x++)
+		for(int x=0;x<wizards.size();x++)
 		{
-			components.get(x).tick(i,j+offset,k);
+			wizards.get(x).tick(i,j+offset,k);
 			
-			int changed = components.get(x).hasFieldBeenChanged();
-			if(changed != -1)
-				components.get(x).setComponentField(changed);
+			//int changed = wizards.get(x).hasFieldBeenChanged();
+			//if(changed != -1)
+			//{
+			//	wizards.get(x).setComponentField(changed);
+			//	if(currentEntity instanceof Entity)
+			//		editor.replaceSelectedEntity((Entity)currentEntity);
+			//}
 		}
 	}
 	
@@ -104,9 +108,9 @@ public class GuiEditorInspector extends GuiMenu {
 		GL11.glTranslatef(0, -(float)Interpolator.linearInterpolate(lastOffset, offset, interpolation), 0);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		
-		for(int x=0;x<components.size();x++)
+		for(int x=0;x<wizards.size();x++)
 		{
-			components.get(x).render(interpolation);
+			wizards.get(x).render(interpolation);
 		}
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		GL11.glPopMatrix();
@@ -115,14 +119,14 @@ public class GuiEditorInspector extends GuiMenu {
 	public void setCurrentEntity(EditorObject o)
 	{
 		this.currentEntity = o;
-		components.clear();
+		wizards.clear();
 		button.setDisabled(currentEntity == null);
 		if(currentEntity==null)
 			return;
 		//Log.debug("Setting Inspector Entity:"+e.name);
 		Vector2D currentPos = pos.copy();
 		EditorObjectWizard ew = new EditorObjectWizard(currentEntity,currentPos,dim.x);
-		components.add(ew);
+		wizards.add(ew);
 		currentPos.y += ew.getHeight();
 		if(o instanceof Entity)
 		{
@@ -131,7 +135,7 @@ public class GuiEditorInspector extends GuiMenu {
 			for(int x=0;x<e.getComponents().size();x++)
 			{
 				EditorObjectWizard cw = new EditorObjectWizard(e.getComponents().get(x),currentPos,dim.x);
-				components.add(cw);
+				wizards.add(cw);
 				currentPos.y += cw.getHeight();
 			}
 		}
@@ -141,9 +145,9 @@ public class GuiEditorInspector extends GuiMenu {
 	
 	public void apply()
 	{
-		for(int x=0;x<components.size();x++)
+		for(int x=0;x<wizards.size();x++)
 		{
-			components.get(x).setComponentFields();
+			wizards.get(x).setComponentFields();
 		}
 		if(currentEntity instanceof Entity)
 			editor.replaceSelectedEntity((Entity)currentEntity);
@@ -151,8 +155,8 @@ public class GuiEditorInspector extends GuiMenu {
 	
 	public boolean isTyping()
 	{
-		for(int x=0;x<components.size();x++)
-			if(components.get(x).isFieldSelected())
+		for(int x=0;x<wizards.size();x++)
+			if(wizards.get(x).isFieldSelected())
 				return true;
 		return false;
 	}
@@ -160,9 +164,9 @@ public class GuiEditorInspector extends GuiMenu {
 	public int getTotalComponentHeight()
 	{
 		int height = 0;
-		for(int x=0;x<components.size();x++)
+		for(int x=0;x<wizards.size();x++)
 		{
-			height += components.get(x).getHeight();
+			height += wizards.get(x).getHeight();
 		}
 		return height;
 	}

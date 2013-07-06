@@ -2,6 +2,7 @@ package com.remote.remote2d.gui.editor;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.Gui;
@@ -68,6 +69,7 @@ public class GuiEditorHeirarchy extends GuiMenu {
 			int textColor = 0xffffff;
 			if(editor.getMap().getEntityList().get(x).equals(editor.getSelectedEntity()))
 			{
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				GL11.glColor4f(1, 1, 1, 0.5f);
 				GL11.glBegin(GL11.GL_QUADS);
 					GL11.glVertex2f(pos.x,currentYPos);
@@ -76,6 +78,7 @@ public class GuiEditorHeirarchy extends GuiMenu {
 					GL11.glVertex2f(pos.x,currentYPos+20);
 				GL11.glEnd();
 				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
 				//textColor = 0x000000;
 			}
 			GL11.glBegin(GL11.GL_LINES);
