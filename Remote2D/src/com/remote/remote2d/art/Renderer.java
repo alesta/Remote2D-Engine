@@ -75,5 +75,4 @@ public class Renderer {
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
-	
 }

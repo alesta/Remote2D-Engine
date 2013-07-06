@@ -57,7 +57,7 @@ public class GuiEditorTopMenuSection extends Gui {
 	{
 		if(isEnabled != enabled)
 		{
-			Log.debug("Setting enabled of: "+title+" : "+isEnabled + " : "+enabled);
+			//Log.debug("Setting enabled of: "+title+" : "+isEnabled + " : "+enabled);
 			isEnabled = enabled;
 			menu.initSections();
 			
