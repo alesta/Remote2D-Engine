@@ -17,14 +17,13 @@ import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
 import com.remote.remote2d.logic.CollisionComparator;
 import com.remote.remote2d.logic.Interpolator;
-import com.remote.remote2d.logic.Vector2D;
-import com.remote.remote2d.logic.Vector2DF;
+import com.remote.remote2d.logic.Vector2;
 
 public class Map implements R2DFileSaver {
 	
 	private EntityList entities;
-	private Vector2D oldCamera = new Vector2D(0,0);
-	public Vector2D camera = new Vector2D(0,0);
+	private Vector2 oldCamera = new Vector2(0,0);
+	public Vector2 camera = new Vector2(0,0);
 	public int backgroundColor = 0xffffff;
 	public int gridSize = 16;
 	public float scale = 1.0f;
@@ -43,7 +42,7 @@ public class Map implements R2DFileSaver {
 	
 	public void render(boolean editor, float interpolation)
 	{
-		Vector2D iCamera = Interpolator.linearInterpolate(oldCamera, camera, interpolation);
+		Vector2 iCamera = Interpolator.linearInterpolate2f(oldCamera, camera, interpolation);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-iCamera.x, -iCamera.y, 0);
 		if(editor)
@@ -58,9 +57,9 @@ public class Map implements R2DFileSaver {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-camera.x, -camera.y, 0);
 		GL11.glScalef(scale, scale, 1);
-		Vector2D currentPos = new Vector2D(0,0);
-		currentPos.x = (int)(camera.x/scale-(camera.x/scale)%gridSize-gridSize);
-		currentPos.y = (int)(camera.y/scale-(camera.y/scale)%gridSize-gridSize);
+		Vector2 currentPos = new Vector2(0,0);
+		currentPos.x = camera.x/scale-(camera.x/scale)%gridSize-gridSize;
+		currentPos.y = camera.y/scale-(camera.y/scale)%gridSize-gridSize;
 		GL11.glColor4f(0,0,0,0.25f);
 		
 		for(int x=0;x<Remote2D.getInstance().displayHandler.height/scale/gridSize+2;x++)
@@ -116,7 +115,7 @@ public class Map implements R2DFileSaver {
 	 * @param vec Said collider's movement vector
 	 * @return The "correction" - just add this to your movement vector and you won't collide with anything
 	 */
-	public Vector2D getCorrection(Collider coll,Vector2D vec)
+	public Vector2 getCorrection(Collider coll,Vector2 vec)
 	{
 		ArrayList<Collider> allColliders = new ArrayList<Collider>();
 		
@@ -143,7 +142,7 @@ public class Map implements R2DFileSaver {
 		Collections.sort(allCollision, new CollisionComparator());
 		
 		//Second collsion pass: Get the actual collision vectors of each collider and add it to the main return vector
-		Vector2D correction = new Vector2D(0,0);
+		Vector2 correction = new Vector2(0,0);
 		for(int x=0;x<allCollision.size();x++)
 		{
 			Collider other = allCollision.get(x).idle;
@@ -193,7 +192,7 @@ public class Map implements R2DFileSaver {
 		return returnArray;
 	}
 	
-	public Entity getTopEntityAtPoint(Vector2D vec)
+	public Entity getTopEntityAtPoint(Vector2 vec)
 	{
 		Entity top = null;
 		for(int x=0;x<entities.size();x++)

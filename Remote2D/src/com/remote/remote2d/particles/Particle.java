@@ -7,19 +7,19 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.logic.Interpolator;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Map;
 
 public class Particle {
 	
-	private Vector2D pos;
+	private Vector2 pos;
 	private int dim;
 	private Color color;
 	private float alpha;
 	private long startTime;
 	
-	public Vector2D velocity;
-	public Vector2D environment;
+	public Vector2 velocity;
+	public Vector2 environment;
 	public Color startColor;
 	public Color endColor;
 	public int startSize;
@@ -29,7 +29,7 @@ public class Particle {
 	public long life;
 	public long lifeLength;
 	
-	public Particle(Vector2D startPos, Vector2D velocity, Vector2D environment, Color startColor, Color endColor, int startSize, int endSize, float startAlpha, float endAlpha, long lifeLength)
+	public Particle(Vector2 startPos, Vector2 velocity, Vector2 environment, Color startColor, Color endColor, int startSize, int endSize, float startAlpha, float endAlpha, long lifeLength)
 	{
 		this.pos = startPos.copy();
 		this.velocity = velocity.copy();
@@ -55,14 +55,14 @@ public class Particle {
 			
 		
 		velocity = velocity.add(environment);
-		Vector2D correction = new Vector2D(0,0);
+		Vector2 correction = new Vector2(0,0);
 		if(map != null)
-			correction = map.getCorrection(pos.subtract(new Vector2D(dim/2,dim/2)).getColliderWithDim(new Vector2D(dim,dim)), velocity);
+			correction = map.getCorrection(pos.subtract(new Vector2(dim/2,dim/2)).getColliderWithDim(new Vector2(dim,dim)), velocity);
 		pos = pos.add(velocity.add(correction));
 		
-		if(!correction.equals(new Vector2D(0,0)))
+		if(!correction.equals(new Vector2(0,0)))
 		{
-			velocity = velocity.add(velocity.multiply(correction.normalize()).multiply(new Vector2D(2,2)));
+			velocity = velocity.add(velocity.multiply(correction.normalize()).multiply(new Vector2(2,2)));
 		}
 		
 		float percentage = ((float)life)/((float)lifeLength);

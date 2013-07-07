@@ -14,7 +14,7 @@ import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiInGame;
 import com.remote.remote2d.io.R2DFileManager;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Map;
 
 public class GuiEditorTopMenu extends Gui {
@@ -208,19 +208,19 @@ public class GuiEditorTopMenu extends Gui {
 				Remote2D.getInstance().guiList.push(new GuiEditor());
 			} else if(secSubTitle.equals("View Art Asset"))
 			{
-				editor.attemptToPutWindowOnTop(new GuiWindowViewArtAsset(editor, new Vector2D(200,200), editor.getWindowBounds()));
+				editor.attemptToPutWindowOnTop(new GuiWindowViewArtAsset(editor, new Vector2(200,200), editor.getWindowBounds()));
 			} else if(secSubTitle.equalsIgnoreCase("Fancypants Collider Test"))
 			{
-				editor.attemptToPutWindowOnTop(new GuiWindowCollisionTest(editor, new Vector2D(300,300), editor.getWindowBounds()));
+				editor.attemptToPutWindowOnTop(new GuiWindowCollisionTest(editor, new Vector2(300,300), editor.getWindowBounds()));
 			} else if(secSubTitle.equalsIgnoreCase("Normal Collider Test"))
 			{
-				editor.attemptToPutWindowOnTop(new GuiWindowGeneralColliderTest(editor, new Vector2D(300,300), editor.getWindowBounds()));
+				editor.attemptToPutWindowOnTop(new GuiWindowGeneralColliderTest(editor, new Vector2(300,300), editor.getWindowBounds()));
 			} else if(secSubTitle.equalsIgnoreCase("1D Perlin Noise"))
 			{
-				editor.attemptToPutWindowOnTop(new GuiWindowPerlin1D(editor, new Vector2D(10,30), editor.getWindowBounds()));
+				editor.attemptToPutWindowOnTop(new GuiWindowPerlin1D(editor, new Vector2(10,30), editor.getWindowBounds()));
 			} else if(secSubTitle.equalsIgnoreCase("2D Perlin Noise"))
 			{
-				editor.attemptToPutWindowOnTop(new GuiWindowPerlin2D(editor, new Vector2D(20,30), editor.getWindowBounds()));
+				editor.attemptToPutWindowOnTop(new GuiWindowPerlin2D(editor, new Vector2(20,30), editor.getWindowBounds()));
 			}
 		} else if(secTitle.equalsIgnoreCase("World"))
 		{

@@ -7,15 +7,16 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiMenu;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorHeirarchy extends GuiMenu {
 	
-	public Vector2D pos = new Vector2D(0,20);
-	public Vector2D dim;
+	public Vector2 pos = new Vector2(0,20);
+	public Vector2 dim;
 	private GuiEditor editor;
 	
-	public GuiEditorHeirarchy(Vector2D pos, Vector2D dim, GuiEditor editor)
+	public GuiEditorHeirarchy(Vector2 pos, Vector2 dim, GuiEditor editor)
 	{
 		this.editor = editor;
 		this.pos = pos;
@@ -32,14 +33,14 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	public void tick(int i, int j, int k) {
 		if(editor.getMap() == null)
 			return;
-		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
+		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
 		{
-			int currentYPos = pos.y;
+			float currentYPos = pos.y;
 			int index = -1;
 			for(int x=0;x<editor.getMap().getEntityList().size();x++)
 			{
-				Vector2D currentPos = new Vector2D(pos.x,currentYPos);
-				if(currentPos.getColliderWithDim(new Vector2D(dim.x,20)).isPointInside(new Vector2D(i,j)))
+				Vector2 currentPos = new Vector2(pos.x,currentYPos);
+				if(currentPos.getColliderWithDim(new Vector2(dim.x,20)).isPointInside(new Vector2(i,j)))
 					index = x;
 				currentYPos += 20;
 			}
@@ -63,7 +64,7 @@ public class GuiEditorHeirarchy extends GuiMenu {
 		if(editor.getMap() == null)
 			return;
 		
-		int currentYPos = pos.y;
+		float currentYPos = pos.y;
 		for(int x=0;x<editor.getMap().getEntityList().size();x++)
 		{
 			int textColor = 0xffffff;

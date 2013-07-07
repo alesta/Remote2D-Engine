@@ -16,7 +16,8 @@ import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.gui.editor.browser.GuiEditorBrowser;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Map;
 
 public class GuiEditor extends GuiMenu implements WindowHolder {
@@ -34,7 +35,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private boolean allowEntityPlace = true;
 	private boolean gridSnap = false;
 	
-	public Vector2D posOffset = new Vector2D(0,0);
+	public Vector2 posOffset = new Vector2(0,0);
 	
 	public GuiEditor()
 	{
@@ -54,14 +55,14 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(inspector == null)
 		{
 			inspector = new GuiEditorInspector(
-					new Vector2D(0,20),
-					new Vector2D(300,getHeight()-320), this);
+					new Vector2(0,20),
+					new Vector2(300,getHeight()-320), this);
 		} else
-			inspector.dim = new Vector2D(300,getHeight()-320);
+			inspector.dim = new Vector2(300,getHeight()-320);
 		
 		if(preview == null)
 		{
-			preview = new GuiEditorPreview(inspector,new Vector2D(0,getHeight()-300),new Vector2D(300,300));
+			preview = new GuiEditorPreview(inspector,new Vector2(0,getHeight()-300),new Vector2(300,300));
 		} else
 			preview.pos.y = getHeight()-300;
 		
@@ -69,15 +70,15 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(heirarchy == null)
 		{
-			heirarchy = new GuiEditorHeirarchy(new Vector2D(getWidth()-300,20),
-					new Vector2D(300,300), this);
+			heirarchy = new GuiEditorHeirarchy(new Vector2(getWidth()-300,20),
+					new Vector2(300,300), this);
 		} else
-			heirarchy.pos = new Vector2D(getWidth()-300,20);
+			heirarchy.pos = new Vector2(getWidth()-300,20);
 		
 		heirarchy.initGui();
 		
 		if(browser == null)
-			browser = new GuiEditorBrowser(this,new Vector2D(getWidth()-300,320),new Vector2D(300,getHeight()-320));
+			browser = new GuiEditorBrowser(this,new Vector2(getWidth()-300,320),new Vector2(300,getHeight()-320));
 		else
 		{
 			browser.pos.x = getWidth()-300;
@@ -213,7 +214,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(stampEntity != null)
 		{
 			stampEntity.updatePos();
-			stampEntity.pos = new Vector2D((int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale));
+			stampEntity.pos = new Vector2((i+map.camera.x)/map.scale,(j+map.camera.y)/map.scale);
 			if(gridSnap)
 			{
 				stampEntity.pos.x -= stampEntity.pos.x%map.gridSize;
@@ -234,11 +235,11 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				map.getEntityList().addEntityToList(selectedEntity);
 				inspector.setCurrentEntity(selectedEntity);
 			} else if(map != null && !(selectedEntity != null && (
-				   inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2D(i,j))
-					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2D(i,j)))))
+				   inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2(i,j))
+					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2(i,j)))))
 			{
-				selectedEntity = map.getTopEntityAtPoint(new Vector2D( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale)));
-				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2D( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale))));
+				selectedEntity = map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale)));
+				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale))));
 			}
 		}
 		
@@ -265,7 +266,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	public ColliderBox getWindowBounds()
 	{
-		return new ColliderBox(new Vector2D(0,20),new Vector2D(getWidth(),getHeight()-20));
+		return new ColliderBox(new Vector2(0,20),new Vector2(getWidth(),getHeight()-20));
 	}
 
 	@Override
@@ -278,7 +279,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}else if(windowStack.peek().equals(window))
 		{
 			
-		}else if(!(windowStack.peek().pos.getColliderWithDim(windowStack.peek().dim).isPointInside(new Vector2D(Remote2D.getInstance().getMouseCoords()))))
+		}else if(!(windowStack.peek().pos.getColliderWithDim(windowStack.peek().dim).isPointInside(new Vector2(new Vector2(Remote2D.getInstance().getMouseCoords()).getElements()))))
 		{
 			int x = windowStack.indexOf(window);
 			windowStack.peek().setSelected(false);
@@ -303,7 +304,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	public boolean getMouseInWindow(int i, int j, GuiWindow window)
 	{
-		return window.pos.getColliderWithDim(window.dim.add(new Vector2D(0,20))).isPointInside(new Vector2D(i,j));
+		return window.pos.getColliderWithDim(window.dim.add(new Vector2(0,20))).isPointInside(new Vector2(i,j));
 	}
 	
 	public void setSelectedEntity(int index)

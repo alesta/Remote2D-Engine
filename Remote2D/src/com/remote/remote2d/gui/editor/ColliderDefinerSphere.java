@@ -2,12 +2,12 @@ package com.remote.remote2d.gui.editor;
 
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.ColliderSphere;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class ColliderDefinerSphere extends ColliderDefiner {
 	
-	Vector2D origin;
-	int radius = -1;
+	Vector2 origin;
+	float radius = -1;
 
 	@Override
 	public void click() {
@@ -15,9 +15,9 @@ public class ColliderDefinerSphere extends ColliderDefiner {
 			origin = hover.copy();
 		else if(radius == -1)
 		{
-			int a = Math.abs(hover.x-origin.x);
-			int b = Math.abs(hover.y-origin.y);
-			radius = (int)Math.sqrt(a*a+b*b);
+			float a = Math.abs(hover.x-origin.x);
+			float b = Math.abs(hover.y-origin.y);
+			radius = (float) Math.sqrt(a*a+b*b);
 		}
 	}
 
@@ -30,9 +30,9 @@ public class ColliderDefinerSphere extends ColliderDefiner {
 	public Collider getCollider() {
 		if(hover == null || origin == null)
 			return null;
-		int a = Math.abs(hover.x-origin.x);
-		int b = Math.abs(hover.y-origin.y);
-		return isDefined() ? new ColliderSphere(origin,radius) : new ColliderSphere(origin,(int)Math.sqrt(a*a+b*b));
+		float a = Math.abs(hover.x-origin.x);
+		float b = Math.abs(hover.y-origin.y);
+		return isDefined() ? new ColliderSphere(new Vector2(origin.getElements()),(float)radius) : new ColliderSphere(new Vector2(origin.getElements()),(int)Math.sqrt(a*a+b*b));
 	}
 
 }

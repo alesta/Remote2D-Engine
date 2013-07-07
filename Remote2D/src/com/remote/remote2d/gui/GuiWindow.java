@@ -8,12 +8,13 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.logic.Vector2;
 
 public abstract class GuiWindow extends Gui {
 	
-	public Vector2D pos;
-	public Vector2D dim;
+	public Vector2 pos;
+	public Vector2 dim;
 	public ColliderBox allowedBounds;
 	public String title;
 	
@@ -21,13 +22,13 @@ public abstract class GuiWindow extends Gui {
 	protected WindowHolder holder;
 	protected boolean isSelected;
 	
-	private Vector2D dragOffset = new Vector2D(-1,-1);
+	private Vector2 dragOffset = new Vector2(-1,-1);
 	private boolean isDragging = false;
 	
 	private final int windowTopColor = 0xff5555;
 	private final int windowMainColor = 0xffbbbb;
 	
-	public GuiWindow(WindowHolder holder, Vector2D pos, Vector2D dim, ColliderBox allowedBounds, String title)
+	public GuiWindow(WindowHolder holder, Vector2 pos, Vector2 dim, ColliderBox allowedBounds, String title)
 	{
 		this.holder = holder;
 		this.pos = pos;
@@ -49,14 +50,14 @@ public abstract class GuiWindow extends Gui {
 	public void tick(int i, int j, int k) {
 		boolean buttonOverride = false;
 		
-		if(!pos.getColliderWithDim(dim.add(new Vector2D(20,20))).isPointInside(new Vector2D(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
+		if(!pos.getColliderWithDim(dim.add(new Vector2(20,20))).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
 		{
 			isSelected = false;
 			buttonOverride = true;
 		}
 		if(!isSelected)
 		{
-			if(pos.getColliderWithDim(dim.add(new Vector2D(20,20))).isPointInside(new Vector2D(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
+			if(pos.getColliderWithDim(dim.add(new Vector2(20,20))).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
 			{
 				holder.attemptToPutWindowOnTop(this);
 				buttonOverride = true;
@@ -72,7 +73,7 @@ public abstract class GuiWindow extends Gui {
 			}
 		}
 		
-		if(pos.getColliderWithDim(new Vector2D(dim.x,20)).isPointInside(new Vector2D(i,j)) && k == 1)
+		if(pos.getColliderWithDim(new Vector2(dim.x,20)).isPointInside(new Vector2(i,j)) && k == 1)
 		{
 			isDragging = true;
 		} else if(k == 0)
@@ -81,22 +82,22 @@ public abstract class GuiWindow extends Gui {
 		if(isDragging)
 		{
 			if(dragOffset.x == -1 || dragOffset.y == -1)
-				dragOffset = new Vector2D(i-pos.x,j-pos.y);
+				dragOffset = new Vector2(i-pos.x,j-pos.y);
 			else
 			{
-				int x = i-dragOffset.x;
-				int y = j-dragOffset.y;
+				float x = i-dragOffset.x;
+				float y = j-dragOffset.y;
 				if(y < allowedBounds.pos.y)
 					y = allowedBounds.pos.y;
 				
-				pos = new Vector2D(x,y);
+				pos = new Vector2(x,y);
 			}
 		} else
-			dragOffset = new Vector2D(-1,-1);
+			dragOffset = new Vector2(-1,-1);
 		
 		for(int x=0;x<buttonList.size();x++)
 		{
-			buttonList.get(x).tick(getMouseInWindow(i,j).x, getMouseInWindow(i,j).y, k);
+			buttonList.get(x).tick((int)getMouseInWindow(i,j).x, (int)getMouseInWindow(i,j).y, k);
 			if(buttonList.get(x).selectState == 2 || buttonList.get(x).selectState == 3)
 			{
 				if(Remote2D.getInstance().hasMouseBeenPressed() && !buttonOverride)
@@ -109,9 +110,9 @@ public abstract class GuiWindow extends Gui {
 	
 	public abstract void renderContents(float interpolation);
 	
-	public Vector2D getMouseInWindow(int i, int j)
+	public Vector2 getMouseInWindow(int i, int j)
 	{
-		return new Vector2D(i-pos.x,j-pos.y-20);
+		return new Vector2(i-pos.x,j-pos.y-20);
 	}
 
 	@Override
@@ -139,7 +140,7 @@ public abstract class GuiWindow extends Gui {
 		
 		Fonts.get("Arial").drawString(title, pos.x+10, pos.y+1, 20, 0xffffff);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		GL11.glScissor(pos.x, Remote2D.getInstance().displayHandler.height-(pos.y+dim.y+20), dim.x, dim.y);
+		GL11.glScissor((int)pos.x, (int)(Remote2D.getInstance().displayHandler.height-(pos.y+dim.y+20)), (int)dim.x, (int)dim.y);
 		
 		GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x,pos.y+20,0);

@@ -9,8 +9,7 @@ import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.logic.Interpolator;
-import com.remote.remote2d.logic.Vector2D;
-import com.remote.remote2d.logic.Vector2DF;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.particles.ParticleSystem;
 
 public class ComponentPlayer extends Component {
@@ -30,9 +29,9 @@ public class ComponentPlayer extends Component {
 	
 	private ParticleSystem testParticles;
 	
-	private Vector2DF velocity = new Vector2DF(0,0);
-	private Vector2DF acceleration = new Vector2DF(0,2);
-	private Vector2D maxVelocity = new Vector2D(10,-1);
+	private Vector2 velocity = new Vector2(0,0);
+	private Vector2 acceleration = new Vector2(0,2);
+	private Vector2 maxVelocity = new Vector2(10,-1);
 		
 	public ComponentPlayer(Entity entity)
 	{
@@ -86,8 +85,8 @@ public class ComponentPlayer extends Component {
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && (state == PlayerState.WALK || state == PlayerState.IDLE))
 			velocity.y -= 20;
 		
-		Vector2D correction = Remote2D.getInstance().map.getCorrection(entity.pos.getColliderWithDim(entity.getDim()),new Vector2D(velocity));
-		velocity = new Vector2DF(new Vector2D(velocity.add(correction)).getElements());
+		Vector2 correction = Remote2D.getInstance().map.getCorrection(entity.pos.getColliderWithDim(entity.getDim()),new Vector2(velocity.getElements()));
+		velocity = velocity.add(correction);
 		
 		//velocity = velocity.multiply(new Vector2DF(friction,friction));
 		
@@ -101,8 +100,8 @@ public class ComponentPlayer extends Component {
 			state = PlayerState.LAND;
 		//velocity.print();
 		
-		int right = Remote2D.getInstance().map.camera.x+Remote2D.getInstance().displayHandler.width;
-		int left = Remote2D.getInstance().map.camera.x;
+		float right = Remote2D.getInstance().map.camera.x+Remote2D.getInstance().displayHandler.width;
+		float left = Remote2D.getInstance().map.camera.x;
 		if(entity.pos.x+entity.getDim().x > right)
 			Remote2D.getInstance().map.camera.x += (entity.pos.x+entity.getDim().x)-right;
 		if(entity.pos.x < left)
@@ -122,14 +121,14 @@ public class ComponentPlayer extends Component {
 		{
 			currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());
 			if(state == PlayerState.LAND && currentAnimation != null)
-				stateTimer = currentAnimation.getFramelength()*currentAnimation.getFrames().x*currentAnimation.getFrames().y;
+				stateTimer = (int) (currentAnimation.getFramelength()*currentAnimation.getFrames().x*currentAnimation.getFrames().y);
 		}
 		
 		if(currentAnimation != null)
 			currentAnimation.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
 		
 		
-		testParticles.pos = new Vector2D(i,j).add(Remote2D.getInstance().map.camera);
+		testParticles.pos = new Vector2(i,j).add(Remote2D.getInstance().map.camera);
 		if(particleTest)
 			testParticles.tick(false);
 			
@@ -178,10 +177,10 @@ public class ComponentPlayer extends Component {
 		
 		if(currentAnimation != null)
 		{
-			Vector2D posVec = new Vector2D(0,0);
+			Vector2 posVec = new Vector2(0,0);
 			posVec.x = entity.getPos(interpolation).x+entity.getDim().x/2-currentAnimation.getSpriteDim().x/2;
 			posVec.y = entity.getPos(interpolation).y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
-			currentAnimation.render(posVec, currentAnimation.getSpriteDim());
+			currentAnimation.render(posVec, new Vector2(currentAnimation.getSpriteDim().getElements()));
 		}
 		
 		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT))

@@ -1,26 +1,19 @@
 package com.remote.remote2d.logic;
 
-public class Vector3DF extends Vector {
+public class Vector3 extends Vector {
 	
 	public float x;
 	public float y;
 	public float z;
 	
-	public Vector3DF(float x, float y, float z)
+	public Vector3(float x, float y, float z)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public Vector3DF(Vector2DF vec)
-	{
-		this.x = vec.x;
-		this.y = vec.y;
-		z = 1;
-	}
-	
-	public Vector3DF(Vector2D vec)
+	public Vector3(Vector2 vec)
 	{
 		this.x = vec.x;
 		this.y = vec.y;
@@ -36,7 +29,7 @@ public class Vector3DF extends Vector {
 	@Override
 	public Vector convertElementsToVector(float[] elements) {
 		elements = removeExcessElements(elements);
-		return new Vector3DF(elements[0],elements[1],elements[2]);
+		return new Vector3(elements[0],elements[1],elements[2]);
 	}
 	
 	@Override
@@ -44,14 +37,14 @@ public class Vector3DF extends Vector {
 		return 3;
 	}
 	
-	public float dot(Vector3DF vec)
+	public float dot(Vector3 vec)
 	{
 		return x*vec.x+y*vec.y+z*vec.z;
 	}
 	
-	public Vector3DF add(Vector3DF vec)
+	public Vector3 add(Vector3 vec)
 	{
-		return new Vector3DF(x+vec.x,y+vec.y,z+vec.z);
+		return new Vector3(x+vec.x,y+vec.y,z+vec.z);
 	}
 	
 	public String toString()

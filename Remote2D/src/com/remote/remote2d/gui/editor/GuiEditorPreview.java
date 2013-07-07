@@ -7,16 +7,16 @@ import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorPreview extends Gui {
 	
 	private GuiEditorInspector inspector;
 	
-	public Vector2D pos;
-	public Vector2D dim;
+	public Vector2 pos;
+	public Vector2 dim;
 	
-	public GuiEditorPreview(GuiEditorInspector inspector, Vector2D pos, Vector2D dim)
+	public GuiEditorPreview(GuiEditorInspector inspector, Vector2 pos, Vector2 dim)
 	{
 		this.pos = pos;
 		this.dim = dim;
@@ -48,7 +48,7 @@ public class GuiEditorPreview extends Gui {
 		GL11.glVertex2f(pos.x+dim.x, pos.y+20);
 		GL11.glEnd();
 		
-		GL11.glScissor(pos.x, Remote2D.getInstance().displayHandler.height-pos.y-dim.y, dim.x, dim.y-20);
+		GL11.glScissor((int)pos.x, (int)(Remote2D.getInstance().displayHandler.height-pos.y-dim.y), (int)dim.x, (int)dim.y-20);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		
 		if(inspector.currentEntity != null)

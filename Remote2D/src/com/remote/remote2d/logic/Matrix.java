@@ -78,8 +78,8 @@ public class Matrix {
 		return matrix;
 	}
 	
-	public static Vector3DF vertexMultiply(float[][] matrix, Vector3DF vert) {
-	  	Vector3DF v = new Vector3DF(0,0,1);
+	public static Vector3 vertexMultiply(float[][] matrix, Vector3 vert) {
+	  	Vector3 v = new Vector3(0,0,1);
 
 	  	v.x = vert.x * matrix[0][0] +
 			  vert.y * matrix[1][0] +
@@ -104,7 +104,7 @@ public class Matrix {
 		return matrix;
 	}
 	
-	public static float[][] getTranslationMatrix(Vector2DF t)
+	public static float[][] getTranslationMatrix(Vector2 t)
 	{
 		float[][] matrix = {{ 1, 0, t.x },
 							{ 0, 1, t.y },
@@ -112,7 +112,7 @@ public class Matrix {
 		return matrix;
 	}
 	
-	public static float[][] getScaleMatrix(Vector2DF s)
+	public static float[][] getScaleMatrix(Vector2 s)
 	{
 		float[][] matrix = {{ s.x, 0,   0 },
 							{ 0,   s.y, 0 },

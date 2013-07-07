@@ -8,13 +8,13 @@ import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Noise1D;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiWindowPerlin1D extends GuiWindow {
 		private float[] values;
 
-	public GuiWindowPerlin1D(WindowHolder holder, Vector2D pos, ColliderBox allowedBounds) {
-		super(holder, pos, new Vector2D(300,300), allowedBounds, "1D Perlin Noise");
+	public GuiWindowPerlin1D(WindowHolder holder, Vector2 pos, ColliderBox allowedBounds) {
+		super(holder, pos, new Vector2(300,300), allowedBounds, "1D Perlin Noise");
 		generate();
 	}
 	
@@ -40,7 +40,7 @@ public class GuiWindowPerlin1D extends GuiWindow {
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2D(30,10),new Vector2D(240,40),"Regenerate"));
+		buttonList.add(new GuiButton(0,new Vector2(30,10),new Vector2(240,40),"Regenerate"));
 	}
 	
 	@Override

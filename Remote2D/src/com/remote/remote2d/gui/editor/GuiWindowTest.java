@@ -6,15 +6,15 @@ import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiWindowTest extends GuiWindow {
 	
 	GuiTextField field;
 
-	public GuiWindowTest(WindowHolder holder, Vector2D pos, Vector2D dim, ColliderBox allowedBounds, String title) {
+	public GuiWindowTest(WindowHolder holder, Vector2 pos, Vector2 dim, ColliderBox allowedBounds, String title) {
 		super(holder, pos, dim, allowedBounds, title);
-		field = new GuiTextField(new Vector2D(30, 30), new Vector2D(200,40), 20);
+		field = new GuiTextField(new Vector2(30, 30), new Vector2(200,40), 20);
 	}
 
 	@Override
@@ -35,8 +35,8 @@ public class GuiWindowTest extends GuiWindow {
 	public void tick(int i, int j, int k)
 	{
 		super.tick(i, j, k);
-		Vector2D mouseInWindow = getMouseInWindow(i,j);
-		field.tick(mouseInWindow.x, mouseInWindow.y, k);
+		Vector2 mouseInWindow = getMouseInWindow(i,j);
+		field.tick((int)mouseInWindow.x, (int)mouseInWindow.y, k);
 	}
 
 }

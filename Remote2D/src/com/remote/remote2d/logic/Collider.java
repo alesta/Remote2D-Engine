@@ -5,9 +5,9 @@ import com.esotericsoftware.minlog.Log;
 public abstract class Collider {
 	
 	public boolean isIdle = true;
-	public Vector2D[] verts;
+	public Vector2[] verts;
 	
-	public Collider(Vector2D[] verts)
+	public Collider(Vector2[] verts)
 	{
 		this.verts = verts;
 	}
@@ -17,7 +17,7 @@ public abstract class Collider {
 		
 	}
 	
-	public Collision getCollision(Collider other, Vector2D movement)
+	public Collision getCollision(Collider other, Vector2 movement)
 	{
 		Collider moved = this.getTransformedCollider(movement);
 		Collision collision = new Collision();
@@ -27,18 +27,18 @@ public abstract class Collider {
 		updateVerts();
 		for(int j = moved.verts.length-1, i = 0; i < moved.verts.length; j = i, i++)
 		{
-			Vector2D v0 = verts[j];
-			Vector2D v1 = verts[i];
-			Vector2D edge = new Vector2D(0,0);
+			Vector2 v0 = verts[j];
+			Vector2 v1 = verts[i];
+			Vector2 edge = new Vector2(0,0);
 			edge.x = v1.x - v0.x; // edge
 			edge.y = v1.y - v0.y; // edge
 		  
-			Vector2D axis = edge.perp(); // Separate axis is perpendicular to the edge
+			Vector2 axis = edge.perp(); // Separate axis is perpendicular to the edge
 			if(calculateCollisionInfo(axis, moved, other, collision))
 			{
 				if(!collision.collides)
 				{
-					collision.correction = new Vector2D(0,0);
+					collision.correction = new Vector2(0,0);
 					collision.lengthSquared = 0;
 				}
 				return collision;
@@ -47,18 +47,18 @@ public abstract class Collider {
 		
 		for(int j = other.verts.length-1, i = 0; i < other.verts.length; j = i, i++)
 		{
-			Vector2D v0 = other.verts[j];
-			Vector2D v1 = other.verts[i];
-			Vector2D edge2 = new Vector2D(0,0);
+			Vector2 v0 = other.verts[j];
+			Vector2 v1 = other.verts[i];
+			Vector2 edge2 = new Vector2(0,0);
 			edge2.x = v1.x - v0.x; // edge
 			edge2.y = v1.y - v0.y; // edge
 		  
-			Vector2D axis = edge2.perp(); // Separate axis is perpendicular to the edge
+			Vector2 axis = edge2.perp(); // Separate axis is perpendicular to the edge
 			if(calculateCollisionInfo(axis, moved, other, collision))
 			{
 				if(!collision.collides)
 				{
-					collision.correction = new Vector2D(0,0);
+					collision.correction = new Vector2(0,0);
 					collision.lengthSquared = 0;
 				}
 				return collision;
@@ -69,7 +69,7 @@ public abstract class Collider {
 		return collision;
 	}
 	
-	protected boolean doesCollideOnAxis(Collider moved, Collider poly2, Vector2D axis)
+	protected boolean doesCollideOnAxis(Collider moved, Collider poly2, Vector2 axis)
 	{
 		int[] thisMinMax = moved.calculateInterval(axis);
 		int mina = thisMinMax[0];
@@ -96,7 +96,7 @@ public abstract class Collider {
 	 * @return If the collision info is "finished."  In other words, if more calculations
 	 * 			are not needed.
 	 */
-	protected boolean calculateCollisionInfo(Vector2D axis, Collider moved, Collider poly2, Collision info) {
+	protected boolean calculateCollisionInfo(Vector2 axis, Collider moved, Collider poly2, Collision info) {
 		int[] thisMinMax = moved.calculateInterval(axis);
 		int mina = thisMinMax[0];
 		int maxa = thisMinMax[1];
@@ -132,9 +132,9 @@ public abstract class Collider {
 		assert(axis_length_squared > 0.00001);
 
 		// the mtd vector for that axis
-		Vector2D sep = new Vector2D(0,0); 
-		sep.x = (int) (axis.x * (overlap / axis_length_squared));
-		sep.y = (int) (axis.y * (overlap / axis_length_squared));
+		Vector2 sep = new Vector2(0,0); 
+		sep.x = (float)(axis.x * (overlap / axis_length_squared));
+		sep.y = (float)(axis.y * (overlap / axis_length_squared));
 		
 
 		// the mtd vector length squared.
@@ -160,12 +160,12 @@ public abstract class Collider {
 		return opposite;
 	}
 	
-	protected int[] calculateInterval(Vector2D axis)
+	protected int[] calculateInterval(Vector2 axis)
 	{
 		return calculateInterval(verts,axis);
 	}
 		
-	protected int[] calculateInterval(Vector2D[] verts, Vector2D axis) {
+	protected int[] calculateInterval(Vector2[] verts, Vector2 axis) {
 		int min;
 		int max;
 		min = max = (int)verts[0].dotVec(axis);
@@ -203,8 +203,8 @@ public abstract class Collider {
 	}
 	
 	public abstract void updateVerts();
-	public abstract boolean isPointInside(Vector2D vec);
-	public abstract Collider getTransformedCollider(Vector2D trans);
+	public abstract boolean isPointInside(Vector2 vec);
+	public abstract Collider getTransformedCollider(Vector2 trans);
 	public abstract void drawCollider();
 	
 }

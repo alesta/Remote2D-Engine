@@ -8,7 +8,7 @@ import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiWindowInsertComponent extends GuiWindow {
 	
@@ -17,9 +17,9 @@ public class GuiWindowInsertComponent extends GuiWindow {
 	GuiButton doneButton;
 	GuiEditor editor;
 
-	public GuiWindowInsertComponent(WindowHolder holder, Vector2D pos, ColliderBox allowedBounds, Entity e, GuiEditor editor) {
-		super(holder, pos, new Vector2D(200,95), allowedBounds, "Insert Component");
-		textField = new GuiTextField(new Vector2D(10,5),new Vector2D(180,40),20);
+	public GuiWindowInsertComponent(WindowHolder holder, Vector2 pos, ColliderBox allowedBounds, Entity e, GuiEditor editor) {
+		super(holder, pos, new Vector2(200,95), allowedBounds, "Insert Component");
+		textField = new GuiTextField(new Vector2(10,5),new Vector2(180,40),20);
 		this.entity = e;
 		this.editor = editor;
 	}
@@ -27,10 +27,10 @@ public class GuiWindowInsertComponent extends GuiWindow {
 	public void initGui()
 	{
 		buttonList.clear();
-		doneButton = new GuiButton(0,new Vector2D(10,50),new Vector2D(80,40),"Done");
+		doneButton = new GuiButton(0,new Vector2(10,50),new Vector2(80,40),"Done");
 		doneButton.setDisabled(true);
 		buttonList.add(doneButton);
-		buttonList.add(new GuiButton(1,new Vector2D(110,50),new Vector2D(80,40),"Cancel"));
+		buttonList.add(new GuiButton(1,new Vector2(110,50),new Vector2(80,40),"Cancel"));
 	}
 
 	@Override
@@ -42,8 +42,8 @@ public class GuiWindowInsertComponent extends GuiWindow {
 	public void tick(int i, int j, int k)
 	{
 		super.tick(i, j, k);
-		Vector2D mouse = getMouseInWindow(i,j);
-		textField.tick(mouse.x, mouse.y, k);
+		Vector2 mouse = getMouseInWindow(i,j);
+		textField.tick((int)mouse.x, (int)mouse.y, k);
 		
 		if(!Remote2D.getInstance().componentList.containsComponent(textField.text) && !doneButton.getDisabled())
 			doneButton.setDisabled(true);

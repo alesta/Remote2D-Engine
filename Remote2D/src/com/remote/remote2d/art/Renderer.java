@@ -2,11 +2,11 @@ package com.remote.remote2d.art;
 
 import org.lwjgl.opengl.GL11;
 
-import com.remote.remote2d.logic.Vector2DF;
+import com.remote.remote2d.logic.Vector2;
 
 public class Renderer {
 	
-	public static void drawPoly(Vector2DF[] vectors, Vector2DF[] uv, Texture tex, float red, float green, float blue, float alpha)
+	public static void drawPoly(Vector2[] vectors, Vector2[] uv, Texture tex, float red, float green, float blue, float alpha)
 	{
 		tex.bind();
 		GL11.glColor4f(red, green, blue, alpha);
@@ -23,7 +23,7 @@ public class Renderer {
 		GL11.glColor3f(1, 1, 1);
 	}
 	
-	public static void drawPoly(Vector2DF[] vectors, float red, float green, float blue, float alpha)
+	public static void drawPoly(Vector2[] vectors, float red, float green, float blue, float alpha)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(red, green, blue, alpha);
@@ -39,7 +39,7 @@ public class Renderer {
 	}
 	
 	
-	public static void drawRect(Vector2DF pos, Vector2DF dim, Vector2DF uvPos, Vector2DF uvDim, Texture tex, float red, float green, float blue, float alpha)
+	public static void drawRect(Vector2 pos, Vector2 dim, Vector2 uvPos, Vector2 uvDim, Texture tex, float red, float green, float blue, float alpha)
 	{
 		tex.bind();
 		GL11.glColor4f(red, green, blue, alpha);
@@ -59,7 +59,7 @@ public class Renderer {
 		GL11.glColor3f(1, 1, 1);
 	}
 	
-	public static void drawRect(Vector2DF pos, Vector2DF dim, float red, float green, float blue, float alpha)
+	public static void drawRect(Vector2 pos, Vector2 dim, float red, float green, float blue, float alpha)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(red, green, blue, alpha);

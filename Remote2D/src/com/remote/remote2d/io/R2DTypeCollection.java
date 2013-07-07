@@ -14,7 +14,7 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Texture;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class R2DTypeCollection extends R2DType {
 	
@@ -144,7 +144,7 @@ public class R2DTypeCollection extends R2DType {
 		setType(key,new R2DTypeChar(key,value));
 	}
 	
-	public void setVector2D(String key, Vector2D value)
+	public void setVector2D(String key, Vector2 value)
 	{
 		setType(key,new R2DTypeVec2D(key,value));
 	}
@@ -204,7 +204,7 @@ public class R2DTypeCollection extends R2DType {
 		return ((R2DTypeShort) data.get(key)).data;
 	}
 	
-	public Vector2D getVector2D(String key)
+	public Vector2 getVector2D(String key)
 	{
 		if(!data.containsKey(key))
 			return null;

@@ -15,7 +15,6 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.CursorLoader;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.art.TextureLoader;
-import com.remote.remote2d.logic.Vector2D;
 
 public class DisplayHandler {
 	

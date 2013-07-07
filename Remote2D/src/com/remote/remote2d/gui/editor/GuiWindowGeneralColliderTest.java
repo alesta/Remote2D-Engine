@@ -11,7 +11,7 @@ import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.ColliderLogic;
 import com.remote.remote2d.logic.ColliderSphere;
 import com.remote.remote2d.logic.Collision;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 
 public class GuiWindowGeneralColliderTest extends GuiWindow {
@@ -20,21 +20,21 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 	Collider moveCollider;
 	Collider altMoveCollider;
 	Collider rawMoveCollider;
-	Vector2D vec = new Vector2D(20,20);
+	Vector2 vec = new Vector2(20,20);
 	Collision collision = new Collision();
 
-	public GuiWindowGeneralColliderTest(WindowHolder holder, Vector2D pos, ColliderBox allowedBounds) {
-		super(holder, pos, new Vector2D(500,500), allowedBounds, "Collider Test");
+	public GuiWindowGeneralColliderTest(WindowHolder holder, Vector2 pos, ColliderBox allowedBounds) {
+		super(holder, pos, new Vector2(500,500), allowedBounds, "Collider Test");
 	}
 		
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2D(10,10),new Vector2D(150,40),"AA Box"));
-		buttonList.add(new GuiButton(1,new Vector2D(10,55),new Vector2D(150,40),"Sphere"));
-		buttonList.add(new GuiButton(2,new Vector2D(340,10),new Vector2D(150,40),"AA Box"));
-		buttonList.add(new GuiButton(3,new Vector2D(340,55),new Vector2D(150,40),"Sphere"));
-		buttonList.add(new GuiButton(4,new Vector2D(175,450),new Vector2D(150,40),"Done"));
+		buttonList.add(new GuiButton(0,new Vector2(10,10),new Vector2(150,40),"AA Box"));
+		buttonList.add(new GuiButton(1,new Vector2(10,55),new Vector2(150,40),"Sphere"));
+		buttonList.add(new GuiButton(2,new Vector2(340,10),new Vector2(150,40),"AA Box"));
+		buttonList.add(new GuiButton(3,new Vector2(340,55),new Vector2(150,40),"Sphere"));
+		buttonList.add(new GuiButton(4,new Vector2(175,450),new Vector2(150,40),"Done"));
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 		rawMoveCollider = null;
 		if(mainCollider != null && moveCollider != null)
 		{
-			Vector2D m = getMouseInWindow(i,j);
+			Vector2 m = new Vector2(getMouseInWindow(i,j).getElements());
 			
 			moveCollider = ColliderLogic.setColliderPos(moveCollider, m);
 			
@@ -88,17 +88,17 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 	{
 		if(button.id == 0)
 		{
-			mainCollider = new ColliderBox(new Vector2D(150,175),new Vector2D(200,150));
+			mainCollider = new ColliderBox(new Vector2(150,175),new Vector2(200,150));
 		} else if(button.id == 1)
 		{
-			mainCollider = new ColliderSphere(new Vector2D(250,250),100);
+			mainCollider = new ColliderSphere(new Vector2(250,250),100);
 		} else if(button.id == 2)
 		{
-			moveCollider = new ColliderBox(new Vector2D(150,175),new Vector2D(200,150));
+			moveCollider = new ColliderBox(new Vector2(150,175),new Vector2(200,150));
 			moveCollider.isIdle = false;
 		} else if(button.id == 3)
 		{
-			moveCollider = new ColliderSphere(new Vector2D(250,250),100);
+			moveCollider = new ColliderSphere(new Vector2(250,250),100);
 			moveCollider.isIdle = false;
 		} else if(button.id == 4)
 		{

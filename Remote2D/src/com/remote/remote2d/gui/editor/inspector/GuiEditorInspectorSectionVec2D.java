@@ -8,7 +8,7 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 	
@@ -20,13 +20,13 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 	float old2 = 0.0f;
 	
 
-	public GuiEditorInspectorSectionVec2D(String name, Vector2D pos, int width) {
+	public GuiEditorInspectorSectionVec2D(String name, Vector2 pos, int width) {
 		super(name, pos, width);
-		textField1 = new GuiTextField(pos.add(new Vector2D(10,20)), new Vector2D(width/2-10,20), 20);
-		textField1.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
+		textField1 = new GuiTextField(pos.add(new Vector2(10,20)), new Vector2(width/2-10,20), 20);
+		textField1.limitToDigits = TextLimiter.LIMIT_TO_FLOAT;
 		
-		textField2 = new GuiTextField(pos.add(new Vector2D(width/2+10,20)), new Vector2D(width/2-20,20), 20);
-		textField2.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
+		textField2 = new GuiTextField(pos.add(new Vector2(width/2+10,20)), new Vector2(width/2-20,20), 20);
+		textField2.limitToDigits = TextLimiter.LIMIT_TO_FLOAT;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 
 	@Override
 	public Object getData() {
-		return new Vector2D(Integer.parseInt(textField1.text),Integer.parseInt(textField2.text));
+		return new Vector2(Float.parseFloat(textField1.text),Float.parseFloat(textField2.text));
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 		{
 			if(textField1.hasTyped() && textField1.hasText() && textField2.hasText())
 			{
-				float new1 = Integer.parseInt(textField1.text);
+				float new1 = Float.parseFloat(textField1.text);
 				int x = (int)((new1*old2)/old1);
 				textField2.text = ""+x;
 				// old1 = new1
@@ -66,7 +66,7 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 			}
 			if(textField2.hasTyped() && textField1.hasText() && textField2.hasText())
 			{
-				float new2 = Integer.parseInt(textField2.text);
+				float new2 = Float.parseFloat(textField2.text);
 				int x = (int)((new2*old1)/old2);
 				textField1.text = ""+x;
 				// old1 = x
@@ -77,9 +77,9 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 		}else
 		{
 			if(textField1.hasText())
-				old1 = Integer.parseInt(textField1.text);
+				old1 = Float.parseFloat(textField1.text);
 			if(textField2.hasText())
-				old2 = Integer.parseInt(textField2.text);
+				old2 = Float.parseFloat(textField2.text);
 		}
 	}
 
@@ -111,10 +111,10 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 	
 	@Override
 	public void setData(Object o) {
-		if(o instanceof Vector2D)
+		if(o instanceof Vector2)
 		{
-			textField1.text = ((Vector2D)o).x+"";
-			textField2.text = ((Vector2D)o).y+"";
+			textField1.text = ((Vector2)o).x+"";
+			textField2.text = ((Vector2)o).y+"";
 		}
 	}
 	

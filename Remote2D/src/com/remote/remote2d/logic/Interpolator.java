@@ -7,9 +7,28 @@ public class Interpolator {
 		return(y1*(1-mu)+y2*mu);
 	}
 	
-	public static Vector2D linearInterpolate(Vector2D y1, Vector2D y2, double mu)
+	private static float[] linearInterpolate(Vector y1, Vector y2, double mu)
 	{
-		return new Vector2D((int)linearInterpolate(y1.x,y2.x,mu),(int)linearInterpolate(y1.y,y2.y,mu));
+		float[] interp = new float[y1.getVectorLength() > y2.getVectorLength() ? y1.getVectorLength() : y2.getVectorLength()];
+		int max = y1.getVectorLength() > y2.getVectorLength() ? y2.getVectorLength() : y1.getVectorLength();
+		for(int x=0;x<max;x++)
+			interp[x] = (float)linearInterpolate(y1.getElements()[x],y2.getElements()[x],mu);
+		
+		for(int x=max;x<interp.length;x++)
+			interp[x] = y1.getVectorLength() > y2.getVectorLength() ? y1.getElements()[x] : y2.getElements()[x];
+		return interp;
+	}
+	
+	public static Vector2 linearInterpolate2i(Vector y1, Vector y2, double mu)
+	{
+		float[] interp = linearInterpolate(y1,y2,mu);
+		return (Vector2)new Vector2(0,0).convertElementsToVector(interp);
+	}
+	
+	public static Vector2 linearInterpolate2f(Vector y1, Vector y2, double mu)
+	{
+		float[] interp = linearInterpolate(y1,y2,mu);
+		return (Vector2)new Vector2(0,0).convertElementsToVector(interp);
 	}
 	
 	public static double cosineInterpolate(double y1, double y2, double mu)

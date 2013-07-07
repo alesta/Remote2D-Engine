@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ColliderGeneric extends Collider {
 
-	public ColliderGeneric(Vector2D[] newVerts) {
+	public ColliderGeneric(Vector2[] newVerts) {
 		this.verts = newVerts;
 	}
 
@@ -13,16 +13,16 @@ public class ColliderGeneric extends Collider {
 	}
 
 	@Override
-	public boolean isPointInside(Vector2D vec) {
+	public boolean isPointInside(Vector2 vec) {
 		return false;
 	}
 
 	@Override
-	public Collider getTransformedCollider(Vector2D trans) {
-		Vector2D[] newVerts = new Vector2D[verts.length];
+	public Collider getTransformedCollider(Vector2 trans) {
+		Vector2[] newVerts = new Vector2[verts.length];
 		for(int x=0;x<verts.length;x++)
 		{
-			newVerts[x] = new Vector2D(verts[x].x+trans.x,verts[x].y+trans.y);
+			newVerts[x] = new Vector2(verts[x].x+trans.x,verts[x].y+trans.y);
 		}
 		return new ColliderGeneric(newVerts);
 	}

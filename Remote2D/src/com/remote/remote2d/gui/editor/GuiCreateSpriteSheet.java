@@ -14,7 +14,8 @@ import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.logic.Interpolator;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiCreateSpriteSheet extends GuiMenu {
 	
@@ -33,52 +34,52 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	
 	GuiButton createButton;
 	
-	Vector2D oldOffset;
-	Vector2D offset;
+	Vector2 oldOffset;
+	Vector2 offset;
 	
 	int scale = 1;
 	
 	public GuiCreateSpriteSheet()
 	{
 		backgroundColor = 0x7f9ddf;
-		texID = new GuiTextField(new Vector2D(100,10), new Vector2D(200,40), 20);
+		texID = new GuiTextField(new Vector2(100,10), new Vector2(200,40), 20);
 		
-		startX = new GuiTextField(new Vector2D(100,55), new Vector2D(100,40), 20);
+		startX = new GuiTextField(new Vector2(100,55), new Vector2(100,40), 20);
 		startX.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		startX.defaultText = "X";
-		startY = new GuiTextField(new Vector2D(200,55), new Vector2D(100,40), 20);
+		startY = new GuiTextField(new Vector2(200,55), new Vector2(100,40), 20);
 		startY.defaultText = "Y";
 		startY.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		
-		dimX = new GuiTextField(new Vector2D(100,100), new Vector2D(100,40), 20);
+		dimX = new GuiTextField(new Vector2(100,100), new Vector2(100,40), 20);
 		dimX.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		dimX.defaultText = "X";
-		dimY = new GuiTextField(new Vector2D(200,100), new Vector2D(100,40), 20);
+		dimY = new GuiTextField(new Vector2(200,100), new Vector2(100,40), 20);
 		dimY.defaultText = "Y";
 		dimY.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		
-		framesX = new GuiTextField(new Vector2D(100,145), new Vector2D(100,40), 20);
+		framesX = new GuiTextField(new Vector2(100,145), new Vector2(100,40), 20);
 		framesX.defaultText = "X";
 		framesX.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
-		framesY = new GuiTextField(new Vector2D(200,145), new Vector2D(100,40), 20);
+		framesY = new GuiTextField(new Vector2(200,145), new Vector2(100,40), 20);
 		framesY.defaultText = "Y";
 		framesY.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		
-		paddingX = new GuiTextField(new Vector2D(100,190), new Vector2D(100,40), 20);
+		paddingX = new GuiTextField(new Vector2(100,190), new Vector2(100,40), 20);
 		paddingX.defaultText = "X";
 		paddingX.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
-		paddingY = new GuiTextField(new Vector2D(200,190), new Vector2D(100,40), 20);
+		paddingY = new GuiTextField(new Vector2(200,190), new Vector2(100,40), 20);
 		paddingY.defaultText = "Y";
 		paddingY.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		
-		frameLength = new GuiTextField(new Vector2D(100,235), new Vector2D(200,40), 20);
+		frameLength = new GuiTextField(new Vector2(100,235), new Vector2(200,40), 20);
 		frameLength.defaultText = "(ms)";
 		frameLength.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
 		
-		animSave = new GuiTextField(new Vector2D(100,280), new Vector2D(200,40), 20);
+		animSave = new GuiTextField(new Vector2(100,280), new Vector2(200,40), 20);
 		
-		offset = new Vector2D(300,0);
-		oldOffset = new Vector2D(300,0);
+		offset = new Vector2(300,0);
+		oldOffset = new Vector2(300,0);
 	}
 	
 	public GuiCreateSpriteSheet(Animation anim)
@@ -102,10 +103,10 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	{
 		buttonList.clear();
 		
-		createButton = new GuiButton(0,new Vector2D(5,getHeight()-45),new Vector2D(100,40),"Create");
+		createButton = new GuiButton(0,new Vector2(5,getHeight()-45),new Vector2(100,40),"Create");
 		buttonList.add(createButton);
-		buttonList.add(new GuiButton(1,new Vector2D(110,getHeight()-45),new Vector2D(100,40),"Cancel"));
-		buttonList.add(new GuiButton(2,new Vector2D(5,getHeight()-90),new Vector2D(205,40),"Regenerate"));
+		buttonList.add(new GuiButton(1,new Vector2(110,getHeight()-45),new Vector2(100,40),"Cancel"));
+		buttonList.add(new GuiButton(2,new Vector2(5,getHeight()-90),new Vector2(205,40),"Regenerate"));
 	}
 	
 	@Override
@@ -130,20 +131,20 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		Fonts.get("Arial").drawString("# Frames", 5, 155, 20, 0xffffff);
 		Fonts.get("Arial").drawString("Padding", 5, 200, 20, 0xffffff);
 		Fonts.get("Arial").drawString("Length", 5, 245, 20, 0xffffff);
-		Fonts.get("Arial").drawString("Anim. Name", 5, 290, 20, 0xffffff);
+		Fonts.get("Arial").drawString("Path", 5, 290, 20, 0xffffff);
 	}
 	
 	@Override
 	public void renderBackground(float interpolation)
 	{
-		Vector2D realOffset = Interpolator.linearInterpolate(oldOffset, offset, interpolation);
+		Vector2 realOffset = Interpolator.linearInterpolate2f(oldOffset, offset, interpolation);
 		
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text))
 		{
 			Texture tex = Remote2D.getInstance().artLoader.getTexture(texID.text);
 			tex.bind();			
-			Vector2D dim = new Vector2D(tex.image.getWidth(),tex.image.getHeight());
+			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			GL11.glScissor(300, 0, getWidth()-300, getHeight());
@@ -171,8 +172,8 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 				GL11.glPopMatrix();
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 				
-				Vector2D spriteDim = animation.getSpriteDim();
-				animation.render(new Vector2D(10,350), spriteDim);
+				Vector2 spriteDim = animation.getSpriteDim();
+				animation.render(new Vector2(10,350), spriteDim);
 			}
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		}
@@ -248,10 +249,10 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			{
 				animation = new Animation(
 						texID.text,
-						new Vector2D(Integer.parseInt(startX.text),Integer.parseInt(startY.text)),
-						new Vector2D(Integer.parseInt(dimX.text),Integer.parseInt(dimY.text)),
-						new Vector2D(Integer.parseInt(paddingX.text),Integer.parseInt(paddingY.text)),
-						new Vector2D(Integer.parseInt(framesX.text),Integer.parseInt(framesY.text)),
+						new Vector2(Integer.parseInt(startX.text),Integer.parseInt(startY.text)),
+						new Vector2(Integer.parseInt(dimX.text),Integer.parseInt(dimY.text)),
+						new Vector2(Integer.parseInt(paddingX.text),Integer.parseInt(paddingY.text)),
+						new Vector2(Integer.parseInt(framesX.text),Integer.parseInt(framesY.text)),
 						Integer.parseInt(frameLength.text)
 				);
 			}

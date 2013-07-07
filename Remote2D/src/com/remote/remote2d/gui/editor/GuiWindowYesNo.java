@@ -7,15 +7,15 @@ import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiWindowYesNo extends GuiWindow {
 	
 	private String[] contents;
 	private Answer answer = Answer.UNDEFINED;
 
-	public GuiWindowYesNo(WindowHolder holder, Vector2D pos, ColliderBox allowedBounds, String title, String contents) {
-		super(holder, pos, new Vector2D(300,100), allowedBounds, title);
+	public GuiWindowYesNo(WindowHolder holder, Vector2 pos, ColliderBox allowedBounds, String title, String contents) {
+		super(holder, pos, new Vector2(300,100), allowedBounds, title);
 		
 		ArrayList<String> trueContents = new ArrayList<String>();
 		String current = "";
@@ -43,8 +43,8 @@ public class GuiWindowYesNo extends GuiWindow {
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2D(10,dim.y-40),new Vector2D(135,40),"Yes"));
-		buttonList.add(new GuiButton(1,new Vector2D(155,dim.y-40),new Vector2D(135,40),"No"));
+		buttonList.add(new GuiButton(0,new Vector2(10,dim.y-40),new Vector2(135,40),"Yes"));
+		buttonList.add(new GuiButton(1,new Vector2(155,dim.y-40),new Vector2(135,40),"No"));
 	}
 	
 	@Override

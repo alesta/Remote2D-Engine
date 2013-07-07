@@ -6,14 +6,14 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection {
 	
 	boolean isTrue = false;
 	private boolean hasBeenChanged = false;
 
-	public GuiEditorInspectorSectionBoolean(String name, Vector2D pos, int width) {
+	public GuiEditorInspectorSectionBoolean(String name, Vector2 pos, int width) {
 		super(name, pos, width);
 	}
 

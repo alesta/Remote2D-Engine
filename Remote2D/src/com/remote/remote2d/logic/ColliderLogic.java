@@ -7,12 +7,12 @@ package com.remote.remote2d.logic;
  */
 public class ColliderLogic {
 	
-	public static int getDistBetweenPoints(int x1, int y1, int x2, int y2)
+	public static float getDistBetweenPoints(float x1, float y1, float x2, float y2)
 	{
-		return (int)Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));
+		return (float)Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));
 	}
 	
-	public static Collider setColliderPos(Collider c, Vector2D pos)
+	public static Collider setColliderPos(Collider c, Vector2 pos)
 	{
 		if(c instanceof ColliderBox)
 		{

@@ -8,16 +8,15 @@ import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.io.R2DFileSaver;
 import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
-import com.remote.remote2d.logic.Vector2DF;
+import com.remote.remote2d.logic.Vector2;
 
 public class Animation implements R2DFileSaver {
 	
 	private String texPath;
-	private Vector2D startPos;
-	private Vector2D spriteDim;
-	private Vector2D padding;
-	private Vector2D frames;
+	private Vector2 startPos;
+	private Vector2 spriteDim;
+	private Vector2 padding;
+	private Vector2 frames;
 	private ColliderBox[] framePos;
 	private int currentframe = 0;
 	private int framelength;
@@ -28,7 +27,7 @@ public class Animation implements R2DFileSaver {
 	public boolean flippedY = false;
 	
 	
-	public Animation(String tex, Vector2D startPos, Vector2D spriteDim, Vector2D padding, Vector2D frames, int framelength)
+	public Animation(String tex, Vector2 startPos, Vector2 spriteDim, Vector2 padding, Vector2 frames, int framelength)
 	{
 		this.texPath = tex;
 		this.startPos = startPos;
@@ -51,38 +50,34 @@ public class Animation implements R2DFileSaver {
 	@Override
 	public void saveR2DFile(R2DTypeCollection collection) {
 		collection.setString("texture", texPath);
-		collection.setInteger("startPos.x", startPos.x);
-		collection.setInteger("startPos.y", startPos.y);
-		collection.setInteger("spriteDim.x", spriteDim.x);
-		collection.setInteger("spriteDim.y", spriteDim.y);
-		collection.setInteger("padding.x", padding.x);
-		collection.setInteger("padding.y", padding.y);
-		collection.setInteger("frames.x", frames.x);
-		collection.setInteger("frames.y", frames.y);
+		collection.setVector2D("startPos", startPos);
+		collection.setVector2D("spriteDim", spriteDim);
+		collection.setVector2D("padding", padding);
+		collection.setVector2D("frames", frames);
 		collection.setInteger("framelength", framelength);
 	}
 
 	@Override
 	public void loadR2DFile(R2DTypeCollection collection) {
 		texPath = collection.getString("texture");
-		startPos = new Vector2D(collection.getInteger("startPos.x"),collection.getInteger("startPos.y"));
-		spriteDim = new Vector2D(collection.getInteger("spriteDim.x"),collection.getInteger("spriteDim.y"));
-		padding = new Vector2D(collection.getInteger("padding.x"),collection.getInteger("padding.y"));
-		frames = new Vector2D(collection.getInteger("frames.x"),collection.getInteger("frames.y"));
+		startPos = collection.getVector2D("startPos");
+		spriteDim = collection.getVector2D("spriteDim");
+		padding = collection.getVector2D("padding");
+		frames = collection.getVector2D("frames");
 		framelength = collection.getInteger("framelength");
 		generateFrames();
 	}
 	
 	public void generateFrames()
 	{
-		framePos = new ColliderBox[frames.x*frames.y];
+		framePos = new ColliderBox[(int) (frames.x*frames.y)];
 		for(int x=0;x<frames.x;x++)
 		{
 			for(int y=0;y<frames.y;y++)
 			{
-				Vector2D pos = startPos.add(spriteDim.add(padding).multiply(new Vector2D(x,y)));
-				ColliderBox collider = new ColliderBox(pos,spriteDim);
-				framePos[frames.x*y+x] = collider;
+				Vector2 pos = startPos.add(spriteDim.add(padding).multiply(new Vector2(x,y)));
+				ColliderBox collider = pos.getColliderWithDim(spriteDim);
+				framePos[(int) (frames.x*y+x)] = collider;
 			}
 		}
 	}
@@ -92,7 +87,7 @@ public class Animation implements R2DFileSaver {
 		return path;
 	}
 	
-	public void render(Vector2D pos, Vector2D dim)
+	public void render(Vector2 pos, Vector2 dim)
 	{
 		if(framePos == null)
 		{
@@ -110,8 +105,8 @@ public class Animation implements R2DFileSaver {
 		Texture tex = Remote2D.getInstance().artLoader.getTexture(texPath);
 		
 		ColliderBox collider = framePos[currentframe];
-		Vector2DF imgPos = collider.pos.divideSensitive(new Vector2DF(tex.image.getWidth(),tex.image.getHeight()));
-		Vector2DF imgDim = collider.dim.divideSensitive(new Vector2DF(tex.image.getWidth(),tex.image.getHeight()));
+		Vector2 imgPos = collider.pos.divide(new Vector2(tex.image.getWidth(),tex.image.getHeight()));
+		Vector2 imgDim = collider.dim.divide(new Vector2(tex.image.getWidth(),tex.image.getHeight()));
 		
 		if(flippedX)
 		{
@@ -144,38 +139,38 @@ public class Animation implements R2DFileSaver {
 		GL11.glPopMatrix();
 	}
 	
-	public Vector2D getStartPos() {
+	public Vector2 getStartPos() {
 		return startPos;
 	}
 
-	public void setStartPos(Vector2D startPos) {
+	public void setStartPos(Vector2 startPos) {
 		this.startPos = startPos;
 		generateFrames();
 	}
 
-	public Vector2D getSpriteDim() {
+	public Vector2 getSpriteDim() {
 		return spriteDim;
 	}
 
-	public void setSpriteDim(Vector2D spriteDim) {
+	public void setSpriteDim(Vector2 spriteDim) {
 		this.spriteDim = spriteDim;
 		generateFrames();
 	}
 
-	public Vector2D getPadding() {
+	public Vector2 getPadding() {
 		return padding;
 	}
 
-	public void setPadding(Vector2D padding) {
+	public void setPadding(Vector2 padding) {
 		this.padding = padding;
 		generateFrames();
 	}
 
-	public Vector2D getFrames() {
+	public Vector2 getFrames() {
 		return frames;
 	}
 
-	public void setFrames(Vector2D frames) {
+	public void setFrames(Vector2 frames) {
 		this.frames = frames;
 		generateFrames();
 	}

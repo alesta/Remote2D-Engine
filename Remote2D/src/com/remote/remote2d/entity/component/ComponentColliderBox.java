@@ -6,19 +6,19 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.ColliderBox;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class ComponentColliderBox extends Component {
 	
-	public Vector2D pos;
-	public Vector2D dim;
+	public Vector2 pos;
+	public Vector2 dim;
 	
 	private ColliderBox currentCollider;
 
 	public ComponentColliderBox(Entity e) {
 		super(e);
-		pos = new Vector2D(0,0);
-		dim = new Vector2D(10,10);
+		pos = new Vector2(0,0);
+		dim = new Vector2(10,10);
 		currentCollider = pos.getColliderWithDim(dim);
 	}
 

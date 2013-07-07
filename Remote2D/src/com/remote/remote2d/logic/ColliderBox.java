@@ -8,19 +8,19 @@ public class ColliderBox extends Collider{
 	 * A simple Axis-Aligned Box Collider
 	 */
 	
-	public Vector2D pos;
-	public Vector2D dim;
+	public Vector2 pos;
+	public Vector2 dim;
 	
-	public ColliderBox(Vector2D pos, Vector2D size)
+	public ColliderBox(Vector2 pos, Vector2 size)
 	{
 		this.pos = pos;
 		this.dim = size;
 		updateVerts();
 	}
 	
-	public Vector2D getPos()
+	public Vector2 getPos()
 	{
-		Vector2D pos = new Vector2D(this.pos.x,this.pos.y);
+		Vector2 pos = new Vector2(this.pos.x,this.pos.y);
 		
 		if(this.dim.x < 0)
 		{
@@ -35,9 +35,9 @@ public class ColliderBox extends Collider{
 		return pos;
 	}
 	
-	public Vector2D getDim()
+	public Vector2 getDim()
 	{
-		Vector2D dim = new Vector2D(this.dim.x,this.dim.y);
+		Vector2 dim = new Vector2(this.dim.x,this.dim.y);
 		
 		if(this.dim.x < 0)
 		{
@@ -53,10 +53,10 @@ public class ColliderBox extends Collider{
 	}
 
 	@Override
-	public boolean isPointInside(Vector2D vec) {
+	public boolean isPointInside(Vector2 vec) {
 		
-		Vector2D pos = getPos();
-		Vector2D dim = getDim();
+		Vector2 pos = getPos();
+		Vector2 dim = getDim();
 		
 		return vec.x > pos.x && vec.y > pos.y && vec.x < pos.x+dim.x && vec.y < pos.y+dim.y;
 		
@@ -64,8 +64,8 @@ public class ColliderBox extends Collider{
 
 	@Override
 	public void drawCollider() {
-		Vector2D pos = getPos();
-		Vector2D dim = getDim();
+		Vector2 pos = getPos();
+		Vector2 dim = getDim();
 		
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
@@ -81,17 +81,17 @@ public class ColliderBox extends Collider{
 	}
 
 	@Override
-	public Collider getTransformedCollider(Vector2D trans) {
+	public Collider getTransformedCollider(Vector2 trans) {
 		ColliderBox box = new ColliderBox(pos.add(trans),dim);
 		return box;
 	}
 
 	@Override
 	public void updateVerts() {
-		verts = new Vector2D[4];
-		verts[0] = new Vector2D(pos.x,pos.y);
-		verts[1] = new Vector2D(pos.x+dim.x,pos.y);
-		verts[2] = new Vector2D(pos.x+dim.x,pos.y+dim.y);
-		verts[3] = new Vector2D(pos.x,pos.y+dim.y);
+		verts = new Vector2[4];
+		verts[0] = new Vector2(pos.x,pos.y);
+		verts[1] = new Vector2(pos.x+dim.x,pos.y);
+		verts[2] = new Vector2(pos.x+dim.x,pos.y+dim.y);
+		verts[3] = new Vector2(pos.x,pos.y+dim.y);
 	}
 }

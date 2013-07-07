@@ -52,7 +52,7 @@ public class FontRenderer {
 		return r;
 	}
 	
-	public void drawString(String s, int x, int y, float size, int color)
+	public void drawString(String s, float x, float y, float size, int color)
 	{
 		BufferedImage image = createImageFromString(s,size,color);
 		if(s.equals("") || image == null)

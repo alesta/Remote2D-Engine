@@ -25,7 +25,8 @@ import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Matrix;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiOptimizeSpriteSheet extends GuiMenu {
 	
@@ -34,8 +35,8 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	GuiTextField savePath;
 	GuiButton button;
 	GuiButton bgButton;
-	Vector2D oldOffset;
-	Vector2D offset;
+	Vector2 oldOffset;
+	Vector2 offset;
 	ArrayList<ColliderDefinerBox> frameDefiners;
 	ColliderDefinerBox activeDefiner = null;
 	int scale = 1;
@@ -50,28 +51,28 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	{
 		backgroundColor = 0x7f9ddf;
 		frameDefiners = new ArrayList<ColliderDefinerBox>();
-		removeField = new GuiTextField(new Vector2D(10,50),new Vector2D(200,40),20);
+		removeField = new GuiTextField(new Vector2(10,50),new Vector2(200,40),20);
 		removeField.limitToDigits = TextLimiter.LIMIT_TO_INTEGER;
-		texturePath = new GuiTextField(new Vector2D(10,120),new Vector2D(280,40),20);
-		savePath = new GuiTextField(new Vector2D(10,270),new Vector2D(280,40),20);
-		offset = new Vector2D(300,0);
-		oldOffset = new Vector2D(300,0);
+		texturePath = new GuiTextField(new Vector2(10,120),new Vector2(280,40),20);
+		savePath = new GuiTextField(new Vector2(10,270),new Vector2(280,40),20);
+		offset = new Vector2(300,0);
+		oldOffset = new Vector2(300,0);
 	}
 	
 	@Override
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(bgButton = new GuiButton(0,new Vector2D(10,10),new Vector2D(240,40),"Pick Background Color").setDisabled(true));
-		buttonList.add(new GuiButton(1,new Vector2D(210,50),new Vector2D(80,40),"Remove"));
-		buttonList.add(new GuiButton(2,new Vector2D(5,170),new Vector2D(90,40),"Left"));
-		buttonList.add(new GuiButton(3,new Vector2D(105,170),new Vector2D(90,40),"Mid"));
-		buttonList.add(new GuiButton(4,new Vector2D(205,170),new Vector2D(90,40),"Right"));
-		buttonList.add(new GuiButton(5,new Vector2D(5,220),new Vector2D(90,40),"Top"));
-		buttonList.add(new GuiButton(6,new Vector2D(105,220),new Vector2D(90,40),"Mid"));
-		buttonList.add(new GuiButton(7,new Vector2D(205,220),new Vector2D(90,40),"Bot"));
-		buttonList.add(button = new GuiButton(8,new Vector2D(10,320),new Vector2D(280,40),"Done").setDisabled(true));
-		buttonList.add(new GuiButton(9,new Vector2D(10,370),new Vector2D(280,40),"Cancel"));
+		buttonList.add(bgButton = new GuiButton(0,new Vector2(10,10),new Vector2(240,40),"Pick Background Color").setDisabled(true));
+		buttonList.add(new GuiButton(1,new Vector2(210,50),new Vector2(80,40),"Remove"));
+		buttonList.add(new GuiButton(2,new Vector2(5,170),new Vector2(90,40),"Left"));
+		buttonList.add(new GuiButton(3,new Vector2(105,170),new Vector2(90,40),"Mid"));
+		buttonList.add(new GuiButton(4,new Vector2(205,170),new Vector2(90,40),"Right"));
+		buttonList.add(new GuiButton(5,new Vector2(5,220),new Vector2(90,40),"Top"));
+		buttonList.add(new GuiButton(6,new Vector2(105,220),new Vector2(90,40),"Mid"));
+		buttonList.add(new GuiButton(7,new Vector2(205,220),new Vector2(90,40),"Bot"));
+		buttonList.add(button = new GuiButton(8,new Vector2(10,320),new Vector2(280,40),"Done").setDisabled(true));
+		buttonList.add(new GuiButton(9,new Vector2(10,370),new Vector2(280,40),"Cancel"));
 	}
 	
 	@Override
@@ -128,20 +129,20 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	@Override
 	public void renderBackground(float interpolation)
 	{
-		Vector2D iOffset = Interpolator.linearInterpolate(oldOffset, offset, interpolation);
+		Vector2 iOffset = Interpolator.linearInterpolate2f(oldOffset, offset, interpolation);
 		
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texturePath.text))
 		{
 			Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text);
 			tex.bind();			
-			Vector2D dim = new Vector2D(tex.image.getWidth(),tex.image.getHeight());
+			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			GL11.glScissor(300, 0, getWidth()-300, getHeight());
 			
 			GL11.glPushMatrix();
-				GL11.glTranslatef(offset.x, offset.y, 0);
+				GL11.glTranslatef(iOffset.x, iOffset.y, 0);
 				GL11.glScalef(scale, scale, 1);
 				
 				GL11.glBegin(GL11.GL_QUADS);
@@ -209,8 +210,8 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 				if(isPickingBG)
 				{
 					Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text); 
-					int x = (i-offset.x)/scale;
-					int y = (j-offset.y)/scale;
+					int x = (int) ((i-offset.x)/scale);
+					int y = (int) ((j-offset.y)/scale);
 					if(tex != null && x < tex.getImage().getWidth() && y < tex.getImage().getHeight())
 					{
 						bgColor = tex.getImage().getRGB(x, y);
@@ -319,24 +320,24 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		 {
 			 Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text); 
 			 BufferedImage source = tex.image;
-			 Vector2D frameSize = new Vector2D(0,0);
+			 Vector2 frameSize = new Vector2(0,0);
 			 for(int x=0;x<frameDefiners.size();x++)
 			 {
 				 ColliderBox coll = (ColliderBox)frameDefiners.get(x).getCollider();
 				 if(coll.dim.x > frameSize.x)
-					 frameSize.x = coll.dim.x;
+					 frameSize.x = (int)coll.dim.x;
 				 if(coll.dim.y > frameSize.y)
-					 frameSize.y = coll.dim.y;
+					 frameSize.y = (int)coll.dim.y;
 			 }
 			 frameSize.print();
-			 BufferedImage image = new BufferedImage(frameSize.x*frameDefiners.size(),frameSize.y,BufferedImage.TYPE_INT_ARGB);
+			 BufferedImage image = new BufferedImage((int)(frameSize.x*frameDefiners.size()),(int)frameSize.y,BufferedImage.TYPE_INT_ARGB);
 			 Graphics2D graphics = image.createGraphics();
 			 graphics.setPaint(new Color(bgColor));
 			 graphics.fillRect(0,0,image.getWidth(),image.getHeight());
-			 Vector2D currentPos = new Vector2D(0,0);//destination
+			 Vector2 currentPos = new Vector2(0,0);//destination
 			 for(int x=0;x<frameDefiners.size();x++)
 			 {
-				 Vector2D startPos = new Vector2D(0,0);//source
+				 Vector2 startPos = new Vector2(0,0);//source
 				 ColliderBox coll = (ColliderBox)frameDefiners.get(x).getCollider();
 				 switch(horizontal)
 				 {
@@ -358,12 +359,12 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 					 break;
 				 }
 				 
-				 for(int i=startPos.x;i<frameSize.x;i++)
+				 for(int i=(int)startPos.x;i<frameSize.x;i++)
 				 {
-					 for(int j=startPos.y;j<frameSize.y;j++)
+					 for(int j=(int)startPos.y;j<frameSize.y;j++)
 					 {
-						 int rgb = source.getRGB(i-startPos.x+coll.pos.x,j-startPos.y+coll.pos.y);
-						 image.setRGB(currentPos.x+i, currentPos.y+j, rgb);
+						 int rgb = source.getRGB((int)(i-startPos.x+coll.pos.x),(int)(j-startPos.y+coll.pos.y));
+						 image.setRGB((int)(currentPos.x+i), (int)(currentPos.y+j), rgb);
 					 }
 				 }
 				 currentPos.x += frameSize.x;

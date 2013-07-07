@@ -14,7 +14,7 @@ import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.GuiCreateSpriteSheet;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.io.R2DFileManager;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.particles.ParticleSystem;
 import com.remote.remote2d.world.Map;
 
@@ -26,10 +26,10 @@ public class GuiEditorBrowser extends Gui {
 	private long lastDoubleClickTime = 0;
 	private GuiEditor editor;
 	
-	public Vector2D pos;
-	public Vector2D dim;
+	public Vector2 pos;
+	public Vector2 dim;
 	
-	public GuiEditorBrowser(GuiEditor editor, Vector2D pos, Vector2D dim)
+	public GuiEditorBrowser(GuiEditor editor, Vector2 pos, Vector2 dim)
 	{
 		folderStack = new ArrayList<Folder>();
 		folderStack.add(new Folder(Remote2D.getJarPath().getPath()));
@@ -43,10 +43,10 @@ public class GuiEditorBrowser extends Gui {
 	public void tick(int i, int j, int k) {
 		
 		Folder currentFolder = folderStack.get(folderStack.size()-1);
-		
-		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)))
+				
+		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
 		{
-			int yPos = j-pos.y-20;
+			float yPos = j-pos.y-20;
 			if(yPos < (currentFolder.files.size()+currentFolder.folders.size()+1)*20)
 			{
 				if(selectedFile == yPos/20)
@@ -90,12 +90,12 @@ public class GuiEditorBrowser extends Gui {
 						selectedFile = -1;
 					} else
 					{
-						selectedFile = yPos/20;
+						selectedFile = (int)(yPos)/20;
 						lastDoubleClickTime = System.currentTimeMillis();
 					}
 				} else
 				{
-					selectedFile = yPos/20;
+					selectedFile = (int)yPos/20;
 					lastDoubleClickTime = System.currentTimeMillis();
 				}
 			} else

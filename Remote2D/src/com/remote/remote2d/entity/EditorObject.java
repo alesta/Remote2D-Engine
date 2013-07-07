@@ -8,7 +8,7 @@ import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.io.R2DFileSaver;
 import com.remote.remote2d.io.R2DTypeCollection;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 /**
  * If a class implements this interface, then it is able to be edited within the
@@ -44,9 +44,9 @@ public abstract class EditorObject implements R2DFileSaver {
 					} else if(o instanceof Float)
 					{
 						collection.setFloat(fields[x].getName(), (Float)o);
-					} else if(o instanceof Vector2D)
+					} else if(o instanceof Vector2)
 					{
-						collection.setVector2D(fields[x].getName(), (Vector2D)o);
+						collection.setVector2D(fields[x].getName(), (Vector2)o);
 					} else if(o instanceof Texture)
 					{
 						collection.setTexture(fields[x].getName(), (Texture)o);
@@ -84,7 +84,7 @@ public abstract class EditorObject implements R2DFileSaver {
 						field.set(this, collection.getLong(field.getName()));
 					else if(field.getType() == Texture.class)
 						field.set(this, collection.getTexture(field.getName()));
-					else if(field.getType() == Vector2D.class)
+					else if(field.getType() == Vector2.class)
 						field.set(this, collection.getVector2D(field.getName()));
 					else if(field.getType() == Animation.class)
 						field.set(this, collection.getAnimation(field.getName()));

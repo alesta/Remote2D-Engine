@@ -7,14 +7,14 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class CursorLoader {
 	
 	public static Texture tex;
-	public static Vector2D hotspot;
+	public static Vector2 hotspot;
 	
-	public static void setCursor(Texture tex, Vector2D hotspot)
+	public static void setCursor(Texture tex, Vector2 hotspot)
 	{
 		CursorLoader.tex = tex;
 		CursorLoader.hotspot = hotspot;
@@ -42,7 +42,7 @@ public class CursorLoader {
 	{
 		if(tex != null)
 		{
-			Vector2D renderpos = new Vector2D(Remote2D.getInstance().getMouseCoords()).subtract(hotspot);
+			Vector2 renderpos = new Vector2(Remote2D.getInstance().getMouseCoords()).subtract(hotspot);
 			tex.bind();
 			
 			GL11.glPushMatrix();

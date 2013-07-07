@@ -8,12 +8,13 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiTextField extends Gui {
 	
-	public Vector2D pos;
-	public Vector2D dim;
+	public Vector2 pos;
+	public Vector2 dim;
 	public int fontsize;
 	public int maxLength = -1;
 	public String text = "";
@@ -30,7 +31,7 @@ public class GuiTextField extends Gui {
 	private int backTimer = 20;
 	
 	
-	public GuiTextField(Vector2D pos, Vector2D dim, int fontsize)
+	public GuiTextField(Vector2 pos, Vector2 dim, int fontsize)
 	{
 		this.pos = pos;
 		this.dim = dim;
@@ -40,7 +41,7 @@ public class GuiTextField extends Gui {
 	@Override
 	public void tick(int i, int j, int k) {
 		hasTyped = false;
-		if(pos.getColliderWithDim(dim).isPointInside(new Vector2D(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
+		if(pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
 		{
 			isSelected = true;
 			blink = true;
@@ -126,7 +127,7 @@ public class GuiTextField extends Gui {
 			}
 		}
 		
-		int yPos = pos.y+dim.y/2-Fonts.get("Arial").getStringDim(text, fontsize)[1]/2;
+		float yPos = pos.y+dim.y/2-Fonts.get("Arial").getStringDim(text, fontsize)[1]/2;
 		Fonts.get("Arial").drawString(s+((isSelected && blink) ? "|" : "")+" ", pos.x+10, yPos, fontsize, 0xffffff);
 		if(text.equals("") && !isSelected)
 			Fonts.get("Arial").drawString(defaultText, pos.x+10, yPos, fontsize, 0x777777);

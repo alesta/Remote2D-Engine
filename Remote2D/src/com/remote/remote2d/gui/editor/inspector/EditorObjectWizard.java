@@ -15,16 +15,16 @@ import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.EditorObject;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class EditorObjectWizard {
 	
 	private EditorObject component;
-	private Vector2D pos;
+	private Vector2 pos;
 	private int width;
 	public ArrayList<GuiEditorInspectorSection> sections;
 	
-	public EditorObjectWizard(EditorObject c, Vector2D pos, int width)
+	public EditorObjectWizard(EditorObject c, Vector2 pos, int width)
 	{
 		component = c;
 		this.pos = pos.copy();
@@ -32,7 +32,7 @@ public class EditorObjectWizard {
 		
 		Field[] fields = component.getClass().getFields();
 		sections = new ArrayList<GuiEditorInspectorSection>();
-		Vector2D currentPos = pos.add(new Vector2D(0,20));
+		Vector2 currentPos = pos.add(new Vector2(0,20));
 		for(int x=0;x<fields.length;x++)
 		{
 			if(Modifier.isPublic(fields[x].getModifiers()))
@@ -60,13 +60,13 @@ public class EditorObjectWizard {
 							sec.textField.text = (Float)o+"";
 						sections.add(sec);
 						currentPos.y += sec.getHeight();
-					} else if(o instanceof Vector2D)
+					} else if(o instanceof Vector2)
 					{
 						GuiEditorInspectorSectionVec2D sec = new GuiEditorInspectorSectionVec2D(fields[x].getName(),currentPos,width);
 						if(o != null)
 						{
-							sec.textField1.text = ((Vector2D)o).x+"";
-							sec.textField2.text = ((Vector2D)o).y+"";
+							sec.textField1.text = ((Vector2)o).x+"";
+							sec.textField2.text = ((Vector2)o).y+"";
 						}
 						sections.add(sec);
 						currentPos.y += sec.getHeight();

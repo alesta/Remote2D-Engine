@@ -14,7 +14,7 @@ import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
 import com.remote.remote2d.logic.Interpolator;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 /**
  * The basic class for all moving things in the game.  Things such as the player,
@@ -34,9 +34,9 @@ public class Entity extends EditorObject implements Cloneable {
 	 */
 	public boolean isStatic = true;
 	public String name;
-	private Vector2D oldPos;
-	public Vector2D pos;
-	public Vector2D dim;
+	private Vector2 oldPos;
+	public Vector2 pos;
+	public Vector2 dim;
 	public String resourcePath = "";
 	public boolean repeatTex = false;
 	public boolean linearScaling = false;
@@ -62,9 +62,9 @@ public class Entity extends EditorObject implements Cloneable {
 		components = new ArrayList<Component>();
 		colliders = new ArrayList<Collider>();
 		
-		pos = new Vector2D(0,0);
-		oldPos = new Vector2D(0,0);
-		dim = new Vector2D(50,50);
+		pos = new Vector2(0,0);
+		oldPos = new Vector2(0,0);
+		dim = new Vector2(50,50);
 	}
 	
 	public Entity()
@@ -110,9 +110,9 @@ public class Entity extends EditorObject implements Cloneable {
 		colliders.remove(c);
 	}
 	
-	public Vector2D getPos(float interpolation)
+	public Vector2 getPos(float interpolation)
 	{
-		return Interpolator.linearInterpolate(oldPos, pos, interpolation);
+		return Interpolator.linearInterpolate2f(oldPos, pos, interpolation);
 	}
 	
 	public void removeCollider(int c)
@@ -170,7 +170,7 @@ public class Entity extends EditorObject implements Cloneable {
 	 * @param movement The movement vector of said collider
 	 * @return If it passes, list of all colliders involved with this WorldElement.  Otherwise, null.
 	 */
-	public ArrayList<Collider> getPossibleColliders(Collider coll, Vector2D movement)
+	public ArrayList<Collider> getPossibleColliders(Collider coll, Vector2 movement)
 	{
 		if(!isStatic)
 			return null;
@@ -198,7 +198,7 @@ public class Entity extends EditorObject implements Cloneable {
 		return parent;
 	}
 	
-	public boolean isPointColliding(Vector2D vec)
+	public boolean isPointColliding(Vector2 vec)
 	{
 		Collider mainCollider = getMainCollider().getTransformedCollider(pos);
 		if(mainCollider.isPointInside(vec))
@@ -234,8 +234,8 @@ public class Entity extends EditorObject implements Cloneable {
 	{
 		if(colliders.size()==0 || !isStatic)
 			return null;
-		Vector2D v1 = null;
-		Vector2D v2 = null;
+		Vector2 v1 = null;
+		Vector2 v2 = null;
 		
 		for(int x=0;x<colliders.size();x++)
 		{
@@ -273,7 +273,7 @@ public class Entity extends EditorObject implements Cloneable {
 		
 	}
 	
-	public Vector2D getDim()
+	public Vector2 getDim()
 	{
 		return dim;
 	}
@@ -288,7 +288,7 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public void render(boolean editor, float interpolation)
 	{
-		Vector2D pos = Interpolator.linearInterpolate(oldPos, this.pos, interpolation);
+		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
 		
 		boolean selected = false;
 		if(editor)

@@ -16,7 +16,7 @@ import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.io.R2DFileSaver;
 import com.remote.remote2d.io.R2DTypeCollection;
-import com.remote.remote2d.logic.Vector2D;
+import com.remote.remote2d.logic.Vector2;
 
 public class GuiMainMenu extends GuiMenu {
 	
@@ -31,8 +31,8 @@ public class GuiMainMenu extends GuiMenu {
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2D(getWidth()/2-125,150),new Vector2D(250,40),"Open Editor"));
-		buttonList.add(new GuiButton(1,new Vector2D(getWidth()/2-125,200),new Vector2D(250,40),"Quit"));
+		buttonList.add(new GuiButton(0,new Vector2(getWidth()/2-125,150),new Vector2(250,40),"Open Editor"));
+		buttonList.add(new GuiButton(1,new Vector2(getWidth()/2-125,200),new Vector2(250,40),"Quit"));
 	}
 	
 	@Override
