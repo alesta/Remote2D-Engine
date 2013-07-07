@@ -15,7 +15,6 @@ import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
-import com.remote.remote2d.logic.Vector2;
 
 public class GuiCreateSpriteSheet extends GuiMenu {
 	
@@ -33,11 +32,16 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	GuiTextField animSave;
 	
 	GuiButton createButton;
+	GuiButton regenButton;
 	
 	Vector2 oldOffset;
 	Vector2 offset;
 	
 	int scale = 1;
+	
+	String message = "";
+	long messageTime = 5000;
+	long lastMessageTime = 0;
 	
 	public GuiCreateSpriteSheet()
 	{
@@ -86,15 +90,15 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	{
 		this();
 		texID.text = anim.getTexPath();
-		startX.text = anim.getStartPos().x+"";
-		startY.text = anim.getStartPos().y+"";
-		dimX.text = anim.getSpriteDim().x+"";
-		dimY.text = anim.getSpriteDim().y+"";
-		framesX.text = anim.getFrames().x+"";
-		framesY.text = anim.getFrames().y+"";
-		paddingX.text = anim.getPadding().x+"";
-		paddingY.text = anim.getPadding().y+"";
-		frameLength.text = anim.getFramelength()+"";
+		startX.text = (int)anim.getStartPos().x+"";
+		startY.text = (int)anim.getStartPos().y+"";
+		dimX.text = (int)anim.getSpriteDim().x+"";
+		dimY.text = (int)anim.getSpriteDim().y+"";
+		framesX.text = (int)anim.getFrames().x+"";
+		framesY.text = (int)anim.getFrames().y+"";
+		paddingX.text = (int)anim.getPadding().x+"";
+		paddingY.text = (int)anim.getPadding().y+"";
+		frameLength.text = (int)anim.getFramelength()+"";
 		animSave.text = anim.getPath();
 	}
 	
@@ -105,8 +109,8 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		
 		createButton = new GuiButton(0,new Vector2(5,getHeight()-45),new Vector2(100,40),"Create");
 		buttonList.add(createButton);
-		buttonList.add(new GuiButton(1,new Vector2(110,getHeight()-45),new Vector2(100,40),"Cancel"));
-		buttonList.add(new GuiButton(2,new Vector2(5,getHeight()-90),new Vector2(205,40),"Regenerate"));
+		buttonList.add(new GuiButton(1,new Vector2(110,getHeight()-45),new Vector2(100,40),"Done"));
+		buttonList.add(regenButton = new GuiButton(2,new Vector2(5,getHeight()-90),new Vector2(205,40),"Regenerate"));
 	}
 	
 	@Override
@@ -132,6 +136,12 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		Fonts.get("Arial").drawString("Padding", 5, 200, 20, 0xffffff);
 		Fonts.get("Arial").drawString("Length", 5, 245, 20, 0xffffff);
 		Fonts.get("Arial").drawString("Path", 5, 290, 20, 0xffffff);
+		if(!isReady() || !animSave.hasText())
+			Fonts.get("Arial").drawString("Fill out all fields!", 5, 335, 20, 0xff0000);
+		else if(!animSave.text.endsWith(Animation.getExtension()))
+			Fonts.get("Arial").drawString("Use "+Animation.getExtension()+" extension", 5, 335, 20, 0xff0000);
+		if(System.currentTimeMillis()-lastMessageTime <= messageTime)
+			Fonts.get("Arial").drawString(message, 5, getHeight()-110, 20, 0xffffff);
 	}
 	
 	@Override
@@ -173,7 +183,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 				GL11.glDisable(GL11.GL_SCISSOR_TEST);
 				
 				Vector2 spriteDim = animation.getSpriteDim();
-				animation.render(new Vector2(10,350), spriteDim);
+				animation.render(new Vector2(10,360), spriteDim);
 			}
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		}
@@ -197,7 +207,8 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		
 		oldOffset = offset.copy();
 		
-		createButton.setDisabled(!isReady());
+		createButton.setDisabled(!(isReady() && animSave.hasText() && animSave.text.endsWith(Animation.getExtension())));
+		regenButton.setDisabled(!isReady());
 		
 		if(Remote2D.getInstance().getKeyboardList().contains('[') && scale >= 2)
 			scale /= 2;
@@ -237,9 +248,11 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	{
 		if(button.id == 0)
 		{
-			R2DFileManager manager = new R2DFileManager("/res/anim/"+animSave.text+Animation.getExtension(),animation);
+			R2DFileManager manager = new R2DFileManager(animSave.text,animation);
 			manager.write();
-			Remote2D.getInstance().guiList.pop();
+			lastMessageTime = System.currentTimeMillis();
+			message = "File "+manager.getFile().getName()+" saved.";
+			//Remote2D.getInstance().guiList.pop();
 		} else if(button.id == 1)
 		{
 			Remote2D.getInstance().guiList.pop();
@@ -265,7 +278,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		boolean total = texID.hasText() && startX.hasText() && startY.hasText() 
 				&& dimX.hasText() && dimY.hasText() && framesX.hasText() &&
 				framesY.hasText() && paddingX.hasText() && paddingY.hasText()
-				&& containsKey && frameLength.hasText() && animSave.hasText();
+				&& containsKey && frameLength.hasText();
 		return total;
 	}
 

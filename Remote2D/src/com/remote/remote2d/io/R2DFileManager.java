@@ -102,6 +102,11 @@ public class R2DFileManager {
 			collection.printContents();
 	}
 	
+	public File getFile()
+	{
+		return new File(file.getPath());
+	}
+	
 	public String getPath()
 	{
 		return path;

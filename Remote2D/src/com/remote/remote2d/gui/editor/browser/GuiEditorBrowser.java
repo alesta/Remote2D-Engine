@@ -46,13 +46,14 @@ public class GuiEditorBrowser extends Gui {
 				
 		if(Remote2D.getInstance().hasMouseBeenPressed() && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
 		{
-			float yPos = j-pos.y-20;
+			int yPos = j-(int)pos.y-20;
 			if(yPos < (currentFolder.files.size()+currentFolder.folders.size()+1)*20)
 			{
 				if(selectedFile == yPos/20)
 				{
 					if(System.currentTimeMillis() - lastDoubleClickTime <= doubleClickTime)
 					{
+						
 						lastDoubleClickTime = -1;
 						if(selectedFile == 0)
 						{
