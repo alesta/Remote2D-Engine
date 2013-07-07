@@ -25,7 +25,8 @@ public class ComponentPlayer extends Component {
 	private PlayerState state = PlayerState.IDLE;
 	private FacingState facing = FacingState.RIGHT;
 	private Animation currentAnimation;
-	private int stateTimer = 0;
+	private long lastLand = 0;
+	private long timerLength = -1;
 	
 	private ParticleSystem testParticles;
 	
@@ -107,21 +108,15 @@ public class ComponentPlayer extends Component {
 		if(entity.pos.x < left)
 			Remote2D.getInstance().map.camera.x -= left-entity.pos.x;
 		
-		if(state == PlayerState.LAND)
-		{
-			if(stateTimer <= 0)
-			{
-				state = PlayerState.IDLE;
-				stateTimer = 0;
-			} else
-				stateTimer--;
-		}
-		
 		if(state != oldState)
 		{
 			currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());
 			if(state == PlayerState.LAND && currentAnimation != null)
-				stateTimer = (int) (currentAnimation.getFramelength()*currentAnimation.getFrames().x*currentAnimation.getFrames().y);
+			{
+				timerLength = (int) (currentAnimation.getFramelength()*currentAnimation.getFrames().x*currentAnimation.getFrames().y);
+				lastLand = System.currentTimeMillis();
+			}
+				
 		}
 		
 		if(currentAnimation != null)
@@ -175,6 +170,13 @@ public class ComponentPlayer extends Component {
 			//GL11.glNormal3f(entity.pos.x+entity.getDim().x/2, entity.pos.y+entity.getDim().y/2, 1);
 		}
 		
+		if(state == PlayerState.LAND && System.currentTimeMillis()-lastLand >= timerLength && timerLength != -1)
+		{
+			state = PlayerState.IDLE;
+			currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());
+			timerLength = -1;
+		}
+		
 		if(currentAnimation != null)
 		{
 			Vector2 posVec = new Vector2(0,0);
@@ -201,7 +203,7 @@ public class ComponentPlayer extends Component {
 		player.idleAnimation = idleAnimation;
 		player.walkAnimation = walkAnimation;
 		player.jumpAnimation = jumpAnimation;
-		player.fallAnimation = jumpAnimation;
+		player.fallAnimation = fallAnimation;
 		player.landAnimation = landAnimation;
 		player.particleTest = particleTest;
 		player.updateAnimation();
