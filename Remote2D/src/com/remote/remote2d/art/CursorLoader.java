@@ -44,24 +44,9 @@ public class CursorLoader {
 		if(tex != null)
 		{
 			Vector2 renderpos = new Vector2(Remote2D.getInstance().getMouseCoords()).subtract(hotspot);
-			tex.bind();
 			
-			GL11.glPushMatrix();
-				GL11.glTranslatef(renderpos.x, renderpos.y, 0);
-				GL11.glBegin(GL11.GL_QUADS);
-					GL11.glTexCoord2f(0, 0);
-					GL11.glVertex2f(0, 0);
-					
-					GL11.glTexCoord2f(1, 0);
-					GL11.glVertex2f(tex.image.getWidth(), 0);
-					
-					GL11.glTexCoord2f(1, 1);
-					GL11.glVertex2f(tex.image.getWidth(), tex.image.getHeight());
-					
-					GL11.glTexCoord2f(0, 1);
-					GL11.glVertex2f(0, tex.image.getHeight());
-				GL11.glEnd();
-			GL11.glPopMatrix();
+			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
+			Renderer.drawRect(renderpos, dim, tex, 0xffffff, 1);
 			
 		}
 	}

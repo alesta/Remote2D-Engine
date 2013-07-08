@@ -40,7 +40,7 @@ public class ComponentCamera extends Component {
 	public void renderAfter(boolean editor, float interpolation) {
 		if(editor)
 		{
-			Renderer.drawRect(entity.pos, new Vector2(Fonts.get("Arial").getStringDim("CAMERA", 20)[0]+10,20), 1, 1, 0, 1);
+			Renderer.drawRect(entity.pos, new Vector2(Fonts.get("Arial").getStringDim("CAMERA", 20)[0]+10,20), 0xffff00, 1);
 			Fonts.get("Arial").drawString("CAMERA", entity.pos.x+5, entity.pos.y, 20, 0x000000);
 		}
 	}

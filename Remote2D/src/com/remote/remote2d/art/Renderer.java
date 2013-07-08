@@ -6,10 +6,10 @@ import com.remote.remote2d.logic.Vector2;
 
 public class Renderer {
 	
-	public static void drawPoly(Vector2[] vectors, Vector2[] uv, Texture tex, float red, float green, float blue, float alpha)
+	public static void drawPoly(Vector2[] vectors, Vector2[] uv, Texture tex, int color, float alpha)
 	{
 		tex.bind();
-		GL11.glColor4f(red, green, blue, alpha);
+		bindRGB(color,alpha);
 		GL11.glBegin(GL11.GL_POLYGON);
 		
 		for(int x=0;x<vectors.length;x++)
@@ -23,10 +23,10 @@ public class Renderer {
 		GL11.glColor3f(1, 1, 1);
 	}
 	
-	public static void drawPoly(Vector2[] vectors, float red, float green, float blue, float alpha)
+	public static void drawPoly(Vector2[] vectors, int color, float alpha)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(red, green, blue, alpha);
+		bindRGB(color,alpha);
 		GL11.glBegin(GL11.GL_POLYGON);
 		
 		for(int x=0;x<vectors.length;x++)
@@ -39,10 +39,10 @@ public class Renderer {
 	}
 	
 	
-	public static void drawRect(Vector2 pos, Vector2 dim, Vector2 uvPos, Vector2 uvDim, Texture tex, float red, float green, float blue, float alpha)
+	public static void drawRect(Vector2 pos, Vector2 dim, Vector2 uvPos, Vector2 uvDim, Texture tex, int color, float alpha)
 	{
 		tex.bind();
-		GL11.glColor4f(red, green, blue, alpha);
+		bindRGB(color,alpha);
 		GL11.glBegin(GL11.GL_QUADS);
 		
 		GL11.glTexCoord2f(uvPos.x, uvPos.y);
@@ -59,10 +59,15 @@ public class Renderer {
 		GL11.glColor3f(1, 1, 1);
 	}
 	
-	public static void drawRect(Vector2 pos, Vector2 dim, float red, float green, float blue, float alpha)
+	public static void drawRect(Vector2 pos, Vector2 dim, Texture tex, int color, float alpha)
+	{
+		drawRect(pos, dim, new Vector2(0,0), new Vector2(1,1), tex, color, alpha);
+	}
+	
+	public static void drawRect(Vector2 pos, Vector2 dim, int color, float alpha)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(red, green, blue, alpha);
+		bindRGB(color,alpha);
 		GL11.glBegin(GL11.GL_QUADS);
 		
 		GL11.glVertex2f(pos.x, pos.y);
@@ -76,10 +81,10 @@ public class Renderer {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
-	public static void drawLineRect(Vector2 pos, Vector2 dim, float red, float green, float blue, float alpha)
+	public static void drawLineRect(Vector2 pos, Vector2 dim, int color, float alpha)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(red, green, blue, alpha);
+		bindRGB(color,alpha);
 		GL11.glBegin(GL11.GL_LINE_STRIP);
 		
 		GL11.glVertex2f(pos.x, pos.y);
@@ -92,5 +97,20 @@ public class Renderer {
 		
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	public static float[] getRGB(int rgb)
+	{
+		float r = ((rgb >> 16) & 0xff)/255f;
+		float g = ((rgb >> 8) & 0xff)/255f;
+		float b = (rgb & 0xff)/255f;
+		float[] returnval = {r,g,b};
+		return returnval;
+	}
+	
+	public static void bindRGB(int rgb, float alpha)
+	{
+		float[] color = getRGB(rgb);
+		GL11.glColor4f(color[0],color[1],color[2],alpha);
 	}
 }
