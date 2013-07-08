@@ -28,7 +28,7 @@ public class GuiWindowPerlin2D extends GuiWindow {
 		if(tex != null)
 			tex.removeTexture();
 		values = Noise2D.perlinImage(300, 300, 6);
-		tex = new Texture(values);
+		tex = new Texture(values,true,false);
 	}
 	
 	@Override

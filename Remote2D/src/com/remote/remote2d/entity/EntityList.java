@@ -25,7 +25,15 @@ public class EntityList {
 	public void addEntityToList(Entity e)
 	{
 		entityList.add(e);
-		e.spawnEntityInWorld();
+		spawn();
+	}
+	
+	public void spawn()
+	{
+		for(int i=0;i<entityList.size();i++)
+		{
+			entityList.get(i).spawnEntityInWorld();
+		}
 	}
 	
 	public void removeEntityFromList(Entity e)

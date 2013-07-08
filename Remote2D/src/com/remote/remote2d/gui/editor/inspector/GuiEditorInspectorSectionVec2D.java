@@ -76,9 +76,9 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 			}
 		}else
 		{
-			if(textField1.hasText())
+			if(textField1.hasText() && !textField1.text.equals("-"))
 				old1 = Float.parseFloat(textField1.text);
-			if(textField2.hasText())
+			if(textField2.hasText() && !textField2.text.equals("-"))
 				old2 = Float.parseFloat(textField2.text);
 		}
 	}

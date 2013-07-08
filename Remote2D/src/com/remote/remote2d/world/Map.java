@@ -22,38 +22,38 @@ import com.remote.remote2d.logic.Vector2;
 public class Map implements R2DFileSaver {
 	
 	private EntityList entities;
-	private Vector2 oldCamera = new Vector2(0,0);
-	public Vector2 camera = new Vector2(0,0);
+	public Camera camera;
 	public int backgroundColor = 0xffffff;
 	public int gridSize = 16;
-	public float scale = 1.0f;
 	
 	public boolean debug = false;
 	
 	public Map()
 	{
 		entities = new EntityList();
+		camera = new Camera();
 	}
 	
 	public Map(EntityList list)
 	{
 		entities = list;
+		camera = new Camera();
 	}
 	
 	public void render(boolean editor, float interpolation)
 	{
-		Vector2 iCamera = Interpolator.linearInterpolate2f(oldCamera, camera, interpolation);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(-iCamera.x, -iCamera.y, 0);
-		if(editor)
-			GL11.glScalef(scale, scale, 1);
+		camera.renderBefore(interpolation, editor);
 		entities.render(editor,interpolation);
-		GL11.glPopMatrix();
+		camera.renderAfter(interpolation, editor);
 	}
 	
-	public void drawGrid()
+	public void drawGrid(float interpolation)
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		
+		float scale = camera.getTrueScale();
+		Vector2 camera = this.camera.getTruePos(interpolation);
+		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-camera.x, -camera.y, 0);
 		GL11.glScalef(scale, scale, 1);
@@ -102,9 +102,14 @@ public class Map implements R2DFileSaver {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
+	public void spawn()
+	{
+		entities.spawn();
+	}
+	
 	public void tick(int i, int j, int k, boolean editor)
 	{
-		oldCamera = camera.copy();
+		camera.tick(i, j, k);
 		if(!editor)
 			entities.tick(i, j, k);
 	}
@@ -250,7 +255,6 @@ public class Map implements R2DFileSaver {
 	{
 		EntityList entityList = entities.clone();
 		Map map = new Map(entityList);
-		map.oldCamera = camera.copy();
 		map.camera = camera.copy();
 		return map;
 	}

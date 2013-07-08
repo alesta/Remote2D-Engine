@@ -1,30 +1,16 @@
 package com.remote.remote2d.test.gui;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
-import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.editor.GuiEditor;
-import com.remote.remote2d.io.R2DFileManager;
-import com.remote.remote2d.io.R2DFileSaver;
-import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.logic.Vector2;
 
 public class GuiMainMenu extends GuiMenu {
-	
-	private R2DFileManager manager;
-	
+		
 	public GuiMainMenu()
 	{
-		//manager = new R2DFileManager("options.r2d", "Options", this);
 	}
 	
 	@Override

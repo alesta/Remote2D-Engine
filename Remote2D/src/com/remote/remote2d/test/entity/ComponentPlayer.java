@@ -8,6 +8,7 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
+import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.particles.ParticleSystem;
@@ -101,12 +102,13 @@ public class ComponentPlayer extends Component {
 			state = PlayerState.LAND;
 		//velocity.print();
 		
-		float right = Remote2D.getInstance().map.camera.x+Remote2D.getInstance().displayHandler.width;
-		float left = Remote2D.getInstance().map.camera.x;
+		ColliderBox renderarea = Remote2D.getInstance().map.camera.getMapRenderArea();
+		float right = renderarea.pos.x+renderarea.dim.x;
+		float left = renderarea.pos.x;
 		if(entity.pos.x+entity.getDim().x > right)
-			Remote2D.getInstance().map.camera.x += (entity.pos.x+entity.getDim().x)-right;
+			Remote2D.getInstance().map.camera.pos.x += (entity.pos.x+entity.getDim().x)-right;
 		if(entity.pos.x < left)
-			Remote2D.getInstance().map.camera.x -= left-entity.pos.x;
+			Remote2D.getInstance().map.camera.pos.x -= left-entity.pos.x;
 		
 		if(state != oldState)
 		{
@@ -123,7 +125,7 @@ public class ComponentPlayer extends Component {
 			currentAnimation.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
 		
 		
-		testParticles.pos = new Vector2(i,j).add(Remote2D.getInstance().map.camera);
+		testParticles.pos = new Vector2(i,j).add(Remote2D.getInstance().map.camera.pos);
 		if(particleTest)
 			testParticles.tick(false);
 			
@@ -164,11 +166,6 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void renderAfter(boolean editor, float interpolation) {
-		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT)){
-			GL11.glPushMatrix();
-			GL11.glScalef(1, 1, 1);
-			//GL11.glNormal3f(entity.pos.x+entity.getDim().x/2, entity.pos.y+entity.getDim().y/2, 1);
-		}
 		
 		if(state == PlayerState.LAND && System.currentTimeMillis()-lastLand >= timerLength && timerLength != -1)
 		{
@@ -184,9 +181,6 @@ public class ComponentPlayer extends Component {
 			posVec.y = entity.getPos(interpolation).y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
 			currentAnimation.render(posVec, new Vector2(currentAnimation.getSpriteDim().getElements()));
 		}
-		
-		if(facing == (spriteFacesRight?FacingState.LEFT:FacingState.RIGHT))
-			GL11.glPopMatrix();
 		
 		if(particleTest)
 			testParticles.render();

@@ -64,7 +64,7 @@ public class GuiEditorInspectorSectionInt extends GuiEditorInspectorSection {
 
 	@Override
 	public boolean isComplete() {
-		return !textField.text.trim().equals("");
+		return !textField.text.trim().equals("") && !textField.text.equals("-");
 	}
 	
 	@Override

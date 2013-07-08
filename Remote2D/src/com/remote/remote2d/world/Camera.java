@@ -1,0 +1,105 @@
+package com.remote.remote2d.world;
+
+import org.lwjgl.opengl.GL11;
+
+import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Renderer;
+import com.remote.remote2d.logic.ColliderBox;
+import com.remote.remote2d.logic.Interpolator;
+import com.remote.remote2d.logic.Vector2;
+
+public class Camera {
+	
+	public Vector2 pos;
+	private Vector2 oldPos;
+	public boolean useMultiples = true;
+	public boolean blackBars = true;
+	public Vector2 targetResolution;
+	public float additionalScale = 1.0f;
+	
+	public Camera(Vector2 pos, Vector2 targetResolution)
+	{
+		this.pos = pos.copy();
+		oldPos = pos.copy();
+		this.targetResolution = targetResolution.copy();
+	}
+	
+	public Camera()
+	{
+		this(new Vector2(0,0),new Vector2(720,480));
+	}
+	
+	public void tick(int i, int j, int k)
+	{
+		this.oldPos = pos.copy();
+	}
+	
+	public void renderBefore(float interpolation, boolean editor)
+	{
+		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
+		ColliderBox renderArea = getScreenRenderArea();
+		float scale = targetResolution.x/renderArea.dim.x;
+		GL11.glPushMatrix();
+		GL11.glTranslatef(-pos.x+renderArea.pos.x, -pos.y+renderArea.pos.y, 0);
+		GL11.glScalef(1.0f/(scale*additionalScale), 1.0f/(scale*additionalScale), 1);
+	}
+	
+	public float getTrueScale()
+	{
+		ColliderBox renderArea = getScreenRenderArea();
+		float scale = targetResolution.x/renderArea.dim.x;
+		return scale*additionalScale;
+	}
+	
+	public void renderAfter(float interpolation, boolean editor)
+	{
+		GL11.glPopMatrix();
+		if(editor || !blackBars)
+			return;
+		ColliderBox renderArea = getScreenRenderArea();
+		float width = (Remote2D.getInstance().displayHandler.width-renderArea.dim.x)/2;
+		float height = (Remote2D.getInstance().displayHandler.height-renderArea.dim.y)/2;
+		Renderer.drawRect(new Vector2(0,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1);
+		Renderer.drawRect(new Vector2(Remote2D.getInstance().displayHandler.width-width,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1);
+		Renderer.drawRect(new Vector2(0,0), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1);
+		Renderer.drawRect(new Vector2(0,Remote2D.getInstance().displayHandler.height-height), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1);
+	}
+	
+	public Vector2 getTruePos(float interpolation)
+	{
+		return Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
+	}
+	
+	private ColliderBox getScreenRenderArea()
+	{
+		Vector2 dim;
+		float screenRatio = (float)(Remote2D.getInstance().displayHandler.width)/(float)(Remote2D.getInstance().displayHandler.height);
+		float aspectRatio = targetResolution.x/targetResolution.y;
+		
+		if(screenRatio > aspectRatio) // Use height
+			dim = new Vector2((float)(Remote2D.getInstance().displayHandler.height)*aspectRatio,Remote2D.getInstance().displayHandler.height);
+		else if(screenRatio < aspectRatio) // Use width
+			dim = new Vector2(Remote2D.getInstance().displayHandler.width,(float)(Remote2D.getInstance().displayHandler.width)/aspectRatio);
+		else
+			dim = new Vector2(Remote2D.getInstance().displayHandler.width,Remote2D.getInstance().displayHandler.height);
+		
+		if(useMultiples)
+		{
+			dim.x -= dim.x%targetResolution.x;
+			dim.y -= dim.y%targetResolution.y;
+		}
+		
+		Vector2 winPos = new Vector2(Remote2D.getInstance().displayHandler.width/2-dim.x/2,Remote2D.getInstance().displayHandler.height/2-dim.y/2);
+		
+		return winPos.getColliderWithDim(dim);
+	}
+	
+	public ColliderBox getMapRenderArea()
+	{
+		return pos.getColliderWithDim(targetResolution);
+	}
+
+	public Camera copy() {
+		return new Camera(pos,targetResolution);
+	}
+}

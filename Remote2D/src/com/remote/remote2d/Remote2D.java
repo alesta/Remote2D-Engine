@@ -13,7 +13,7 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.ArtLoader;
 import com.remote.remote2d.art.CursorLoader;
 import com.remote.remote2d.entity.InsertableComponentList;
-import com.remote.remote2d.entity.InsertableEntityList;
+import com.remote.remote2d.entity.component.ComponentCamera;
 import com.remote.remote2d.entity.component.ComponentColliderBox;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.world.Map;
@@ -118,6 +118,7 @@ public class Remote2D {
 		
 		componentList = new InsertableComponentList();
 		componentList.addInsertableComponent("Box Collider", new ComponentColliderBox(null));
+		componentList.addInsertableComponent("Camera", new ComponentCamera(null));
 		
 		artLoader = new ArtLoader();
 		

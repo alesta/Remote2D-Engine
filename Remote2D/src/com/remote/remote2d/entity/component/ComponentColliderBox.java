@@ -2,9 +2,7 @@ package com.remote.remote2d.entity.component;
 
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.entity.Entity;
-import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 
@@ -47,7 +45,7 @@ public class ComponentColliderBox extends Component {
 	public void renderAfter(boolean editor, float interpolation) {
 		if(currentCollider != null && editor)
 		{
-			GL11.glColor3f(1, 0, 0);
+			GL11.glColor4f(0, 1, 0, 0.5f);
 			currentCollider.getTransformedCollider(entity.pos).drawCollider();
 			GL11.glColor3f(1, 1, 1);
 		}

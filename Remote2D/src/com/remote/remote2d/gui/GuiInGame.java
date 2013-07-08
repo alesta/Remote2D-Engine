@@ -12,6 +12,7 @@ public class GuiInGame extends GuiMenu {
 	{
 		Log.info("Loading In-Game!");
 		backgroundColor = Remote2D.getInstance().map.backgroundColor;
+		Remote2D.getInstance().map.spawn();
 	}
 	
 	@Override

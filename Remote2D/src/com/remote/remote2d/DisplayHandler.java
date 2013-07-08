@@ -1,8 +1,6 @@
 package com.remote.remote2d;
 
-import java.awt.Window;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -12,8 +10,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
-import com.remote.remote2d.art.CursorLoader;
-import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.art.TextureLoader;
 
 public class DisplayHandler {

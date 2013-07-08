@@ -17,7 +17,7 @@ import com.remote.remote2d.gui.editor.browser.GuiEditorBrowser;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
-import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.world.Camera;
 import com.remote.remote2d.world.Map;
 
 public class GuiEditor extends GuiMenu implements WindowHolder {
@@ -51,6 +51,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		{
 			windowStack = new Stack<GuiWindow>();
 		}
+		
+		if(map != null)
+			map.camera.targetResolution = new Vector2(Remote2D.getInstance().displayHandler.width, Remote2D.getInstance().displayHandler.height);
 		
 		if(inspector == null)
 		{
@@ -122,18 +125,17 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(map != null)
 		{
 			if(gridSnap)
-				map.drawGrid();
+				map.drawGrid(interpolation);
+			
 			map.render(true,interpolation);
 		}
 		GL11.glColor4f(1, 1, 1, 0.5f);
 		if(stampEntity != null)
 		{
-			GL11.glPushMatrix();
-			GL11.glTranslatef(-map.camera.x, -map.camera.y, 0);
-			GL11.glScalef(map.scale, map.scale, 1);
+			map.camera.renderBefore(interpolation, true);
 			stampEntity.render(true,interpolation);
 			stampEntity.getGeneralCollider().drawCollider();
-			GL11.glPopMatrix();
+			map.camera.renderAfter(interpolation, true);
 		}
 		GL11.glColor4f(1, 1, 1, 1);
 		
@@ -165,18 +167,19 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			map.gridSize *= 2;
 		if(Remote2D.getInstance().getKeyboardList().contains('[') && map.gridSize>1)
 			map.gridSize /= 2;
-		if(Remote2D.getInstance().getKeyboardList().contains('+') && map.scale < 16)
-			map.scale *= 2;
-		if(Remote2D.getInstance().getKeyboardList().contains('-') && map.scale > 0.25)
-			map.scale /= 2;
+		if(Remote2D.getInstance().getKeyboardList().contains('+') && map.camera.additionalScale < 16)
+			map.camera.additionalScale *= 2;
+		if(Remote2D.getInstance().getKeyboardList().contains('-') && map.camera.additionalScale > 0.25)
+			map.camera.additionalScale /= 2;
 		if(Remote2D.getInstance().getKeyboardList().contains('0'))
-			map.scale = 1;
+			map.camera.additionalScale = 1;
 	}
 	
 	@Override
 	public void tick(int i, int j, int k)
 	{
 		super.tick(i, j, k);
+		
 		if(getMouseInWindow(i,j))
 			disableElementPlace();
 		
@@ -214,7 +217,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(stampEntity != null)
 		{
 			stampEntity.updatePos();
-			stampEntity.pos = new Vector2((i+map.camera.x)/map.scale,(j+map.camera.y)/map.scale);
+			stampEntity.pos = new Vector2((i+map.camera.pos.x)/map.camera.additionalScale,(j+map.camera.pos.y)/map.camera.additionalScale);
 			if(gridSnap)
 			{
 				stampEntity.pos.x -= stampEntity.pos.x%map.gridSize;
@@ -238,23 +241,26 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				   inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2(i,j))
 					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2(i,j)))))
 			{
-				selectedEntity = map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale)));
-				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.x)/map.scale),(int)((j+map.camera.y)/map.scale))));
+				selectedEntity = map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale)));
+				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale))));
 			}
 		}
 		
-		boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
-		boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
-		boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
-		boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
-		if(up)
-			map.camera.y += 5f;
-		if(down)
-			map.camera.y -= 5f;
-		if(left)
-			map.camera.x += 5f;
-		if(right)
-			map.camera.x -= 5f;
+		if(map != null)
+		{
+			boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
+			boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
+			boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
+			boolean right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+			if(up)
+				map.camera.pos.y += 5f;
+			if(down)
+				map.camera.pos.y -= 5f;
+			if(left)
+				map.camera.pos.x += 5f;
+			if(right)
+				map.camera.pos.x -= 5f;
+		}
 		
 		allowEntityPlace = true;
 	}
@@ -344,8 +350,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 
 	public void setMap(Map map) {
 		if(map != null && !map.equals(map))
-			map.camera.y = -20;
+			map.camera.pos.y = -20;
 		this.map = map;
+		map.camera.targetResolution = new Vector2(Remote2D.getInstance().displayHandler.width, Remote2D.getInstance().displayHandler.height);
 		inspector.setCurrentEntity(null);
 	}
 

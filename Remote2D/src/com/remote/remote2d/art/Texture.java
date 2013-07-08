@@ -20,16 +20,6 @@ public class Texture {
 		glId = TextureLoader.loadTexture(image,linearScaling,repeat);
 	}
 	
-	public Texture(String loc)
-	{
-		this(loc,false,false);
-	}
-	
-	public Texture(BufferedImage loc)
-	{
-		this(loc,false,false);
-	}
-	
 	public Texture(BufferedImage image, boolean linearScaling,boolean repeat) {
 		textureLocation = "";
 		this.image = image;
