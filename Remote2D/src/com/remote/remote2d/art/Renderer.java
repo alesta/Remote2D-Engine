@@ -38,6 +38,22 @@ public class Renderer {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
+	public static void drawRect(Vector2 pos, Vector2 dim, Vector2 uvPos, Vector2 uvDim, Texture tex, int color, float alpha)
+	{
+		float r = ((color >> 16) & 0xff)/255f;
+		float g = ((color >> 8) & 0xff)/255f;
+		float b = (color & 0xff)/255f;
+		drawRect(pos,dim,uvPos,uvDim,tex,r,g,b,alpha);
+	}
+	
+	public static void drawRect(Vector2 pos, Vector2 dim, int color, float alpha)
+	{
+		float r = ((color >> 16) & 0xff)/255f;
+		float g = ((color >> 8) & 0xff)/255f;
+		float b = (color & 0xff)/255f;
+		drawRect(pos,dim,r,g,b,alpha);
+	}
+	
 	
 	public static void drawRect(Vector2 pos, Vector2 dim, Vector2 uvPos, Vector2 uvDim, Texture tex, float red, float green, float blue, float alpha)
 	{

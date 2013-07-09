@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
@@ -289,6 +291,9 @@ public class Entity extends EditorObject implements Cloneable {
 	{
 		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
 		
+		if(editor)
+			oldPos = pos.copy();
+		
 		boolean selected = false;
 		if(editor)
 			if(Remote2D.getInstance().guiList.peek() instanceof GuiEditor)
@@ -300,21 +305,12 @@ public class Entity extends EditorObject implements Cloneable {
 			float maxX = ((float)dim.x)/32f;
 			float maxY = ((float)dim.y)/32f;
 			tex.bind();
+			int color = 0xffffff;
 			if(selected)
-				Gui.bindRGB(0xff0000);
+				color = 0xff0000;
 			else
-				Gui.bindRGB(0xffaaaa);
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glTexCoord2f(0, 0);
-				GL11.glVertex2f(pos.x,pos.y);
-				GL11.glTexCoord2f(maxX, 0);
-				GL11.glVertex2f(pos.x+dim.x, pos.y);
-				GL11.glTexCoord2f(maxX, maxY);
-				GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-				GL11.glTexCoord2f(0, maxY);
-				GL11.glVertex2f(pos.x, pos.y+dim.y);
-			GL11.glEnd();
-			Gui.bindRGB(0xffffff);
+				color = 0xffaaaa;
+			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color, 1);
 		}
 		
 		float[] colorFloats = Gui.getRGB(color.getRGB());
@@ -322,25 +318,14 @@ public class Entity extends EditorObject implements Cloneable {
 		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
 		{
 			Texture tex = Remote2D.getInstance().artLoader.getTexture(resourcePath,linearScaling,repeatTex);
-			tex.bind();
 			float maxX = 1;
 			float maxY = 1;
-			//Log.debug(color.getRGB()+"");
 			if(repeatTex)
 			{
 				maxX = ((float)dim.x)/((float)tex.image.getWidth());
 				maxY = ((float)dim.y)/((float)tex.image.getHeight());
 			}
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glTexCoord2f(0, 0);
-				GL11.glVertex2f(pos.x,pos.y);
-				GL11.glTexCoord2f(maxX, 0);
-				GL11.glVertex2f(pos.x+dim.x, pos.y);
-				GL11.glTexCoord2f(maxX, maxY);
-				GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-				GL11.glTexCoord2f(0, maxY);
-				GL11.glVertex2f(pos.x, pos.y+dim.y);
-			GL11.glEnd();
+			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color.getRGB(), 1);
 		} else if(Remote2D.getInstance().artLoader.R2DExists(resourcePath))
 		{
 			Remote2D.getInstance().artLoader.getAnimation(resourcePath).render(pos, dim);

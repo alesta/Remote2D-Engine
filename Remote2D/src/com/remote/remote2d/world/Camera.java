@@ -2,6 +2,7 @@ package com.remote.remote2d.world;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.logic.ColliderBox;
@@ -38,10 +39,12 @@ public class Camera {
 	{
 		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
 		ColliderBox renderArea = getScreenRenderArea();
-		float scale = targetResolution.x/renderArea.dim.x;
+		float scale = (renderArea.dim.x/targetResolution.x)*additionalScale;
+		
 		GL11.glPushMatrix();
-		GL11.glTranslatef(-pos.x+renderArea.pos.x, -pos.y+renderArea.pos.y, 0);
-		GL11.glScalef(1.0f/(scale*additionalScale), 1.0f/(scale*additionalScale), 1);
+		GL11.glTranslatef(renderArea.pos.x, renderArea.pos.y,0);
+		GL11.glScalef(scale, scale, 0);
+		GL11.glTranslatef(-pos.x, -pos.y, 0);		
 	}
 	
 	public float getTrueScale()
@@ -59,10 +62,11 @@ public class Camera {
 		ColliderBox renderArea = getScreenRenderArea();
 		float width = (Remote2D.getInstance().displayHandler.width-renderArea.dim.x)/2;
 		float height = (Remote2D.getInstance().displayHandler.height-renderArea.dim.y)/2;
-		Renderer.drawRect(new Vector2(0,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1);
-		Renderer.drawRect(new Vector2(Remote2D.getInstance().displayHandler.width-width,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1);
-		Renderer.drawRect(new Vector2(0,0), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1);
-		Renderer.drawRect(new Vector2(0,Remote2D.getInstance().displayHandler.height-height), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1);
+		
+		Renderer.drawRect(new Vector2(0,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(Remote2D.getInstance().displayHandler.width-width,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(0,0), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(0,Remote2D.getInstance().displayHandler.height-height), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1f);
 	}
 	
 	public Vector2 getTruePos(float interpolation)

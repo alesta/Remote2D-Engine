@@ -42,6 +42,7 @@ public class Map implements R2DFileSaver {
 	
 	public void render(boolean editor, float interpolation)
 	{
+		//drawGrid(interpolation);
 		camera.renderBefore(interpolation, editor);
 		entities.render(editor,interpolation);
 		camera.renderAfter(interpolation, editor);
