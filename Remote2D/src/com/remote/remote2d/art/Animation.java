@@ -120,7 +120,23 @@ public class Animation implements R2DFileSaver {
 			imgDim.y *= -1;
 		}
 		
-		Renderer.drawRect(pos, dim, imgPos, imgDim, tex, 0xffffff, 1);
+		tex.bind();
+		GL11.glPushMatrix();
+		GL11.glTranslatef(pos.x, pos.y, 0);
+		GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(imgPos.x,imgPos.y);
+			GL11.glVertex2f(0, 0);
+			
+			GL11.glTexCoord2f(imgPos.x+imgDim.x,imgPos.y);
+			GL11.glVertex2f(dim.x, 0);
+			
+			GL11.glTexCoord2f(imgPos.x+imgDim.x,imgPos.y+imgDim.y);
+			GL11.glVertex2f(dim.x, dim.y);
+			
+			GL11.glTexCoord2f(imgPos.x,imgPos.y+imgDim.y);
+			GL11.glVertex2f(0, dim.y);
+		GL11.glEnd();
+		GL11.glPopMatrix();
 	}
 	
 	public Vector2 getStartPos() {
