@@ -89,8 +89,19 @@ public class Camera {
 		
 		if(useMultiples)
 		{
-			dim.x -= dim.x%targetResolution.x;
-			dim.y -= dim.y%targetResolution.y;
+			if(targetResolution.x <= Remote2D.getInstance().displayHandler.width && targetResolution.y <= Remote2D.getInstance().displayHandler.height)
+			{
+				dim.x -= dim.x%targetResolution.x;
+				dim.y -= dim.y%targetResolution.y;
+			} 
+//			else
+//			{
+//				dim = targetResolution.copy();
+//				while(dim.x > Remote2D.getInstance().displayHandler.width || dim.y > Remote2D.getInstance().displayHandler.height)
+//				{
+//					dim = dim.divide(new Vector2(2,2));
+//				}
+//			}
 		}
 		
 		Vector2 winPos = new Vector2(Remote2D.getInstance().displayHandler.width/2-dim.x/2,Remote2D.getInstance().displayHandler.height/2-dim.y/2);

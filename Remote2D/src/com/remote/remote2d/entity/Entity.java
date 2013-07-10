@@ -313,8 +313,6 @@ public class Entity extends EditorObject implements Cloneable {
 			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color, 1);
 		}
 		
-		float[] colorFloats = Gui.getRGB(color.getRGB());
-		GL11.glColor4f(colorFloats[0], colorFloats[1], colorFloats[2], alpha);
 		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
 		{
 			Texture tex = Remote2D.getInstance().artLoader.getTexture(resourcePath,linearScaling,repeatTex);
@@ -327,34 +325,12 @@ public class Entity extends EditorObject implements Cloneable {
 			}
 			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color.getRGB(), 1);
 		} else if(Remote2D.getInstance().artLoader.R2DExists(resourcePath))
-		{
 			Remote2D.getInstance().artLoader.getAnimation(resourcePath).render(pos, dim);
-		} else
-		{
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex2f(pos.x,pos.y);
-				GL11.glVertex2f(pos.x+dim.x, pos.y);
-				GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-				GL11.glVertex2f(pos.x, pos.y+dim.y);
-			GL11.glEnd();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-		}
+		else
+			Renderer.drawRect(pos, dim, color.getRGB(), alpha);
 		
 		if(editor && selected)
-		{
-			Gui.bindRGB(0xff0000);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glBegin(GL11.GL_LINE_STRIP);
-				GL11.glVertex2f(pos.x,pos.y);
-				GL11.glVertex2f(pos.x+dim.x, pos.y);
-				GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-				GL11.glVertex2f(pos.x, pos.y+dim.y);
-				GL11.glVertex2f(pos.x,pos.y);
-			GL11.glEnd();
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			Gui.bindRGB(0xffffff);
-		}
+			Renderer.drawLineRect(pos, dim, 1, 0, 0, 1);
 		
 		Gui.bindRGB(0xffffff);
 		
