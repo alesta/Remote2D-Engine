@@ -110,6 +110,13 @@ public class ComponentPlayer extends Component {
 		if(entity.pos.x < left)
 			Remote2D.getInstance().map.camera.pos.x -= left-entity.pos.x;
 		
+		float bottom = renderarea.pos.y+renderarea.dim.y;
+		float top = renderarea.pos.y;
+		if(entity.pos.y+entity.getDim().y > bottom)
+			Remote2D.getInstance().map.camera.pos.y += (entity.pos.y+entity.getDim().y)-bottom;
+		if(entity.pos.y < top)
+			Remote2D.getInstance().map.camera.pos.y -= top-entity.pos.y;
+		
 		if(state != oldState)
 		{
 			currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());

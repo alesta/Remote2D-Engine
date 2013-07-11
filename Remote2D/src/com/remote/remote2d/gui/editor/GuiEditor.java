@@ -34,6 +34,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private Entity selectedEntity = null;
 	private boolean allowEntityPlace = true;
 	private boolean gridSnap = false;
+	private Vector2 dragPoint = null;
 	
 	public Vector2 posOffset = new Vector2(0,0);
 	
@@ -159,7 +160,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		menu.render(interpolation);
 	}
 	
-	private void poll()
+	private void poll(int i, int j)
 	{
 		if(Remote2D.getInstance().getKeyboardList().contains('g'))
 			gridSnap = !gridSnap;
@@ -168,11 +169,17 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(Remote2D.getInstance().getKeyboardList().contains('[') && map.gridSize>1)
 			map.gridSize /= 2;
 		if(Remote2D.getInstance().getKeyboardList().contains('+') && map.camera.additionalScale < 16)
+		{
 			map.camera.additionalScale *= 2;
+		}
 		if(Remote2D.getInstance().getKeyboardList().contains('-') && map.camera.additionalScale > 0.25)
+		{
 			map.camera.additionalScale /= 2;
+		}
 		if(Remote2D.getInstance().getKeyboardList().contains('0'))
+		{
 			map.camera.additionalScale = 1;
+		}
 	}
 	
 	@Override
@@ -189,6 +196,28 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}
 		if(map != null)
 		{
+			if(Mouse.isButtonDown(2))
+			{
+				if(dragPoint == null)
+					dragPoint = new Vector2(i/map.camera.additionalScale+map.camera.pos.x,j/map.camera.additionalScale+map.camera.pos.y);
+				else
+				{
+					map.camera.pos = dragPoint.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+				}
+			} else
+				dragPoint = null;
+			
+			int deltaWheel = Remote2D.getInstance().getDeltaWheel();
+			if(deltaWheel > 0 && map.camera.additionalScale < 16)//zoom in, up
+			{
+				map.camera.additionalScale *= 2;
+				map.camera.pos = map.camera.pos.add(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+			} else if(deltaWheel < 0 && map.camera.additionalScale > 0.25)//zoom out, down
+			{
+				map.camera.pos = map.camera.pos.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+				map.camera.additionalScale /= 2;
+			}
+			
 			map.tick(i, j, k, true);
 			backgroundColor = map.backgroundColor;
 		}
@@ -209,9 +238,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(!inspector.isTyping())
 		{
 			if(windowStack.size() == 0)
-				poll();
+				poll(i,j);
 			else if(!windowStack.peek().isSelected())
-				poll();
+				poll(i,j);
 		}
 		
 		if(stampEntity != null)
@@ -237,9 +266,11 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				selectedEntity = stampEntity.clone();
 				map.getEntityList().addEntityToList(selectedEntity);
 				inspector.setCurrentEntity(selectedEntity);
-			} else if(map != null && !(selectedEntity != null && (
+			} else if(map != null && !((
 				   inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2(i,j))
-					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2(i,j)))))
+					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2(i,j))
+					|| browser.pos.getColliderWithDim(browser.dim).isPointInside(new Vector2(i,j))
+					|| preview.pos.getColliderWithDim(preview.dim).isPointInside(new Vector2(i,j)))))
 			{
 				selectedEntity = map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale)));
 				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale))));

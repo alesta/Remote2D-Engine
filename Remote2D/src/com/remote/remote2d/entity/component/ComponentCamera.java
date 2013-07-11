@@ -25,7 +25,11 @@ public class ComponentCamera extends Component {
 	@Override
 	public void renderBefore(boolean editor, float interpolation) {
 		
-		
+		if(editor)
+		{
+			Renderer.drawRect(entity.pos, new Vector2(Fonts.get("Arial").getStringDim("CAMERA", 20)[0]+10,20), 1, 1, 0, 1);
+			Fonts.get("Arial").drawString("CAMERA", entity.pos.x+5, entity.pos.y, 20, 0x000000);
+		}
 		
 	}
 
@@ -41,9 +45,8 @@ public class ComponentCamera extends Component {
 	public void renderAfter(boolean editor, float interpolation) {
 		if(editor)
 		{
-			Renderer.drawRect(entity.pos, new Vector2(Fonts.get("Arial").getStringDim("CAMERA", 20)[0]+10,20), 1, 1, 0, 1);
 			Renderer.drawLineRect(entity.pos, targetResolution, 0, 0, 1, 1);
-			Fonts.get("Arial").drawString("CAMERA", entity.pos.x+5, entity.pos.y, 20, 0x000000);
+			
 		}
 	}
 
@@ -52,7 +55,8 @@ public class ComponentCamera extends Component {
 		ComponentCamera newColl = new ComponentCamera(entity);
 		newColl.blackBars = this.blackBars;
 		newColl.useMultiples = this.useMultiples;
-		newColl.targetResolution = this.targetResolution.copy();
+		if(targetResolution != null)
+			newColl.targetResolution = this.targetResolution.copy();
 		return newColl;
 	}
 

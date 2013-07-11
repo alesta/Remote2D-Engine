@@ -191,12 +191,12 @@ public class DisplayHandler {
 	        Display.setDisplayMode(targetDisplayMode);
 	        Display.setFullscreen(fullscreen);
 	        Display.setLocation(posX, posY);
+	        setIcons(Remote2D.getInstance().getGame().getIconPath());
 	        Display.setVSyncEnabled(fullscreen);
 	        if(fullscreen == true)
 	        	Display.create();
 	        
 	        initGL();
-				
 	    } catch (LWJGLException e) {
 	        Log.warn("Unable to setup mode "+width+"x"+height+" fullscreen="+fullscreen + e);
 	    }

@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
@@ -118,25 +119,8 @@ public abstract class GuiWindow extends Gui {
 	@Override
 	public void render(float interpolation) {
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		float[] rgbtop = getRGB(isSelected ? windowTopColor : windowMainColor);
-		float[] rgbbot = getRGB(windowMainColor);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(rgbtop[0], rgbtop[1], rgbtop[2]);
-			GL11.glVertex2f(pos.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+20);
-			GL11.glVertex2f(pos.x, pos.y+20);
-			
-			GL11.glColor3f(rgbbot[0], rgbbot[1], rgbbot[2]);
-			GL11.glVertex2f(pos.x, pos.y+20);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+20);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+20+dim.y);
-			GL11.glVertex2f(pos.x, pos.y+20+dim.y);
-		GL11.glEnd();
-		GL11.glColor3f(1, 1, 1);
-		
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawRect(pos, new Vector2(dim.x,20), isSelected ? windowTopColor : windowMainColor, 1.0f);
+		Renderer.drawRect(pos.add(new Vector2(0,20)), dim, windowMainColor, 1.0f);
 		
 		Fonts.get("Arial").drawString(title, pos.x+10, pos.y+1, 20, 0xffffff);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
@@ -152,21 +136,12 @@ public abstract class GuiWindow extends Gui {
 		
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
-		GL11.glColor3f(0, 0, 0);
-		
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-			
-			GL11.glVertex2f(pos.x,pos.y);
-			GL11.glVertex2f(pos.x+dim.x,pos.y);
-			GL11.glVertex2f(pos.x+dim.x,pos.y+dim.y+20);
-			GL11.glVertex2f(pos.x,pos.y+dim.y+20);
-			GL11.glVertex2f(pos.x,pos.y);
-			
-		GL11.glEnd();
+		Renderer.drawLineRect(pos, dim.add(new Vector2(0,20)), 0x000000, 1.0f);
 		
 		GL11.glColor3f(0.4f, 0.4f, 0.4f);
+		
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
 		GL11.glBegin(GL11.GL_LINES);
 		

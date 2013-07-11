@@ -27,6 +27,10 @@ public class Vector2 extends Vector {
 		this(x[0],x[1]);
 	}
 
+	public Vector2(float x) {
+		this(x,x);
+	}
+
 	@Override
 	public float[] getElements() {
 		float[] elements = {x,y};

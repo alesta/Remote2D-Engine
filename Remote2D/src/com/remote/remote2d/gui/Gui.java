@@ -2,6 +2,7 @@ package com.remote.remote2d.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.logic.Vector2;
 
@@ -32,26 +33,12 @@ public abstract class Gui {
 	
 	public static void renderTextureWithCoords(Texture tex, Vector2 pos, Vector2 dim, Vector2 imgPos, Vector2 imgDim)
 	{
-		tex.bind();
 		Vector2 glImgPos = new Vector2((float)imgPos.x/(float)tex.image.getWidth(),
 				(float)imgPos.y/(float)tex.image.getHeight());
 		Vector2 glImgDim = new Vector2((float)imgDim.x/(float)tex.image.getWidth(),
 				(float)imgDim.y/(float)tex.image.getHeight());
 		
-		GL11.glColor4f(1,1,1,1);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(glImgPos.x, 				glImgPos.y);
-			GL11.glVertex2f(pos.x, 			pos.y);
-			
-			GL11.glTexCoord2f(glImgPos.x+glImgDim.x, 	glImgPos.y);
-			GL11.glVertex2f(pos.x+dim.x, 	pos.y);
-			
-			GL11.glTexCoord2f(glImgPos.x+glImgDim.x, 	glImgPos.y+glImgDim.y);
-			GL11.glVertex2f(pos.x+dim.x, 	pos.y+dim.y);
-			
-			GL11.glTexCoord2f(glImgPos.x, 				glImgPos.y+glImgDim.y);
-			GL11.glVertex2f(pos.x, 			pos.y+dim.y);
-		GL11.glEnd();
+		Renderer.drawRect(pos, dim, glImgPos, glImgDim, tex, 0xffffff, 1.0f);
 	}
 	
 }

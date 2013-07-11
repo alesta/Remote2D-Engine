@@ -56,11 +56,12 @@ public class Map implements R2DFileSaver {
 		Vector2 camera = this.camera.getTruePos(interpolation);
 		
 		GL11.glPushMatrix();
-		GL11.glTranslatef(-camera.x, -camera.y, 0);
+		
 		GL11.glScalef(scale, scale, 1);
+		GL11.glTranslatef(-camera.x, -camera.y, 0);
 		Vector2 currentPos = new Vector2(0,0);
-		currentPos.x = camera.x/scale-(camera.x/scale)%gridSize-gridSize;
-		currentPos.y = camera.y/scale-(camera.y/scale)%gridSize-gridSize;
+		currentPos.x = camera.x-camera.x%gridSize-gridSize;
+		currentPos.y = camera.y-camera.y%gridSize-gridSize;
 		GL11.glColor4f(0,0,0,0.25f);
 		
 		for(int x=0;x<Remote2D.getInstance().displayHandler.height/scale/gridSize+2;x++)
@@ -79,7 +80,7 @@ public class Map implements R2DFileSaver {
 			GL11.glLineWidth(1);
 		}
 		
-		currentPos.y = (int)(camera.y/scale-(camera.y/scale)%gridSize-gridSize);
+		currentPos.y = camera.y-camera.y%gridSize-gridSize;
 		for(int y=0;y<Remote2D.getInstance().displayHandler.width/scale/gridSize+2;y++)
 		{
 			if(currentPos.x == 0)

@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.logic.Vector2;
 
@@ -98,23 +99,8 @@ public class GuiTextField extends Gui {
 	@Override
 	public void render(float interpolation) {
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(0, 0, 0, 1);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(pos.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y+dim.y);
-		GL11.glEnd();
-		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-			GL11.glVertex2f(pos.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y);
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawRect(pos, dim, 0x000000, 1.0f);
+		Renderer.drawLineRect(pos, dim, 0xffffff, 1.0f);
 		
 		String s = prefix+text;
 		if(!s.equals(""))

@@ -109,4 +109,11 @@ public class Renderer {
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
+
+	public static void drawLineRect(Vector2 pos, Vector2 dim, int color, float alpha) {
+		float r = ((color >> 16) & 0xff)/255f;
+		float g = ((color >> 8) & 0xff)/255f;
+		float b = (color & 0xff)/255f;
+		drawLineRect(pos,dim,r,g,b,alpha);
+	}
 }
