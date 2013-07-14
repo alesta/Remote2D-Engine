@@ -196,26 +196,29 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}
 		if(map != null)
 		{
-			if(Mouse.isButtonDown(2))
+			if(!isWidgetHovered(i,j) || dragPoint != null)
 			{
-				if(dragPoint == null)
-					dragPoint = new Vector2(i/map.camera.additionalScale+map.camera.pos.x,j/map.camera.additionalScale+map.camera.pos.y);
-				else
+				if(Mouse.isButtonDown(2) || (Mouse.isButtonDown(0) && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))))
 				{
-					map.camera.pos = dragPoint.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+					if(dragPoint == null)
+						dragPoint = new Vector2(i/map.camera.additionalScale+map.camera.pos.x,j/map.camera.additionalScale+map.camera.pos.y);
+					else
+					{
+						map.camera.pos = dragPoint.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+					}
+				} else
+					dragPoint = null;
+				
+				int deltaWheel = Remote2D.getInstance().getDeltaWheel();
+				if(deltaWheel > 0 && map.camera.additionalScale < 16)//zoom in, up
+				{
+					map.camera.additionalScale *= 2;
+					map.camera.pos = map.camera.pos.add(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+				} else if(deltaWheel < 0 && map.camera.additionalScale > 0.25)//zoom out, down
+				{
+					map.camera.pos = map.camera.pos.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+					map.camera.additionalScale /= 2;
 				}
-			} else
-				dragPoint = null;
-			
-			int deltaWheel = Remote2D.getInstance().getDeltaWheel();
-			if(deltaWheel > 0 && map.camera.additionalScale < 16)//zoom in, up
-			{
-				map.camera.additionalScale *= 2;
-				map.camera.pos = map.camera.pos.add(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
-			} else if(deltaWheel < 0 && map.camera.additionalScale > 0.25)//zoom out, down
-			{
-				map.camera.pos = map.camera.pos.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
-				map.camera.additionalScale /= 2;
 			}
 			
 			map.tick(i, j, k, true);
@@ -266,11 +269,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				selectedEntity = stampEntity.clone();
 				map.getEntityList().addEntityToList(selectedEntity);
 				inspector.setCurrentEntity(selectedEntity);
-			} else if(map != null && !((
-				   inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2(i,j))
-					|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2(i,j))
-					|| browser.pos.getColliderWithDim(browser.dim).isPointInside(new Vector2(i,j))
-					|| preview.pos.getColliderWithDim(preview.dim).isPointInside(new Vector2(i,j)))))
+			} else if(map != null && !isWidgetHovered(i,j))
 			{
 				selectedEntity = map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale)));
 				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale))));
@@ -299,6 +298,14 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	@Override
 	public GuiWindow getTopWindow() {
 		return windowStack.peek();
+	}
+	
+	private boolean isWidgetHovered(int i, int j)
+	{
+		return inspector.pos.getColliderWithDim(inspector.dim).isPointInside(new Vector2(i,j))
+				|| heirarchy.pos.getColliderWithDim(heirarchy.dim).isPointInside(new Vector2(i,j))
+				|| browser.pos.getColliderWithDim(browser.dim).isPointInside(new Vector2(i,j))
+				|| preview.pos.getColliderWithDim(preview.dim).isPointInside(new Vector2(i,j));
 	}
 	
 	public ColliderBox getWindowBounds()

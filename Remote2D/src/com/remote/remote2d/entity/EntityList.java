@@ -28,6 +28,12 @@ public class EntityList {
 		spawn();
 	}
 	
+	public void addEntityToList(Entity e,int i)
+	{
+		entityList.add(i,e);
+		spawn();
+	}
+	
 	public void spawn()
 	{
 		for(int i=0;i<entityList.size();i++)
@@ -45,6 +51,11 @@ public class EntityList {
 				entityList.remove(i);
 			}
 		}
+	}
+	
+	public void removeEntityFromList(int i)
+	{
+		entityList.remove(i);
 	}
 	
 	public void reloadTextures()
