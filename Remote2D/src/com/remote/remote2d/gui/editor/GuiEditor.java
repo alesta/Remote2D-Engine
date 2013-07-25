@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiWindow;
@@ -249,7 +250,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(stampEntity != null)
 		{
 			stampEntity.updatePos();
-			stampEntity.pos = new Vector2((i+map.camera.pos.x)/map.camera.additionalScale,(j+map.camera.pos.y)/map.camera.additionalScale);
+			stampEntity.pos = getMapMousePos();
 			if(gridSnap)
 			{
 				stampEntity.pos.x -= stampEntity.pos.x%map.gridSize;
@@ -271,8 +272,8 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				inspector.setCurrentEntity(selectedEntity);
 			} else if(map != null && !isWidgetHovered(i,j))
 			{
-				selectedEntity = map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale)));
-				inspector.setCurrentEntity(map.getTopEntityAtPoint(new Vector2( (int)((i+map.camera.pos.x)/map.camera.additionalScale),(int)((j+map.camera.pos.y)/map.camera.additionalScale))));
+				selectedEntity = map.getTopEntityAtPoint(getMapMousePos());
+				inspector.setCurrentEntity(selectedEntity);
 			}
 		}
 		
@@ -293,6 +294,12 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}
 		
 		allowEntityPlace = true;
+	}
+	
+	public Vector2 getMapMousePos()
+	{
+		Vector2 mouse = new Vector2(Remote2D.getInstance().getMouseCoords());
+		return new Vector2((mouse.x/map.camera.additionalScale+map.camera.pos.x),(mouse.y/map.camera.additionalScale+map.camera.pos.y));
 	}
 
 	@Override
