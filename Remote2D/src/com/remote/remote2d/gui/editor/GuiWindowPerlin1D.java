@@ -3,6 +3,7 @@ package com.remote.remote2d.gui.editor;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.WindowHolder;
@@ -25,15 +26,13 @@ public class GuiWindowPerlin1D extends GuiWindow {
 	
 	@Override
 	public void renderContents(float interpolation) {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		GL11.glColor3f(1, 1, 1);
+		Vector2[] vecValues = new Vector2[values.length];
 		for(int x=0;x<values.length;x++)
 		{
-			GL11.glVertex2f(x, 300-values[x]*300);
+			vecValues[x] = new Vector2(x, 300-values[x]*300);
 		}
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		
+		Renderer.drawLinePoly(vecValues, 1, 1, 1, 1);
 	}
 	
 	@Override

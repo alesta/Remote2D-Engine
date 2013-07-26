@@ -205,6 +205,6 @@ public abstract class Collider {
 	public abstract void updateVerts();
 	public abstract boolean isPointInside(Vector2 vec);
 	public abstract Collider getTransformedCollider(Vector2 trans);
-	public abstract void drawCollider();
+	public abstract void drawCollider(int color);
 	
 }

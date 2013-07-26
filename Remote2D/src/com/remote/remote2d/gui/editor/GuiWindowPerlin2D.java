@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiWindow;
@@ -33,18 +34,7 @@ public class GuiWindowPerlin2D extends GuiWindow {
 	
 	@Override
 	public void renderContents(float interpolation) {
-		tex.bind();
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor3f(1, 1, 1);
-			GL11.glTexCoord2f(0, 0);
-			GL11.glVertex2f(0,0);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(300,0);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f(300,300);
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(0,300);
-		GL11.glEnd();
+		Renderer.drawRect(new Vector2(0,0), new Vector2(300,300), tex, 0xffffff, 1.0f);
 	}
 	
 	@Override

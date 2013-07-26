@@ -2,6 +2,8 @@ package com.remote.remote2d.logic;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.art.Renderer;
+
 public class ColliderBox extends Collider{
 	
 	/**
@@ -63,21 +65,11 @@ public class ColliderBox extends Collider{
 	}
 
 	@Override
-	public void drawCollider() {
+	public void drawCollider(int color) {
 		Vector2 pos = getPos();
 		Vector2 dim = getDim();
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		{
-			GL11.glVertex2f(pos.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y);
-		}
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawLineRect(pos, dim, 0xffffff, 1.0f);
 	}
 
 	@Override

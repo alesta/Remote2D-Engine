@@ -11,6 +11,7 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.EditorObject;
 import com.remote.remote2d.entity.component.Component;
@@ -167,14 +168,8 @@ public class EditorObjectWizard {
 		for(int x=0;x<sections.size();x++)
 			sections.get(x).render(interpolation);
 		
-		Gui.bindRGB(0xffffff);
-		GL11.glBegin(GL11.GL_LINES);
-		GL11.glVertex2f(pos.x, pos.y+20);
-		GL11.glVertex2f(pos.x+width, pos.y+20);
-		
-		GL11.glVertex2f(pos.x, pos.y+getHeight());
-		GL11.glVertex2f(pos.x+width, pos.y+getHeight());
-		GL11.glEnd();
+		Renderer.drawLine(new Vector2(pos.x,pos.y+20), new Vector2(pos.x+width,pos.y+20), 0xffffff, 1.0f);
+		Renderer.drawLine(new Vector2(pos.x,pos.y+getHeight()), new Vector2(pos.x+width,pos.y+getHeight()), 0xffffff, 1.0f);
 		
 		Fonts.get("Arial").drawString(component.getClass().getSimpleName(), pos.x, pos.y, 20, 0xffffff);
 	}

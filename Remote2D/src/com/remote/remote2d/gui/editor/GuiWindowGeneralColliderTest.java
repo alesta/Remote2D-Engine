@@ -40,23 +40,15 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 	@Override
 	public void renderContents(float interpolation) {
 		if(mainCollider != null)
-			mainCollider.drawCollider();
+			mainCollider.drawCollider(0xffffff);
 		if(moveCollider != null)
-			moveCollider.drawCollider();
+			moveCollider.drawCollider(0xffffff);
 		
 		if(altMoveCollider != null)
-		{
-			GL11.glColor3f(0, 1, 0);
-			altMoveCollider.drawCollider();
-			GL11.glColor3f(1, 1, 1);
-		}
+			altMoveCollider.drawCollider(0x00ff00);
 		
 		if(rawMoveCollider != null)
-		{
-			GL11.glColor3f(0, 0, 1);
-			rawMoveCollider.drawCollider();
-			GL11.glColor3f(1, 1, 1);
-		}
+			rawMoveCollider.drawCollider(0x0000ff);
 		
 		if(collision.collides)
 		{

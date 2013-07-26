@@ -218,12 +218,10 @@ public class Entity extends EditorObject implements Cloneable {
 		Collider mainCollider = getMainCollider();
 		GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x,pos.y,0);
-			GL11.glColor3f(1,1,0);
 			if(mainCollider != null)
-				mainCollider.drawCollider();
-			GL11.glColor3f(1,1,1);
+				mainCollider.drawCollider(0xffff00);
 			for(int x=0;x<colliders.size();x++)
-				colliders.get(x).drawCollider();
+				colliders.get(x).drawCollider(0xffffff);
 		GL11.glPopMatrix();
 	}
 	

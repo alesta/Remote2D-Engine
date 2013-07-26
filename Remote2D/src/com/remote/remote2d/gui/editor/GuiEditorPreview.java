@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
@@ -31,16 +32,7 @@ public class GuiEditorPreview extends Gui {
 	@Override
 	public void render(float interpolation) {
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(0,0,0,0.5f);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(pos.x,pos.y);
-			GL11.glVertex2f(pos.x+dim.x,pos.y);
-			GL11.glVertex2f(pos.x+dim.x,pos.y+dim.y);
-			GL11.glVertex2f(pos.x,pos.y+dim.y);
-		GL11.glEnd();
-		bindRGB(0xffffff);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawRect(pos, dim, 0x000000, 0.5f);
 		
 		Fonts.get("Arial").drawString("Preview", pos.x, pos.y, 20, 0xffffff);
 		GL11.glBegin(GL11.GL_LINES);

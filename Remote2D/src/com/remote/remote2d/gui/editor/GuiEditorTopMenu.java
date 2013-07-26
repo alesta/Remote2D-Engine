@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
@@ -113,21 +114,12 @@ public class GuiEditorTopMenu extends Gui {
 
 	@Override
 	public void render(float interpolation) {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(1, 0.2f, 0.2f, 1);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(0, 0);
-			GL11.glVertex2f(Remote2D.getInstance().displayHandler.width, 0);
-			GL11.glVertex2f(Remote2D.getInstance().displayHandler.width,height);
-			GL11.glVertex2f(0,height);
-		GL11.glEnd();
-		GL11.glColor4f(1, 1, 1, 1);
+		Renderer.drawRect(new Vector2(0,0), new Vector2(Remote2D.getInstance().displayHandler.width,height), 1, 0.2f, 0.2f, 1);
 		
 		for(int x=0;x<sections.size();x++)
 		{
 			sections.get(x).render(interpolation);
 		}
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
 	@Override

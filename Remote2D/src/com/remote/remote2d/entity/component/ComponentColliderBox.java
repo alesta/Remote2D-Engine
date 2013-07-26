@@ -44,11 +44,7 @@ public class ComponentColliderBox extends Component {
 	@Override
 	public void renderAfter(boolean editor, float interpolation) {
 		if(currentCollider != null && editor)
-		{
-			GL11.glColor4f(0, 1, 0, 0.5f);
-			currentCollider.getTransformedCollider(entity.pos).drawCollider();
-			GL11.glColor3f(1, 1, 1);
-		}
+			currentCollider.getTransformedCollider(entity.pos).drawCollider(0x00ff00);
 	}
 
 	@Override

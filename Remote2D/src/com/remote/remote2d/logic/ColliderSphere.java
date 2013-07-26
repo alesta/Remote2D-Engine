@@ -2,6 +2,8 @@ package com.remote.remote2d.logic;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.art.Renderer;
+
 public class ColliderSphere extends Collider {
 	
 	public Vector2 pos;
@@ -28,29 +30,21 @@ public class ColliderSphere extends Collider {
 	}
 	
 	@Override
-	public void drawCollider() {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+	public void drawCollider(int color) {
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
+		Vector2[] verts = new Vector2[360];
+		for (int i=0; i <= 360; i++)
 		{
-			for (int i=0; i <= 360; i++)
-			{
-				float degInRad = i*(3.14159f/180f);
-				double x = Math.cos(degInRad)*radius+pos.x;
-				double y = Math.sin(degInRad)*radius+pos.y;
-				GL11.glVertex2d(x,y);
-			}
+			float degInRad = i*(3.14159f/180f);
+			double x = Math.cos(degInRad)*radius+pos.x;
+			double y = Math.sin(degInRad)*radius+pos.y;
+			GL11.glVertex2d(x,y);
 		}
-		GL11.glEnd();
+		
+		Renderer.drawLinePoly(verts, color, 1.0f);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(pos.x-3, pos.y-3);
-			GL11.glVertex2f(pos.x+3, pos.y-3);
-			GL11.glVertex2f(pos.x+3, pos.y+3);
-			GL11.glVertex2f(pos.x-3, pos.y+3);
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawRect(new Vector2(pos.x-3,pos.y-3), new Vector2(6), color, 1.0f);
 	}
 
 	@Override

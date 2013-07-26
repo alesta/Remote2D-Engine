@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.EntityList;
 import com.remote.remote2d.entity.component.Component;
@@ -49,9 +50,7 @@ public class Map implements R2DFileSaver {
 	}
 	
 	public void drawGrid(float interpolation)
-	{
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		
+	{		
 		float scale = camera.getTrueScale();
 		Vector2 camera = this.camera.getTruePos(interpolation);
 		
@@ -66,42 +65,36 @@ public class Map implements R2DFileSaver {
 		
 		for(int x=0;x<Remote2D.getInstance().displayHandler.height/scale/gridSize+2;x++)
 		{
+			int color = 0x000000;
+			float alpha = 0.25f;
 			if(currentPos.y == 0)
 			{
-				GL11.glColor4f(1,0,0,0.5f);
+				color = 0xff0000;
+				alpha = 0.5f;
 				GL11.glLineWidth(3);
 			}
-			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex2f(currentPos.x,currentPos.y);
-			GL11.glVertex2f((Remote2D.getInstance().displayHandler.width)/scale+gridSize*2+currentPos.x,currentPos.y);
+			Renderer.drawLine(currentPos, new Vector2((Remote2D.getInstance().displayHandler.width)/scale+gridSize*2+currentPos.x,currentPos.y), color, alpha);
 			currentPos.y+=gridSize;
-			GL11.glColor4f(0,0,0,0.25f);
-			GL11.glEnd();
 			GL11.glLineWidth(1);
 		}
 		
 		currentPos.y = camera.y-camera.y%gridSize-gridSize;
 		for(int y=0;y<Remote2D.getInstance().displayHandler.width/scale/gridSize+2;y++)
 		{
+			int color = 0x000000;
+			float alpha = 0.25f;
 			if(currentPos.x == 0)
 			{
-				GL11.glColor4f(0,1,0,0.5f);
+				color = 0x00ff00;
+				alpha = 0.5f;
 				GL11.glLineWidth(3);
 			}
-			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex2f(currentPos.x,currentPos.y);
-			GL11.glVertex2f(currentPos.x,(Remote2D.getInstance().displayHandler.height)/scale+gridSize*2+currentPos.y);
-			
+			Renderer.drawLine(currentPos, new Vector2(currentPos.x,(Remote2D.getInstance().displayHandler.height)/scale+gridSize*2+currentPos.y), color, alpha);
 			currentPos.x+=gridSize;
-			GL11.glColor4f(0,0,0,0.25f);
-			
-			GL11.glEnd();
 			GL11.glLineWidth(1);
 		}
 		
 		GL11.glPopMatrix();
-		Gui.bindRGB(0xffffff);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	
 	public void spawn()

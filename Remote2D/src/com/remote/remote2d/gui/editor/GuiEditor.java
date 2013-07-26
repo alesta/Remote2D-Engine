@@ -131,15 +131,14 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			
 			map.render(true,interpolation);
 		}
-		GL11.glColor4f(1, 1, 1, 0.5f);
+		
 		if(stampEntity != null)
 		{
 			map.camera.renderBefore(interpolation, true);
 			stampEntity.render(true,interpolation);
-			stampEntity.getGeneralCollider().drawCollider();
+			stampEntity.getGeneralCollider().drawCollider(0xffffff);
 			map.camera.renderAfter(interpolation, true);
 		}
-		GL11.glColor4f(1, 1, 1, 1);
 		
 		if(selectedEntity != null)
 		{

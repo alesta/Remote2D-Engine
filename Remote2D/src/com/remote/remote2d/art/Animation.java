@@ -186,13 +186,11 @@ public class Animation implements R2DFileSaver {
 		
 		if(framePos == null)
 			return;
-				
-		GL11.glColor3f(0, 1, 0);
+		
 		for(int x = 0;x<framePos.length;x++)
 		{
-			framePos[x].drawCollider();
+			framePos[x].drawCollider(0x00ff00);
 		}
-		GL11.glColor3f(1, 1, 1);
 	}
 
 	public static String getExtension() {

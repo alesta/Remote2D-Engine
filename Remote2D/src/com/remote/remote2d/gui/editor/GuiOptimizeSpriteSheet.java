@@ -17,6 +17,7 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;
@@ -84,16 +85,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		texturePath.render(interpolation);
 		savePath.render(interpolation);
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		bindRGB(bgColor);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(250, 10);
-			GL11.glVertex2f(290, 10);
-			GL11.glVertex2f(290, 50);
-			GL11.glVertex2f(250, 50);
-		GL11.glEnd();
-		bindRGB(0xffffff);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawRect(new Vector2(250,10), new Vector2(40,40), bgColor, 1.0f);
 		
 		String infoH = "Horizontal:";
 		switch(horizontal)
@@ -155,18 +147,15 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 					GL11.glTexCoord2f(0, 1);
 					GL11.glVertex2f(0, dim.y);
 				GL11.glEnd();
-				bindRGB(0xff0000);
+				
 				for(int x=0;x<frameDefiners.size();x++)
 				{
 					ColliderBox coll = (ColliderBox) frameDefiners.get(x).getCollider();
-					coll.drawCollider();
-					bindRGB(0xffffff);
+					coll.drawCollider(0xff0000);
 					Fonts.get("Logo").drawString(""+x, coll.pos.x+coll.dim.x, coll.pos.y+coll.dim.y, 10, 0xff0000);
-					bindRGB(0xff0000);
 				}
 				if(activeDefiner != null)
-					activeDefiner.getCollider().drawCollider();
-				bindRGB(0xffffff);
+					activeDefiner.getCollider().drawCollider(0xff0000);
 	 		GL11.glPopMatrix();
 	 		
 	 		if(Mouse.getX() > 300)

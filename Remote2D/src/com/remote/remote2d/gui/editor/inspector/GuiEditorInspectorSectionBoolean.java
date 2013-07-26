@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.logic.Vector2;
@@ -45,23 +46,12 @@ public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection 
 	@Override
 	public void render(float interpolation) {
 		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		GL11.glVertex2f(pos.x+width-20, pos.y);
-		GL11.glVertex2f(pos.x+width, pos.y);
-		GL11.glVertex2f(pos.x+width, pos.y+20);
-		GL11.glVertex2f(pos.x+width-20, pos.y+20);
-		GL11.glVertex2f(pos.x+width-20, pos.y);
-		GL11.glEnd();
+		Renderer.drawLineRect(new Vector2(pos.x+width-20,pos.y), new Vector2(20), 0xffffff, 1.0f);
 		
 		if(isTrue)
 		{
-			GL11.glBegin(GL11.GL_LINE_STRIP);
-				GL11.glVertex2f(pos.x+width-20, pos.y);
-				GL11.glVertex2f(pos.x+width, pos.y+20);
-				
-				GL11.glVertex2f(pos.x+width-20, pos.y+20);
-				GL11.glVertex2f(pos.x+width, pos.y);
-			GL11.glEnd();
+			Renderer.drawLine(new Vector2(pos.x+width-20,pos.y), new Vector2(pos.x+width,pos.y+20), 0xffffff, 1.0f);
+			Renderer.drawLine(new Vector2(pos.x+width-20,pos.y+20), new Vector2(pos.x+width,pos.y), 0xffffff, 1.0f);
 		}
 	}
 	

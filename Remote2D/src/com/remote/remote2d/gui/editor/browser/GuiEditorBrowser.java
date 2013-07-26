@@ -9,6 +9,7 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.GuiCreateSpriteSheet;
@@ -115,23 +116,9 @@ public class GuiEditorBrowser extends Gui {
 	@Override
 	public void render(float interpolation) {
 		
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(0,0,0,0.5f);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(pos.x,pos.y);
-			GL11.glVertex2f(pos.x+dim.x,pos.y);
-			GL11.glVertex2f(pos.x+dim.x,pos.y+dim.y);
-			GL11.glVertex2f(pos.x,pos.y+dim.y);
-		GL11.glEnd();
-		GL11.glColor4f(1, 1, 1, 1);
-		
-		GL11.glBegin(GL11.GL_LINES);
-		GL11.glVertex2f(pos.x, pos.y+20);
-		GL11.glVertex2f(pos.x+dim.x, pos.y+20);
-		GL11.glVertex2f(pos.x, pos.y+40);
-		GL11.glVertex2f(pos.x+dim.x, pos.y+40);
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Renderer.drawRect(pos, dim, 0x000000, 0.5f);
+		Renderer.drawLine(new Vector2(pos.x,pos.y+20), new Vector2(pos.x+dim.x, pos.y+20), 0xffffff, 1.0f);
+		Renderer.drawLine(new Vector2(pos.x,pos.y+40), new Vector2(pos.x+dim.x, pos.y+40), 0xffffff, 1.0f);
 		
 		Fonts.get("Arial").drawString("Browser", pos.x+10, pos.y, 20, 0xffffff);
 		
@@ -139,67 +126,28 @@ public class GuiEditorBrowser extends Gui {
 		
 		Fonts.get("Arial").drawString("...", pos.x+10, pos.y+20, 20, folderStack.size() == 1 ? 0x999999 : 0xffffff);
 		int yOffset = 20;
-		if(selectedFile == 0)
-		{
-			GL11.glColor4f(1,1,1,0.5f);
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(pos.x,  pos.y+yOffset);
-			GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset);
-			GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset+20);
-			GL11.glVertex2f(pos.x,  pos.y+yOffset+20);
-			GL11.glEnd();
-			GL11.glColor4f(1,1,1,1);
-		}
+		if(selectedFile == 0)	
+			Renderer.drawRect(new Vector2(pos.x,pos.y+yOffset), new Vector2(dim.x,20), 0xffffff, 0.5f);
 		yOffset = 40;
 		
 		for(int x=0;x<currentFolder.folders.size();x++)
 		{
 			if(selectedFile-1 == x)
-			{
-				GL11.glColor4f(1,1,1,0.5f);
-				GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex2f(pos.x,  pos.y+yOffset);
-				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset);
-				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset+20);
-				GL11.glVertex2f(pos.x,  pos.y+yOffset+20);
-				GL11.glEnd();
-				GL11.glColor4f(1,1,1,1);
-			}
+				Renderer.drawRect(new Vector2(pos.x,pos.y+yOffset), new Vector2(dim.x,20), 0xffffff, 0.5f);
 			
 			Fonts.get("Arial").drawString(new File(currentFolder.folders.get(x).getPath()).getName(), pos.x+10, pos.y+yOffset, 20, 0xffffff);
-			
-			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex2f(pos.x, pos.y+yOffset+20);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+yOffset+20);
-			GL11.glEnd();
-			
-			bindRGB(0xffffff);
+			Renderer.drawLine(new Vector2(pos.x,pos.y+yOffset+20), new Vector2(pos.x+dim.x,pos.y+yOffset+20), 0xffffff, 1.0f);
 			
 			yOffset += 20;
 		}
 		
 		for(int x=0;x<currentFolder.files.size();x++)
 		{
-			Fonts.get("Arial").drawString(currentFolder.files.get(x).getName(), pos.x+10, pos.y+yOffset, 20, 0xffffff);
-			
 			if(selectedFile-1-currentFolder.folders.size() == x)
-			{
-				GL11.glColor4f(1,1,1,0.5f);
-				GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex2f(pos.x,  pos.y+yOffset);
-				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset);
-				GL11.glVertex2f(pos.x+dim.x,  pos.y+yOffset+20);
-				GL11.glVertex2f(pos.x,  pos.y+yOffset+20);
-				GL11.glEnd();
-				GL11.glColor4f(1,1,1,1);
-			}
+				Renderer.drawRect(new Vector2(pos.x,pos.y+yOffset), new Vector2(dim.x,20), 0xffffff, 0.5f);
 			
-			GL11.glBegin(GL11.GL_LINES);
-			GL11.glVertex2f(pos.x, pos.y+yOffset+20);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+yOffset+20);
-			GL11.glEnd();
-			
-			bindRGB(0xffffff);
+			Fonts.get("Arial").drawString(currentFolder.files.get(x).getName(), pos.x+10, pos.y+yOffset, 20, 0xffffff);
+			Renderer.drawLine(new Vector2(pos.x,pos.y+yOffset+20), new Vector2(pos.x+dim.x,pos.y+yOffset+20), 0xffffff, 1.0f);
 			
 			yOffset += 20;
 		}

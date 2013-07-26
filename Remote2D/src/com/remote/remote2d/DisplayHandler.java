@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.TextureLoader;
+import com.remote.remote2d.logic.Vector2;
 
 public class DisplayHandler {
 	
@@ -51,6 +52,11 @@ public class DisplayHandler {
 			buffers[x] = getBufferFromImage(TextureLoader.loadImage(icons[x]),4);
 		
 		Display.setIcon(buffers);
+	}
+	
+	public Vector2 getDimensions()
+	{
+		return new Vector2(width,height);
 	}
 	
 	public ByteBuffer getBufferFromImage(BufferedImage image, int BYTES_PER_PIXEL)

@@ -3,6 +3,7 @@ package com.remote.remote2d.logic;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.art.Renderer;
 
 public class ColliderMatrixBox extends Collider {
 	
@@ -96,43 +97,17 @@ public class ColliderMatrixBox extends Collider {
 	}
 	
 	@Override
-	public void drawCollider() {
+	public void drawCollider(int color) {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		//GL11.glColor3f(0, 1, 0);
 		GL11.glTranslatef(pos.x,pos.y,0);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		{
-			Vector2 pos[] = getPoints();
-			GL11.glVertex2f(pos[0].x, pos[0].y);
-			GL11.glVertex2f(pos[1].x, pos[1].y);
-			GL11.glVertex2f(pos[2].x, pos[2].y);
-			GL11.glVertex2f(pos[3].x, pos[3].y);
-			GL11.glVertex2f(pos[0].x, pos[0].y);
-		}
-		GL11.glEnd();
+		Renderer.drawLinePoly(getPoints(), 0xffffff, 1.0f);
 		GL11.glTranslatef(-pos.x,-pos.y,0);
 		
-		GL11.glColor3f(0, 0, 1);
-		GL11.glBegin(GL11.GL_LINE_STRIP);
-		{
-			GL11.glVertex2f(pos.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y);
-			GL11.glVertex2f(pos.x+dim.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y+dim.y);
-			GL11.glVertex2f(pos.x, pos.y);
-		}
-		GL11.glEnd();
+		Renderer.drawLineRect(pos, dim, 0x00ff00, 1.0f);
 		
 		if(vec != null)
-		{
-			GL11.glColor3f(0, 0, 0);
-			GL11.glBegin(GL11.GL_QUADS);
-				GL11.glVertex2f(vec.x-3, vec.y-3);
-				GL11.glVertex2f(vec.x+3, vec.y-3);
-				GL11.glVertex2f(vec.x+3, vec.y+3);
-				GL11.glVertex2f(vec.x-3, vec.y+3);
-			GL11.glEnd();
-		}
+			Renderer.drawRect(new Vector2(vec.x-3,vec.y-3), new Vector2(6), 0x000000, 1.0f);
 		
 		//GL11.glColor3f(1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

@@ -5,7 +5,9 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 
 public class GuiEditorTopMenuSection extends Gui {
 	
@@ -78,20 +80,7 @@ public class GuiEditorTopMenuSection extends Gui {
 		int yPos = y+height/2-titledim[1]/2;
 		
 		if(isSelected)
-		{
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glColor4f(1, 0.6f, 0.6f, 1);
-			GL11.glPushMatrix();
-				GL11.glTranslatef(x, y, 0);
-				GL11.glBegin(GL11.GL_QUADS);
-					GL11.glVertex2f(0, 0);
-					GL11.glVertex2f(width, 0);
-					GL11.glVertex2f(width,height);
-					GL11.glVertex2f(0,height);
-				GL11.glEnd();
-			GL11.glPopMatrix();
-			GL11.glColor4f(1, 1, 1, 1);
-		}
+			Renderer.drawRect(new Vector2(x,y), new Vector2(width,height), 1,  0.6f, 0.6f, 1);
 		
 		Fonts.get("Arial").drawString(title, xPos, yPos, 20, 0xffffff);
 		
@@ -102,29 +91,9 @@ public class GuiEditorTopMenuSection extends Gui {
 		for(int i=0;i<values.length;i++)
 		{
 			boolean isBoxHovered = hoveredBox == i;
-			GL11.glColor4f(1, isBoxHovered?0.6f:0.2f, isBoxHovered?0.6f:0.2f, 1);
-			GL11.glPushMatrix();
 			
-				GL11.glTranslatef(x, currentY, 0);
-				
-				GL11.glBegin(GL11.GL_QUADS);
-					GL11.glVertex2f(0, 0);
-					GL11.glVertex2f(subWidth, 0);
-					GL11.glVertex2f(subWidth,height);
-					GL11.glVertex2f(0,height);
-				GL11.glEnd();
-				
-				GL11.glColor3f(0, 0, 0);
-				GL11.glBegin(GL11.GL_LINE_STRIP);
-					GL11.glVertex2f(0, 0);
-					GL11.glVertex2f(subWidth, 0);
-					GL11.glVertex2f(subWidth,height);
-					GL11.glVertex2f(0,height);
-					GL11.glVertex2f(0, 0);
-				GL11.glEnd();
-				
-			GL11.glPopMatrix();
-			GL11.glColor4f(1, 1, 1, 1);
+			Renderer.drawRect(new Vector2(x,currentY), new Vector2(subWidth, height), 1, isBoxHovered?0.6f:0.2f, isBoxHovered?0.6f:0.2f, 1);
+			Renderer.drawLineRect(new Vector2(x,currentY), new Vector2(subWidth, height), 0, 0, 0, 1);
 			
 			Fonts.get("Arial").drawString(values[i],x+10,currentY, 20, 0xffffff);
 			currentY += subheight;

@@ -5,6 +5,7 @@ import java.awt.Color;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
@@ -80,15 +81,7 @@ public class Particle {
 	public void render()
 	{
 		float[] color = Gui.getRGB(this.color.getRGB());
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(color[0],color[1],color[2],alpha);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glVertex2f(pos.x-dim/2, pos.y-dim/2);
-			GL11.glVertex2f(pos.x+dim/2, pos.y-dim/2);
-			GL11.glVertex2f(pos.x+dim/2, pos.y+dim/2);
-			GL11.glVertex2f(pos.x-dim/2, pos.y+dim/2);
-		GL11.glEnd();
-		GL11.glColor4f(1, 1, 1, 1);
+		Renderer.drawRect(new Vector2(pos.x-dim/2,pos.y-dim/2), new Vector2(dim), this.color.getRGB(), alpha);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 	

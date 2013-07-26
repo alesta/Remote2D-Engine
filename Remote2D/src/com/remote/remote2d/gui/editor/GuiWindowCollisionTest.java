@@ -22,9 +22,7 @@ public class GuiWindowCollisionTest extends GuiWindow {
 
 	@Override
 	public void renderContents(float interpolation) {
-		GL11.glColor3f(collides ? 1 : 0, collides ? 0 : 1, 0);
-		collider.drawCollider();
-		GL11.glColor3f(1, 1, 1);
+		collider.drawCollider(collides ? 0xff0000 : 0x00ff00);
 	}
 	
 	boolean scaleUp = true;
