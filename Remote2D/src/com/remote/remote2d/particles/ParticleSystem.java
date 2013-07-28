@@ -48,6 +48,7 @@ public class ParticleSystem extends EditorObject {
 	
 	public ParticleSystem(Map map)
 	{
+		super(null);
 		this.map = map;
 		particles = new ArrayList<Particle>();
 		random = new Random();

@@ -1,6 +1,8 @@
 package com.remote.remote2d.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.remote.remote2d.entity.component.Component;
 

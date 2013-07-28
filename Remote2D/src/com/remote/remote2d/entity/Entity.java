@@ -2,16 +2,19 @@ package com.remote.remote2d.entity;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.GuiEditor;
+import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
 import com.remote.remote2d.logic.Interpolator;
@@ -35,7 +38,6 @@ public class Entity extends EditorObject implements Cloneable {
 	 */
 	public boolean isStatic = true;
 	public String name;
-	private Vector2 oldPos;
 	public Vector2 pos;
 	public Vector2 dim;
 	public String resourcePath = "";
@@ -43,6 +45,8 @@ public class Entity extends EditorObject implements Cloneable {
 	public boolean linearScaling = false;
 	public Color color = new Color(0xaaaaaa);
 	public float alpha = 1.0f;
+	
+	private Vector2 oldPos;
 	
 	private static final String slashLoc = "/res/gui/slash.png";
 	
@@ -58,6 +62,7 @@ public class Entity extends EditorObject implements Cloneable {
 		
 	public Entity(String name)
 	{
+		super(null);
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
@@ -329,10 +334,6 @@ public class Entity extends EditorObject implements Cloneable {
 		
 		if(editor && selected)
 			Renderer.drawLineRect(pos, dim, 1, 0, 0, 1);
-		
-		Gui.bindRGB(0xffffff);
-		
-		
 	}
 	
 	public Entity clone()
@@ -402,6 +403,6 @@ public class Entity extends EditorObject implements Cloneable {
 
 	public static String getExtension() {
 		return ".entity";
-	}
+	}	
 		
 }

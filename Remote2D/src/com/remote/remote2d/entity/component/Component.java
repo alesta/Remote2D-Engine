@@ -16,6 +16,7 @@ public abstract class Component extends EditorObject{
 	
 	public Component(Entity e)
 	{
+		super(null);
 		this.entity = e;
 	}
 	

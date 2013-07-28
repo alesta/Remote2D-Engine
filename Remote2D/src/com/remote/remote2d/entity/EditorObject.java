@@ -3,6 +3,7 @@ package com.remote.remote2d.entity;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.UUID;
 
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Texture;
@@ -20,6 +21,15 @@ import com.remote.remote2d.logic.Vector2;
  */
 public abstract class EditorObject implements R2DFileSaver {
 	
+	private String uuid;
+	
+	public EditorObject(String uuid)
+	{
+		this.uuid = uuid;
+		if(this.uuid == null)
+			this.uuid = UUID.randomUUID().toString();
+	}
+	
 	/**
 	 * Called when this object is changed in the editor.
 	 */
@@ -28,6 +38,7 @@ public abstract class EditorObject implements R2DFileSaver {
 	
 	public void saveR2DFile(R2DTypeCollection collection)
 	{
+		collection.setString("this.UUID", uuid);
 		Field[] fields = this.getClass().getFields();
 		for(int x=0;x<fields.length;x++)
 		{
@@ -67,6 +78,7 @@ public abstract class EditorObject implements R2DFileSaver {
 	}
 	public void loadR2DFile(R2DTypeCollection collection)
 	{
+		uuid = collection.getString("this.UUID");
 		Field[] fields = this.getClass().getFields();
 		for(int x=0;x<fields.length;x++)
 		{
@@ -96,6 +108,11 @@ public abstract class EditorObject implements R2DFileSaver {
 				} catch (Exception e) {}
 			}
 		}
+	}
+	
+	public String getUUID()
+	{
+		return uuid;
 	}
 	
 }

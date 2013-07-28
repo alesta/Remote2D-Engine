@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
@@ -244,6 +247,24 @@ public class Map implements R2DFileSaver {
 			entities.addEntityToList(e);
 		}
 		//collection.printContents();
+	}
+	
+	public Vector2 screenToWorldCoords(Vector2 vec)
+	{
+		Matrix4f matrix = camera.getInverseMatrix();
+		
+		Vector4f oldCoords = new Vector4f(vec.x,vec.y,0,1);
+		Vector4f newCoords = Matrix4f.transform(matrix, oldCoords, null);
+		return new Vector2(newCoords.x,newCoords.y);
+	}
+	
+	public Vector2 worldToScreenCoords(Vector2 vec)
+	{
+		Matrix4f matrix = camera.getMatrix();
+		
+		Vector4f oldCoords = new Vector4f(vec.x,vec.y,0,1);
+		Vector4f newCoords = Matrix4f.transform(matrix, oldCoords, null);
+		return new Vector2(newCoords.x,newCoords.y);
 	}
 	
 	public Map copy()

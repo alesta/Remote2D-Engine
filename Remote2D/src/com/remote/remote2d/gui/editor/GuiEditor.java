@@ -132,6 +132,25 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			map.render(true,interpolation);
 		}
 		
+		if(map != null)
+		{
+			for(int x = 0;x<map.getEntityList().size();x++)
+			{
+				Entity entity = map.getEntityList().get(x);
+				if(entity.pos.getColliderWithDim(entity.getDim()).isPointInside(getMapMousePos()))
+				{
+					int fontsize = 20;
+					int fontdim[] = Fonts.get("Arial").getStringDim(entity.name, fontsize);
+					Vector2 dim = new Vector2(fontdim[0]+20,fontdim[1]);
+					Vector2 pos = new Vector2(entity.pos.x+entity.dim.x/2,entity.pos.y+entity.dim.y);
+					pos = map.worldToScreenCoords(pos);
+					pos.x -= fontdim[0]/2+10;
+					Renderer.drawRect(pos, dim, 0x000000, 0.5f);
+					Fonts.get("Arial").drawString(entity.name, pos.x+10, pos.y, fontsize, 0xffffff);
+				}
+			}
+		}
+		
 		if(stampEntity != null)
 		{
 			map.camera.renderBefore(interpolation, true);
@@ -298,7 +317,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	public Vector2 getMapMousePos()
 	{
 		Vector2 mouse = new Vector2(Remote2D.getInstance().getMouseCoords());
-		return new Vector2((mouse.x/map.camera.additionalScale+map.camera.pos.x),(mouse.y/map.camera.additionalScale+map.camera.pos.y));
+		return map.screenToWorldCoords(mouse);
 	}
 
 	@Override

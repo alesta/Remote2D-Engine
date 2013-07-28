@@ -1,6 +1,13 @@
 package com.remote.remote2d.world;
 
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
@@ -116,5 +123,41 @@ public class Camera {
 
 	public Camera copy() {
 		return new Camera(pos,targetResolution);
+	}
+	
+	public Matrix4f getMatrix()
+	{
+		Matrix4f matrix = new Matrix4f();
+
+		ColliderBox renderArea = getScreenRenderArea();
+		float scale = (renderArea.dim.x/targetResolution.x)*additionalScale;
+		
+		Vector3f translate1 = new Vector3f(renderArea.pos.x, renderArea.pos.y,0);
+		Vector3f scaleV = new Vector3f(scale, scale, 0);
+		Vector3f translate2 = new Vector3f(-pos.x, -pos.y, 0);
+		
+		matrix.translate(translate1);
+		matrix.scale(scaleV);
+		matrix.translate(translate2);
+		
+		return matrix;
+	}
+	
+	public Matrix4f getInverseMatrix()
+	{
+		Matrix4f matrix = new Matrix4f();
+
+		ColliderBox renderArea = getScreenRenderArea();
+		float scale = (renderArea.dim.x/targetResolution.x)*additionalScale;
+		
+		Vector3f translate1 = new Vector3f(-renderArea.pos.x, -renderArea.pos.y,0);
+		Vector3f scaleV = new Vector3f(1/scale, 1/scale, 0);
+		Vector3f translate2 = new Vector3f(pos.x, pos.y, 0);
+		
+		matrix.translate(translate2);
+		matrix.scale(scaleV);
+		matrix.translate(translate1);
+		
+		return matrix;
 	}
 }
