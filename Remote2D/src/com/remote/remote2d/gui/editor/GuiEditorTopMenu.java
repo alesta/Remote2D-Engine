@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
@@ -32,9 +33,16 @@ public class GuiEditorTopMenu extends Gui {
 		sections = new ArrayList<GuiEditorTopMenuSection>();
 				
 		int currentX = 0;
-		
-		String[] fileContents = {"New Map","Open Map","Save Map Files","Save Global Files"};
+				
+		String[] fileContents = {"New Map","Open Map","Save Map"};
 		GuiEditorTopMenuSection file = new GuiEditorTopMenuSection(currentX, 0, height, fileContents, "File", this);
+		
+		file.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_N});
+		file.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_O});
+		file.keyCombos[2] = new KeyShortcut(new int[]{Keyboard.KEY_S});
+		
+		file.reloadSubWidth();
+		
 		if(file.getEnabled())
 			currentX += file.width;
 		
@@ -43,10 +51,20 @@ public class GuiEditorTopMenu extends Gui {
 		if(edit.getEnabled())
 			currentX += edit.width;
 		
+		edit.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_S}).setUseShift(true);
+		edit.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_O}).setUseShift(true);
+		
+		edit.reloadSubWidth();
+		
 		String[] worldContents = {"Insert Entity", "Run Map"};
 		GuiEditorTopMenuSection world = new GuiEditorTopMenuSection(currentX, 0, height, worldContents, "World", this);
 		if(world.getEnabled())
 			currentX += world.width;
+		
+		world.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_E});
+		world.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_R});
+		
+		world.reloadSubWidth();
 		
 		Iterator<Entry<String,Component>> iterator = Remote2D.getInstance().componentList.getIterator();
 		ArrayList<String> contents = new ArrayList<String>();
@@ -63,6 +81,9 @@ public class GuiEditorTopMenu extends Gui {
 		GuiEditorTopMenuSection window = new GuiEditorTopMenuSection(currentX, 0, height, windowContents, "Window", this);
 		if(window.getEnabled())
 			currentX += window.width;
+		window.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_F});
+		
+		window.reloadSubWidth();
 		
 		String[] devContents = {"Reinitialize Editor", "View Art Asset", "Fancypants Collider Test","Normal Collider Test", "1D Perlin Noise", "2D Perlin Noise"};
 		GuiEditorTopMenuSection dev = new GuiEditorTopMenuSection(currentX, 0, height, devContents, "Developer", this);
@@ -155,9 +176,6 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				Log.info("Opening new Document!");
 				editor.setMap(new Map());
-			} else if(secSubTitle.equalsIgnoreCase("Save Local Files"))
-			{
-				Log.info("Saving!");
 			} else if(secSubTitle.equalsIgnoreCase("Open Map"))
 			{
 				Log.info("Opening!");
@@ -165,7 +183,7 @@ public class GuiEditorTopMenu extends Gui {
 				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", newMap);
 				mapManager.read();
 				editor.setMap(newMap);
-			} else if(secSubTitle.equalsIgnoreCase("Save Map Files"))
+			} else if(secSubTitle.equalsIgnoreCase("Save Map"))
 			{
 				Map map = editor.getMap();
 				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", map);

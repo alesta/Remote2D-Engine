@@ -1,5 +1,9 @@
 package com.remote.remote2d.gui.editor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
@@ -32,6 +36,8 @@ public class GuiEditorTopMenuSection extends Gui {
 									//It is used to communicate between this class and the menu class
 									//via popSelectedBox()
 	
+	public KeyShortcut[] keyCombos;
+	
 	public GuiEditorTopMenuSection(int x, int y, int h, String[] values, String title, GuiEditorTopMenu menu)
 	{
 		super();
@@ -45,10 +51,22 @@ public class GuiEditorTopMenuSection extends Gui {
 		titledim = Fonts.get("Arial").getStringDim(title, 20);
 		width = titledim[0]+20;
 		
+		keyCombos = new KeyShortcut[values.length];
+		
+		reloadSubWidth();
+	}
+	
+	public void reloadSubWidth()
+	{
 		subWidth = width;
 		for(int i=0;i<values.length;i++)
 		{
 			int thisWidth = Fonts.get("Arial").getStringDim(values[i], 20)[0];
+			if(keyCombos[i] != null)
+			{
+				int keyWidth = Fonts.get("Arial").getStringDim(keyCombos[i].toString(), 20)[0];
+				thisWidth += keyWidth+20;
+			}
 			if(thisWidth > subWidth)
 				subWidth = thisWidth;
 		}
@@ -96,12 +114,29 @@ public class GuiEditorTopMenuSection extends Gui {
 			Renderer.drawLineRect(new Vector2(x,currentY), new Vector2(subWidth, height), 0, 0, 0, 1);
 			
 			Fonts.get("Arial").drawString(values[i],x+10,currentY, 20, 0xffffff);
+			
+			if(keyCombos[i] != null)
+			{
+				int keyWidth = Fonts.get("Arial").getStringDim(keyCombos[i].toString(), 20)[0];
+				Fonts.get("Arial").drawString(keyCombos[i].toString(), x+subWidth-10-keyWidth, currentY, 20, 0xffffff);
+			}
+			
 			currentY += subheight;
 		}
 	}
 	
 	@Override
 	public void tick(int i, int j, int k) {
+		for(int x = 0; x<keyCombos.length; x++)
+		{
+			if(keyCombos[x] == null)
+				continue;
+			boolean hasComboBeenPressed = keyCombos[x].getShortcutActivated();
+			if(hasComboBeenPressed)
+			{
+				selectedBox = x;
+			}
+		}
 		if(!isEnabled)
 			return;
 		isHovered = i > x && j > y && i < x+width && j < y+height;
