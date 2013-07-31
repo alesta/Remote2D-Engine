@@ -13,6 +13,7 @@ import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiWindow;
+import com.remote.remote2d.gui.KeyShortcut;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.gui.editor.browser.GuiEditorBrowser;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
@@ -22,6 +23,9 @@ import com.remote.remote2d.world.Camera;
 import com.remote.remote2d.world.Map;
 
 public class GuiEditor extends GuiMenu implements WindowHolder {
+	
+	public Vector2 posOffset = new Vector2(0,0);
+	public boolean grid = false;
 	
 	private GuiEditorTopMenu menu;
 	private GuiEditorInspector inspector;
@@ -34,10 +38,8 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private Entity stampEntity;
 	private Entity selectedEntity = null;
 	private boolean allowEntityPlace = true;
-	private boolean gridSnap = false;
-	private Vector2 dragPoint = null;
 	
-	public Vector2 posOffset = new Vector2(0,0);
+	private Vector2 dragPoint = null;
 	
 	public GuiEditor()
 	{
@@ -126,7 +128,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(map != null)
 		{
-			if(gridSnap)
+			if(grid)
 				map.drawGrid(interpolation);
 			
 			map.render(true,interpolation);
@@ -182,28 +184,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		menu.render(interpolation);
 	}
 	
-	private void poll(int i, int j)
-	{
-		if(Remote2D.getInstance().getKeyboardList().contains('g'))
-			gridSnap = !gridSnap;
-		if(Remote2D.getInstance().getKeyboardList().contains(']'))
-			map.gridSize *= 2;
-		if(Remote2D.getInstance().getKeyboardList().contains('[') && map.gridSize>1)
-			map.gridSize /= 2;
-		if(Remote2D.getInstance().getKeyboardList().contains('+') && map.camera.additionalScale < 16)
-		{
-			map.camera.additionalScale *= 2;
-		}
-		if(Remote2D.getInstance().getKeyboardList().contains('-') && map.camera.additionalScale > 0.25)
-		{
-			map.camera.additionalScale /= 2;
-		}
-		if(Remote2D.getInstance().getKeyboardList().contains('0'))
-		{
-			map.camera.additionalScale = 1;
-		}
-	}
-	
 	@Override
 	public void tick(int i, int j, int k)
 	{
@@ -246,7 +226,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			map.tick(i, j, k, true);
 			backgroundColor = map.backgroundColor;
 		}
-		menu.tick(i,j,k);
 		if(windowStack.size() == 0)
 		{
 			inspector.tick(i, j, k);
@@ -259,20 +238,13 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			heirarchy.tick(i, j, k);
 			browser.tick(i, j, k);
 		}
-		
-		if(!inspector.isTyping())
-		{
-			if(windowStack.size() == 0)
-				poll(i,j);
-			else if(!windowStack.peek().isSelected())
-				poll(i,j);
-		}
-		
+		KeyShortcut.CAN_EXECUTE = !inspector.isTyping();
+		menu.tick(i,j,k);
 		if(stampEntity != null)
 		{
 			stampEntity.updatePos();
 			stampEntity.pos = getMapMousePos();
-			if(gridSnap)
+			if(grid)
 			{
 				stampEntity.pos.x -= stampEntity.pos.x%map.gridSize;
 				stampEntity.pos.y -= stampEntity.pos.y%map.gridSize;
@@ -424,6 +396,12 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 
 	public Entity getSelectedEntity() {
 		return selectedEntity;
+	}
+
+	public void deleteSelectedEntity() {
+		if(selectedEntity != null)
+			map.getEntityList().removeEntityFromList(selectedEntity);
+		inspector.setCurrentEntity(null);
 	}
 	
 }

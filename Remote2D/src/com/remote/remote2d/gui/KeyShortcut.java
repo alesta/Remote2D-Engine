@@ -1,12 +1,15 @@
-package com.remote.remote2d.gui.editor;
+package com.remote.remote2d.gui;
 
 import java.util.ArrayList;
 
+import org.lwjgl.LWJGLUtil;
 import org.lwjgl.input.Keyboard;
 
 import com.esotericsoftware.minlog.Log;
 
 public class KeyShortcut {
+	
+	public static boolean CAN_EXECUTE = true;
 	
 	public boolean useControl = false;
 	public boolean useMeta = false;
@@ -18,7 +21,7 @@ public class KeyShortcut {
 	public KeyShortcut(int[] shortcuts)
 	{
 		this.shortcuts = shortcuts;
-		setMetaOrControl(true);
+		setUseControl(true);
 	}
 	
 	@Override
@@ -28,31 +31,20 @@ public class KeyShortcut {
 		if(useShift)
 			result+='\u21e7';
 		if(useControl)
-			result+="^";
+			result+="Ctrl";
 		if(useMeta)
 			result += "\u2318";
 		for(int x : shortcuts)
 		{
-			if(x == Keyboard.KEY_DELETE)
-				result += "\u2326";
-			else if(x == Keyboard.KEY_BACK)
-				result += "\u232b";
-			else if(x == Keyboard.KEY_LEFT)
-				result += "\u21e0";
-			else if(x == Keyboard.KEY_UP)
-				result += "\u21e1";
-			else if(x == Keyboard.KEY_RIGHT)
-				result += "\u21e2";
-			else if(x == Keyboard.KEY_DOWN)
-				result += "\u21e3";
-			else
-				result += Keyboard.getKeyName(x);
+			result += getStringFromID(x);
 		}
 		return result;
 	}
 	
 	public boolean getShortcutActivated()
 	{
+		if(!CAN_EXECUTE)
+			return false;
 		boolean oldPressed = pressed;
 		pressed = true;
 		boolean control = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
@@ -99,12 +91,69 @@ public class KeyShortcut {
 		useControl = false;
 		if(use)
 		{
-			if(System.getProperty("os.name").startsWith("Mac"))
+			if(LWJGLUtil.getPlatformName().equalsIgnoreCase("macosx"))
 				useMeta = true;
 			else
 				useControl = true;
 		}
 			
 		return this;
+	}
+	
+	public String getStringFromID(int x)
+	{
+		switch(x)
+		{
+		case Keyboard.KEY_DELETE:
+			return "\u2326";
+		case Keyboard.KEY_BACK:
+			return "\u232b";
+		case Keyboard.KEY_LEFT:
+			return "\u21e0";
+		case Keyboard.KEY_UP:
+			return "\u21e1";
+		case Keyboard.KEY_RIGHT:
+			return "\u21e2";
+		case Keyboard.KEY_DOWN:
+			return "\u21e3";
+		case Keyboard.KEY_LBRACKET:
+			return "[";
+		case Keyboard.KEY_RBRACKET:
+			return "]";
+		case Keyboard.KEY_LSHIFT:
+			return "\u21e7";
+		case Keyboard.KEY_RSHIFT:
+			return "\u21e7";
+		case Keyboard.KEY_LCONTROL:
+			return "Ctrl";
+		case Keyboard.KEY_RCONTROL:
+			return "Ctrl";
+		case Keyboard.KEY_LMETA:
+			return "\u2318";
+		case Keyboard.KEY_RMETA:
+			return "\u2318";
+		case Keyboard.KEY_APOSTROPHE:
+			return "\'";
+		case Keyboard.KEY_COLON:
+			return ";";
+		case Keyboard.KEY_BACKSLASH:
+			return "\\";
+		case Keyboard.KEY_COMMA:
+			return ",";
+		case Keyboard.KEY_PERIOD:
+			return ".";
+		case Keyboard.KEY_SLASH:
+			return "/";
+		case Keyboard.KEY_EQUALS:
+			return "=";
+		case Keyboard.KEY_MINUS:
+			return "-";
+		case Keyboard.KEY_RETURN:
+			return "\u23ce";
+		case Keyboard.KEY_TAB:
+			return "\u21b9";
+		default:
+			return Keyboard.getKeyName(x);
+		}
 	}
 }

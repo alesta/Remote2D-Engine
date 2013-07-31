@@ -15,6 +15,7 @@ import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiInGame;
+import com.remote.remote2d.gui.KeyShortcut;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Map;
@@ -56,13 +57,20 @@ public class GuiEditorTopMenu extends Gui {
 		
 		edit.reloadSubWidth();
 		
-		String[] worldContents = {"Insert Entity", "Run Map"};
+		String[] worldContents = {"Insert Entity", "Delete Entity", "Toggle Grid", "Increase Grid Size", "Decrease Grid Size", "Zoom In", "Zoom Out", "Revert Zoom", "Run Map"};
 		GuiEditorTopMenuSection world = new GuiEditorTopMenuSection(currentX, 0, height, worldContents, "World", this);
 		if(world.getEnabled())
 			currentX += world.width;
 		
 		world.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_E});
-		world.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_R});
+		world.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_DELETE}).setMetaOrControl(false);
+		world.keyCombos[2] = new KeyShortcut(new int[]{Keyboard.KEY_G}).setMetaOrControl(false);
+		world.keyCombos[3] = new KeyShortcut(new int[]{Keyboard.KEY_RBRACKET}).setMetaOrControl(false);
+		world.keyCombos[4] = new KeyShortcut(new int[]{Keyboard.KEY_LBRACKET}).setMetaOrControl(false);
+		world.keyCombos[5] = new KeyShortcut(new int[]{Keyboard.KEY_EQUALS}).setMetaOrControl(false);
+		world.keyCombos[6] = new KeyShortcut(new int[]{Keyboard.KEY_MINUS}).setMetaOrControl(false);
+		world.keyCombos[7] = new KeyShortcut(new int[]{Keyboard.KEY_0}).setMetaOrControl(false);
+		world.keyCombos[8] = new KeyShortcut(new int[]{Keyboard.KEY_R});
 		
 		world.reloadSubWidth();
 		
@@ -241,7 +249,29 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				Remote2D.getInstance().map = editor.getMap().copy();
 				Remote2D.getInstance().guiList.push(new GuiInGame());
-			}
+			} else if(secSubTitle.equalsIgnoreCase("Delete Entity"))
+			{
+				editor.deleteSelectedEntity();
+			} else if(secSubTitle.equalsIgnoreCase("Toggle Grid"))
+			{
+				editor.grid = !editor.grid;
+			} else if(secSubTitle.equalsIgnoreCase("Increase Grid Size"))
+			{
+				editor.getMap().gridSize *= 2;
+			} else if(secSubTitle.equalsIgnoreCase("Decrease Grid Size"))
+			{
+				if(editor.getMap().gridSize > 1)
+					editor.getMap().gridSize /= 2;
+			} else if(secSubTitle.equalsIgnoreCase("Zoom In"))
+			{
+				if(editor.getMap().camera.additionalScale < 16)
+					editor.getMap().camera.additionalScale *= 2;
+			} else if(secSubTitle.equalsIgnoreCase("Zoom Out"))
+			{
+				if(editor.getMap().camera.additionalScale > 0.25)
+					editor.getMap().camera.additionalScale /= 2;
+			} else if(secSubTitle.equalsIgnoreCase("Revert Zoom"))
+				editor.getMap().camera.additionalScale = 1;
 		} else if(secTitle.equalsIgnoreCase("Component"))
 		{
 			if(editor.getSelectedEntity() != null)

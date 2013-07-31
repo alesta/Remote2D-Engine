@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.gui.KeyShortcut;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
