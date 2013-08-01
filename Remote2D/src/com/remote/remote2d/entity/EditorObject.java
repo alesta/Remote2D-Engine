@@ -110,6 +110,14 @@ public abstract class EditorObject implements R2DFileSaver {
 		}
 	}
 	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof EditorObject)
+			return this.getUUID().equals(((EditorObject)o).getUUID());
+		return false;
+	}
+	
 	public String getUUID()
 	{
 		return uuid;

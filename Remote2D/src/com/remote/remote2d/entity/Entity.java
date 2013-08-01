@@ -73,6 +73,19 @@ public class Entity extends EditorObject implements Cloneable {
 		dim = new Vector2(50,50);
 	}
 	
+	public Entity(String name, String uuid)
+	{
+		super(uuid);
+		this.name = name;
+		children = new ArrayList<Entity>();
+		components = new ArrayList<Component>();
+		colliders = new ArrayList<Collider>();
+		
+		pos = new Vector2(0,0);
+		oldPos = new Vector2(0,0);
+		dim = new Vector2(50,50);
+	}
+	
 	public Entity()
 	{
 		this("");
@@ -338,7 +351,7 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public Entity clone()
 	{
-		Entity e = new Entity();
+		Entity e = new Entity(name,getUUID());
 		e.alpha = this.alpha;
 		e.parent = this.parent;
 		e.color = new Color(color.getRGB());
@@ -346,7 +359,6 @@ public class Entity extends EditorObject implements Cloneable {
 		e.dim = this.dim.copy();
 		e.isStatic = this.isStatic;
 		e.linearScaling = this.linearScaling;
-		e.name = this.name;
 		e.repeatTex = this.repeatTex;
 		e.resourcePath = this.resourcePath;
 		

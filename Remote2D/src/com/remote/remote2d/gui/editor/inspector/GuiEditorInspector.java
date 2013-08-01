@@ -14,6 +14,7 @@ import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.gui.editor.GuiWindowInsertComponent;
+import com.remote.remote2d.gui.editor.operation.OperationEditEntity;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.logic.Vector2;
@@ -138,12 +139,19 @@ public class GuiEditorInspector extends GuiMenu {
 	
 	public void apply()
 	{
+		EditorObject clone = null;
+		if(currentEntity instanceof Entity)
+			clone = ((Entity)currentEntity).clone();
 		for(int x=0;x<wizards.size();x++)
 		{
 			wizards.get(x).setComponentFields();
 		}
 		if(currentEntity instanceof Entity)
-			editor.replaceSelectedEntity((Entity)currentEntity);
+		{
+			Entity before = (Entity)clone;
+			Entity after = ((Entity)currentEntity).clone();
+			editor.executeOperation(new OperationEditEntity(editor,before,after));
+		}
 	}
 	
 	public boolean isTyping()

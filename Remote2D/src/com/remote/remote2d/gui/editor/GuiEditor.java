@@ -1,5 +1,6 @@
 package com.remote.remote2d.gui.editor;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import org.lwjgl.input.Keyboard;
@@ -17,6 +18,8 @@ import com.remote.remote2d.gui.KeyShortcut;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.gui.editor.browser.GuiEditorBrowser;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
+import com.remote.remote2d.gui.editor.operation.GuiWindowConfirmOperation;
+import com.remote.remote2d.gui.editor.operation.Operation;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Camera;
@@ -33,6 +36,8 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private GuiEditorBrowser browser;
 	private GuiEditorHeirarchy heirarchy;
 	private Stack<GuiWindow> windowStack;
+	private Stack<Operation> undoList;
+	private ArrayList<Operation> redoList;
 	
 	private Map map;
 	private Entity stampEntity;
@@ -45,6 +50,8 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	{
 		super();
 		backgroundColor = 0xaa0000;
+		undoList = new Stack<Operation>();
+		redoList = new ArrayList<Operation>();
 		menu = new GuiEditorTopMenu(this);
 	}
 	
@@ -59,19 +66,23 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(map != null)
 			map.camera.targetResolution = new Vector2(Remote2D.getInstance().displayHandler.width, Remote2D.getInstance().displayHandler.height);
 		
+		int previewHeight = Math.min(320, (getHeight()-20)/3);
 		if(inspector == null)
 		{
 			inspector = new GuiEditorInspector(
 					new Vector2(0,20),
-					new Vector2(300,getHeight()-320), this);
+					new Vector2(300,getHeight()-previewHeight-20), this);
 		} else
-			inspector.dim = new Vector2(300,getHeight()-320);
+			inspector.dim = new Vector2(300,getHeight()-previewHeight-20);
 		
 		if(preview == null)
 		{
-			preview = new GuiEditorPreview(inspector,new Vector2(0,getHeight()-300),new Vector2(300,300));
+			preview = new GuiEditorPreview(inspector,new Vector2(0,getHeight()-previewHeight),new Vector2(300,previewHeight));
 		} else
-			preview.pos.y = getHeight()-300;
+		{
+			preview.pos.y = getHeight()-previewHeight;
+			preview.dim.y = previewHeight;
+		}
 		
 		inspector.initGui();
 		
@@ -391,17 +402,68 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			map.camera.pos.y = -20;
 		this.map = map;
 		map.camera.targetResolution = new Vector2(Remote2D.getInstance().displayHandler.width, Remote2D.getInstance().displayHandler.height);
+		windowStack.clear();
 		inspector.setCurrentEntity(null);
 	}
 
 	public Entity getSelectedEntity() {
 		return selectedEntity;
 	}
-
-	public void deleteSelectedEntity() {
-		if(selectedEntity != null)
-			map.getEntityList().removeEntityFromList(selectedEntity);
-		inspector.setCurrentEntity(null);
+	
+	public void executeOperation(Operation o)
+	{
+		o.execute();
+		redoList.clear();
+		if(o.canBeUndone())
+			undoList.add(o);
+		else
+			undoList.clear();
+		
+		menu.updateUndo();
+	}
+	
+	public void confirmOperation(Operation o)
+	{
+		attemptToPutWindowOnTop(new GuiWindowConfirmOperation(this, new Vector2(40,40), getWindowBounds(), o));
+	}
+	
+	public void undo()
+	{
+		if(undoList.size() > 0)
+		{
+			redoList.add(undoList.peek());
+			undoList.pop().undo();
+		}
+		
+		menu.updateUndo();
+	}
+	
+	public void redo()
+	{
+		if(redoList.size() > 0)
+		{
+			undoList.push(redoList.get(0));
+			redoList.get(0).execute();
+			redoList.remove(0);
+		}
+		
+		menu.updateUndo();
+	}
+	
+	public Operation peekUndoStack()
+	{
+		if(undoList.size() > 0)
+			return undoList.peek();
+		else
+			return null;
+	}
+	
+	public Operation peekRedoStack()
+	{
+		if(redoList.size() > 0)
+			return redoList.get(0);
+		else
+			return null;
 	}
 	
 }

@@ -16,6 +16,12 @@ import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiInGame;
 import com.remote.remote2d.gui.KeyShortcut;
+import com.remote.remote2d.gui.editor.operation.GuiWindowConfirmOperation;
+import com.remote.remote2d.gui.editor.operation.OperationDeleteEntity;
+import com.remote.remote2d.gui.editor.operation.OperationNewEntity;
+import com.remote.remote2d.gui.editor.operation.OperationNewMap;
+import com.remote.remote2d.gui.editor.operation.OperationOpenMap;
+import com.remote.remote2d.gui.editor.operation.OperationSaveMap;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Map;
@@ -47,13 +53,15 @@ public class GuiEditorTopMenu extends Gui {
 		if(file.getEnabled())
 			currentX += file.width;
 		
-		String[] editContents = {"Create Animated Sprite", "Optimize Spritesheet"};
+		String[] editContents = {"Undo", "Redo", "Create Animated Sprite", "Optimize Spritesheet"};
 		GuiEditorTopMenuSection edit = new GuiEditorTopMenuSection(currentX, 0, height, editContents, "Edit", this);
 		if(edit.getEnabled())
 			currentX += edit.width;
 		
-		edit.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_S}).setUseShift(true);
-		edit.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_O}).setUseShift(true);
+		edit.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_Z});
+		edit.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_Y});
+		edit.keyCombos[2] = new KeyShortcut(new int[]{Keyboard.KEY_S}).setUseShift(true);
+		edit.keyCombos[3] = new KeyShortcut(new int[]{Keyboard.KEY_O}).setUseShift(true);
 		
 		edit.reloadSubWidth();
 		
@@ -174,7 +182,7 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				secTitle = sections.get(x).title;
 				secSubTitle = sections.get(x).values[selectedSubSec];
-				Log.info("Selected box: " + secTitle + ">" + secSubTitle+" ");
+				//Log.info("Selected box: " + secTitle + ">" + secSubTitle+" ");
 			}
 		}
 		
@@ -182,21 +190,23 @@ public class GuiEditorTopMenu extends Gui {
 		{
 			if(secSubTitle.equalsIgnoreCase("New Map"))
 			{
-				Log.info("Opening new Document!");
-				editor.setMap(new Map());
+				if(editor.getMap() != null)
+					editor.confirmOperation(new OperationNewMap(editor));
+				else
+					editor.executeOperation(new OperationNewMap(editor));
 			} else if(secSubTitle.equalsIgnoreCase("Open Map"))
 			{
 				Log.info("Opening!");
 				Map newMap = new Map();
 				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", newMap);
 				mapManager.read();
-				editor.setMap(newMap);
+				if(editor.getMap() != null)
+					editor.confirmOperation(new OperationOpenMap(editor,newMap));
+				else
+					editor.executeOperation(new OperationOpenMap(editor,newMap));
 			} else if(secSubTitle.equalsIgnoreCase("Save Map"))
 			{
-				Map map = editor.getMap();
-				R2DFileManager mapManager = new R2DFileManager("/res/maps/map.r2d", map);
-				mapManager.write();
-				editor.setMap(map);
+				editor.confirmOperation(new OperationSaveMap(editor));
 			}
 		} else if(secTitle.equalsIgnoreCase("Edit"))
 		{
@@ -206,6 +216,12 @@ public class GuiEditorTopMenu extends Gui {
 			} else if(secSubTitle.equalsIgnoreCase("Optimize Spritesheet"))
 			{
 				Remote2D.getInstance().guiList.push(new GuiOptimizeSpriteSheet());
+			} else if(secSubTitle.startsWith("Undo"))
+			{
+				editor.undo();
+			} else if(secSubTitle.startsWith("Redo"))
+			{
+				editor.redo();
 			}
 		} else if(secTitle.equalsIgnoreCase("Window"))
 		{
@@ -244,14 +260,15 @@ public class GuiEditorTopMenu extends Gui {
 		{
 			if(secSubTitle.equalsIgnoreCase("Insert Entity"))
 			{
-				editor.setActiveEntity(new Entity());
+				editor.confirmOperation(new OperationNewEntity(editor));
 			} else if(secSubTitle.equalsIgnoreCase("Run Map"))
 			{
 				Remote2D.getInstance().map = editor.getMap().copy();
 				Remote2D.getInstance().guiList.push(new GuiInGame());
 			} else if(secSubTitle.equalsIgnoreCase("Delete Entity"))
 			{
-				editor.deleteSelectedEntity();
+				OperationDeleteEntity delete = new OperationDeleteEntity(editor);
+				editor.confirmOperation(delete);
 			} else if(secSubTitle.equalsIgnoreCase("Toggle Grid"))
 			{
 				editor.grid = !editor.grid;
@@ -280,6 +297,19 @@ public class GuiEditorTopMenu extends Gui {
 				editor.getInspector().setCurrentEntity(editor.getSelectedEntity());
 			}
 		}
+	}
+	
+	public void updateUndo()
+	{
+		sections.get(2).values[0] = "Undo";
+		
+		if(editor.peekUndoStack() != null)
+			sections.get(2).values[0] = "Undo "+editor.peekUndoStack().name();
+		
+		sections.get(2).values[1] = "Redo";
+		
+		if(editor.peekRedoStack() != null)
+			sections.get(2).values[1] = "Redo "+editor.peekRedoStack().name();
 	}
 	
 }

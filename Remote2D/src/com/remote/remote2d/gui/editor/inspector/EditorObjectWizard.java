@@ -20,18 +20,18 @@ import com.remote.remote2d.logic.Vector2;
 
 public class EditorObjectWizard {
 	
-	private EditorObject component;
+	private EditorObject object;
 	private Vector2 pos;
 	private int width;
 	public ArrayList<GuiEditorInspectorSection> sections;
 	
 	public EditorObjectWizard(EditorObject c, Vector2 pos, int width)
 	{
-		component = c;
+		object = c;
 		this.pos = pos.copy();
 		this.width = width;
 		
-		Field[] fields = component.getClass().getFields();
+		Field[] fields = object.getClass().getFields();
 		sections = new ArrayList<GuiEditorInspectorSection>();
 		Vector2 currentPos = pos.add(new Vector2(0,20));
 		for(int x=0;x<fields.length;x++)
@@ -39,7 +39,7 @@ public class EditorObjectWizard {
 			if(Modifier.isPublic(fields[x].getModifiers()))
 			{
 				try {
-					Object o = fields[x].get(component);
+					Object o = fields[x].get(object);
 					if(o instanceof Integer)
 					{
 						GuiEditorInspectorSectionInt sec = new GuiEditorInspectorSectionInt(fields[x].getName(),currentPos,width);
@@ -111,20 +111,20 @@ public class EditorObjectWizard {
 			setComponentField(x);
 		}
 		
-		component.apply();
+		object.apply();
 	}
 	
 	public void setComponentField(int x)
 	{
 		try {
-			Field field = component.getClass().getField(sections.get(x).name);
-			field.set(component, sections.get(x).getData());
+			Field field = object.getClass().getField(sections.get(x).name);
+			field.set(object, sections.get(x).getData());
 		} catch (NoSuchFieldException e) {
 			Log.error("Field doesn't exist: "+sections.get(x).name);
 		} catch (Exception e) {
 			throw new Remote2DException(e);
 		}
-		component.apply();
+		object.apply();
 	}
 	
 	public void deselectFields()
@@ -171,7 +171,7 @@ public class EditorObjectWizard {
 		Renderer.drawLine(new Vector2(pos.x,pos.y+20), new Vector2(pos.x+width,pos.y+20), 0xffffff, 1.0f);
 		Renderer.drawLine(new Vector2(pos.x,pos.y+getHeight()), new Vector2(pos.x+width,pos.y+getHeight()), 0xffffff, 1.0f);
 		
-		Fonts.get("Arial").drawString(component.getClass().getSimpleName(), pos.x, pos.y, 20, 0xffffff);
+		Fonts.get("Arial").drawString(object.getClass().getSimpleName(), pos.x, pos.y, 20, 0xffffff);
 	}
 	
 }

@@ -47,12 +47,8 @@ public class EntityList {
 	public void removeEntityFromList(Entity e)
 	{
 		for(int i=0;i<entityList.size();i++)
-		{
 			if(entityList.get(i).equals(e))
-			{
 				entityList.remove(i);
-			}
-		}
 	}
 	
 	public void removeEntityFromList(int i)
