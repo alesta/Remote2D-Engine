@@ -85,6 +85,7 @@ public class DisplayHandler {
 	{
 		if(Display.getWidth() != width || Display.getHeight() != height)
 		{
+			Log.debug("Resolution not in sync!  Display: "+Display.getWidth()+"x"+Display.getHeight()+" ­ OpenGL: "+width+"x"+height);
 			width = Display.getWidth();
 			height = Display.getHeight();
 			initGL();
@@ -96,7 +97,7 @@ public class DisplayHandler {
 	
 	public void initGL()
 	{
-		Log.info("Initializing OpenGL");
+		Log.debug("Initializing OpenGL");
 		GL11.glEnable(GL11.GL_TEXTURE_2D);               
         
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);          
