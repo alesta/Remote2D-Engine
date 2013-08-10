@@ -40,7 +40,7 @@ public class GuiEditorPreview extends Gui {
 		GL11.glVertex2f(pos.x+dim.x, pos.y+20);
 		GL11.glEnd();
 		
-		GL11.glScissor((int)pos.x, (int)(Remote2D.getInstance().displayHandler.height-pos.y-dim.y), (int)dim.x, (int)dim.y-20);
+		GL11.glScissor((int)pos.x, (int)(screenHeight()-pos.y-dim.y), (int)dim.x, (int)dim.y-20);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		
 		if(inspector.currentEntity != null)

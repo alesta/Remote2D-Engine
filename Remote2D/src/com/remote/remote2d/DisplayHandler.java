@@ -11,21 +11,29 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.TextureLoader;
+import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 
 public class DisplayHandler {
 	
-	public int width;
-	public int height;
-	public boolean fullscreen;
-	public boolean borderless;
+	private int screenWidth;
+	private int screenHeight;
+	private int gameWidth;
+	private int gameHeight;
+	private boolean fullscreen;
+	private boolean borderless;
+	private StretchType type;
 	
-	public DisplayHandler(int width, int height, boolean fullscreen, boolean borderless)
+	public DisplayHandler(int width, int height, int gameWidth, int gameHeight, StretchType type, boolean fullscreen, boolean borderless)
 	{
-		this.width = borderless ? Display.getDesktopDisplayMode().getWidth() : width;
-		this.height = borderless ? Display.getDesktopDisplayMode().getHeight() : height;
+		this.screenWidth = borderless ? Display.getDesktopDisplayMode().getWidth() : width;
+		this.screenHeight = borderless ? Display.getDesktopDisplayMode().getHeight() : height;
 		this.fullscreen = fullscreen;
 		this.borderless = borderless;
+		this.gameWidth = gameWidth;
+		this.gameHeight = gameHeight;
+		this.type = type;
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(width,height));
@@ -56,7 +64,30 @@ public class DisplayHandler {
 	
 	public Vector2 getDimensions()
 	{
-		return new Vector2(width,height);
+		if(type != StretchType.NONE)
+			return new Vector2(gameWidth,gameHeight);
+		else
+			return new Vector2(screenWidth,screenHeight);
+	}
+	
+	public Vector2 getScreenDimensions()
+	{
+		return new Vector2(screenWidth,screenHeight);
+	}
+	
+	public boolean getFullscreen()
+	{
+		return fullscreen;
+	}
+	
+	public StretchType getStretchType()
+	{
+		return type;
+	}
+	
+	public boolean getBorderless()
+	{
+		return borderless;
 	}
 	
 	public ByteBuffer getBufferFromImage(BufferedImage image, int BYTES_PER_PIXEL)
@@ -83,16 +114,22 @@ public class DisplayHandler {
 	
 	public void checkDisplayResolution()
 	{
-		if(Display.getWidth() != width || Display.getHeight() != height)
+		if(Display.getWidth() != screenWidth || Display.getHeight() != screenHeight)
 		{
-			Log.debug("Resolution not in sync!  Display: "+Display.getWidth()+"x"+Display.getHeight()+" ­ OpenGL: "+width+"x"+height);
-			width = Display.getWidth();
-			height = Display.getHeight();
+			Log.debug("Resolution not in sync!  LWJGL: "+Display.getWidth()+"x"+Display.getHeight()+" ­ Remote2D: "+screenWidth+"x"+screenHeight);
+			screenWidth = Display.getWidth();
+			screenHeight = Display.getHeight();
 			initGL();
 			
 			for(int x=0;x<Remote2D.getInstance().guiList.size();x++)
 				Remote2D.getInstance().guiList.get(x).initGui();
 		}
+	}
+	
+	public Vector2 getRenderScale()
+	{
+		ColliderBox renderArea = getScreenRenderArea();
+		return renderArea.dim.divide(getDimensions());
 	}
 	
 	public void initGL()
@@ -105,13 +142,15 @@ public class DisplayHandler {
     	// enable alpha blending
     	GL11.glEnable(GL11.GL_BLEND);
     	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-    
-    	GL11.glViewport(0,0,width,height);
+    	ColliderBox renderArea = getScreenRenderArea();
+    	GL11.glViewport((int)renderArea.pos.x,(int)renderArea.pos.y,(int)renderArea.dim.x,(int)renderArea.dim.y);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0, width, height, 0, 1, -1);//Note, the GL coordinates are flipped!
+		Vector2 dim = getDimensions();
+		GL11.glOrtho(0, dim.x, dim.y, 0, 1, -1);//Note, the GL coordinates are flipped!
+		
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		
 		if(Remote2D.getInstance().artLoader != null)
@@ -120,6 +159,62 @@ public class DisplayHandler {
 		}
 		
 		//CursorLoader.setCursor(new Texture("/res/gui/mouse.png"), new Vector2D(22,22));
+	}
+	
+	public ColliderBox getScreenRenderArea()
+	{
+		if(type == StretchType.NONE || type == StretchType.STRETCH)
+			return new Vector2(0,0).getColliderWithDim(new Vector2(screenWidth,screenHeight));
+		
+		float targetAspectRatio = ((float)gameWidth)/((float)gameHeight);
+		int width = screenWidth;
+		int height = (int)(screenWidth/targetAspectRatio+0.5f);
+		
+		if(height > screenHeight)
+		{
+			height = screenHeight;
+			width = (int)(height*targetAspectRatio+0.5f);
+		}
+		
+		if(type == StretchType.MULTIPLES)
+		{
+			if(gameWidth <= screenWidth && gameHeight <= screenHeight)
+			{
+				width -= width%gameWidth;
+				height -= height%gameHeight;
+			} 
+			else
+			{
+				width = gameWidth;
+				height = gameHeight;
+				while(width > screenWidth || height > screenHeight)
+				{
+					width /= 2;
+					height /= 2;
+				}
+			}
+		}
+		
+		Vector2 winPos = new Vector2(screenWidth/2-width/2,screenHeight/2-height/2);
+		Vector2 winDim = new Vector2(width,height);
+		
+		return winPos.getColliderWithDim(winDim);
+	}
+	
+	/**
+	 * Sets the target resolution and Stretch Type of the game.  This is relatively expensive (requires reloading OpenGL and therefore all pictures) so use
+	 * this sparingly.
+	 * @param resx The target width of the game
+	 * @param resy The target height of the game
+	 * @param stretch Sets the stretch mode of the game
+	 * @see StretchType
+	 */
+	public void setGameResolution(int resx, int resy, StretchType stretch)
+	{
+		gameWidth = resx;
+		gameHeight = resy;
+		type = stretch;
+		initGL();
 	}
 	
 	/**
@@ -188,8 +283,8 @@ public class DisplayHandler {
 	            return;
 	        }
 	        	        
-	        this.width = targetDisplayMode.getWidth();
-	        this.height = targetDisplayMode.getHeight();
+	        this.screenWidth = targetDisplayMode.getWidth();
+	        this.screenHeight = targetDisplayMode.getHeight();
 	        this.fullscreen = fullscreen;
 	        
 	        if(fullscreen == true)

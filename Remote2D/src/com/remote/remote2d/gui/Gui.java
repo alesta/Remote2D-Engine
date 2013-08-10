@@ -2,6 +2,7 @@ package com.remote.remote2d.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.logic.Vector2;
@@ -29,6 +30,21 @@ public abstract class Gui {
 	{
 		float[] color = getRGB(rgb);
 		GL11.glColor3f(color[0],color[1],color[2]);
+	}
+	
+	public static int screenWidth()
+	{
+		return (int)Remote2D.getInstance().displayHandler.getDimensions().x;
+	}
+	
+	public static int screenHeight()
+	{
+		return (int)Remote2D.getInstance().displayHandler.getDimensions().y;
+	}
+	
+	public static Vector2 screenDim()
+	{
+		return Remote2D.getInstance().displayHandler.getDimensions();
 	}
 	
 	public static void renderTextureWithCoords(Texture tex, Vector2 pos, Vector2 dim, Vector2 imgPos, Vector2 imgDim)

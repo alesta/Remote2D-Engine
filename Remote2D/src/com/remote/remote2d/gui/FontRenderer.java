@@ -80,6 +80,6 @@ public class FontRenderer {
 	public void drawCenteredString(String s, int y, float size, int color)
 	{
 		int[] stringDim = getStringDim(s,size);
-		drawString(s,Remote2D.getInstance().displayHandler.width/2-stringDim[0]/2,y,size,color);
+		drawString(s,Remote2D.getInstance().displayHandler.getDimensions().x/2-stringDim[0]/2,y,size,color);
 	}
 }

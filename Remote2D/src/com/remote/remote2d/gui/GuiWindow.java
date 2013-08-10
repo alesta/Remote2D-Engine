@@ -124,7 +124,7 @@ public abstract class GuiWindow extends Gui {
 		
 		Fonts.get("Arial").drawString(title, pos.x+10, pos.y+1, 20, 0xffffff);
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		GL11.glScissor((int)pos.x, (int)(Remote2D.getInstance().displayHandler.height-(pos.y+dim.y+20)), (int)dim.x, (int)dim.y);
+		GL11.glScissor((int)pos.x, (int)(screenHeight()-(pos.y+dim.y+20)), (int)dim.x, (int)dim.y);
 		
 		GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x,pos.y+20,0);

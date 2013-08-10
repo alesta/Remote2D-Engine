@@ -64,23 +64,23 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}
 		
 		if(map != null)
-			map.camera.targetResolution = new Vector2(Remote2D.getInstance().displayHandler.width, Remote2D.getInstance().displayHandler.height);
+			map.camera.targetResolution = screenDim();
 		
-		int previewHeight = Math.min(320, (getHeight()-20)/3);
+		int previewHeight = Math.min(320, (screenHeight()-20)/3);
 		if(inspector == null)
 		{
 			inspector = new GuiEditorInspector(
 					new Vector2(0,20),
-					new Vector2(300,getHeight()-previewHeight-20), this);
+					new Vector2(300,screenHeight()-previewHeight-20), this);
 		} else
-			inspector.dim = new Vector2(300,getHeight()-previewHeight-20);
+			inspector.dim = new Vector2(300,screenHeight()-previewHeight-20);
 		
 		if(preview == null)
 		{
-			preview = new GuiEditorPreview(inspector,new Vector2(0,getHeight()-previewHeight),new Vector2(300,previewHeight));
+			preview = new GuiEditorPreview(inspector,new Vector2(0,screenHeight()-previewHeight),new Vector2(300,previewHeight));
 		} else
 		{
-			preview.pos.y = getHeight()-previewHeight;
+			preview.pos.y = screenHeight()-previewHeight;
 			preview.dim.y = previewHeight;
 		}
 		
@@ -88,20 +88,21 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(heirarchy == null)
 		{
-			heirarchy = new GuiEditorHeirarchy(new Vector2(getWidth()-300,20),
+			heirarchy = new GuiEditorHeirarchy(new Vector2(screenWidth()-300,20),
 					new Vector2(300,300), this);
 		} else
-			heirarchy.pos = new Vector2(getWidth()-300,20);
+			heirarchy.pos = new Vector2(screenWidth()-300,20);
 		
 		heirarchy.initGui();
 		
 		if(browser == null)
-			browser = new GuiEditorBrowser(this,new Vector2(getWidth()-300,320),new Vector2(300,getHeight()-320));
+			browser = new GuiEditorBrowser(this,new Vector2(screenWidth()-300,320),new Vector2(300,screenHeight()-320));
 		else
 		{
-			browser.pos.x = getWidth()-300;
-			browser.dim.y = getHeight()-320;
+			browser.pos.x = screenWidth()-300;
+			browser.dim.y = screenHeight()-320;
 		}
+		browser.resetSections();
 		
 		if(map != null)
 			map.getEntityList().reloadTextures();
@@ -134,7 +135,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(map == null)
 		{
 			int[] size = Fonts.get("Pixel_Arial").getStringDim("Remote2D Editor", 40);
-			Fonts.get("Pixel_Arial").drawString("Remote2D Editor", getWidth()/2-size[0]/2, getHeight()/2-size[1]/2+10, 40, 0xff9999);
+			Fonts.get("Pixel_Arial").drawString("Remote2D Editor", screenWidth()/2-size[0]/2, screenHeight()/2-size[1]/2+10, 40, 0xff9999);
 		}
 		
 		if(map != null)
@@ -175,16 +176,9 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			map.camera.renderAfter(interpolation, true);
 		}
 		
-		if(selectedEntity != null)
-		{
-			inspector.render(interpolation);
-			preview.render(interpolation);
-		}
-		if(map != null)
-		{
-			
-			heirarchy.render(interpolation);
-		}
+		inspector.render(interpolation);
+		preview.render(interpolation);
+		heirarchy.render(interpolation);
 		browser.render(interpolation);
 		
 		for(int x=0;x<windowStack.size();x++)
@@ -223,6 +217,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 					dragPoint = null;
 				
 				int deltaWheel = Remote2D.getInstance().getDeltaWheel();
+				Vector2 mousePos = new Vector2(i,j).divide(new Vector2(map.camera.additionalScale));
 				if(deltaWheel > 0 && map.camera.additionalScale < 16)//zoom in, up
 				{
 					map.camera.additionalScale *= 2;
@@ -321,7 +316,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	public ColliderBox getWindowBounds()
 	{
-		return new ColliderBox(new Vector2(0,20),new Vector2(getWidth(),getHeight()-20));
+		return new ColliderBox(new Vector2(0,20),new Vector2(screenWidth(),screenHeight()-20));
 	}
 
 	@Override
@@ -401,7 +396,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(map != null && !map.equals(map))
 			map.camera.pos.y = -20;
 		this.map = map;
-		map.camera.targetResolution = new Vector2(Remote2D.getInstance().displayHandler.width, Remote2D.getInstance().displayHandler.height);
+		map.camera.targetResolution = screenDim();
 		windowStack.clear();
 		inspector.setCurrentEntity(null);
 	}

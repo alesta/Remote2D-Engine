@@ -31,18 +31,16 @@ public class ColliderSphere extends Collider {
 	
 	@Override
 	public void drawCollider(int color) {
-		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		Vector2[] verts = new Vector2[360];
+		Vector2[] verts = new Vector2[361];
 		for (int i=0; i <= 360; i++)
 		{
 			float degInRad = i*(3.14159f/180f);
 			double x = Math.cos(degInRad)*radius+pos.x;
 			double y = Math.sin(degInRad)*radius+pos.y;
-			GL11.glVertex2d(x,y);
+			verts[i] = new Vector2((float)x,(float)y);
 		}
 		
 		Renderer.drawLinePoly(verts, color, 1.0f);
-		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		
 		Renderer.drawRect(new Vector2(pos.x-3,pos.y-3), new Vector2(6), color, 1.0f);
 	}

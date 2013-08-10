@@ -20,7 +20,7 @@ public class GuiEditorInspectorSectionAnimation extends GuiEditorInspectorSectio
 	}
 
 	@Override
-	public int getHeight() {
+	public int sectionHeight() {
 		return 40;
 	}
 

@@ -24,7 +24,7 @@ public class GuiEditorInspectorSectionColor extends GuiEditorInspectorSection {
 	}
 
 	@Override
-	public int getHeight() {
+	public int sectionHeight() {
 		return 40;
 	}
 

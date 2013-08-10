@@ -13,10 +13,13 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.ArtLoader;
 import com.remote.remote2d.art.CursorLoader;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.InsertableComponentList;
 import com.remote.remote2d.entity.component.ComponentCamera;
 import com.remote.remote2d.entity.component.ComponentColliderBox;
 import com.remote.remote2d.gui.GuiMenu;
+import com.remote.remote2d.logic.ColliderBox;
+import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Map;
 
 public class Remote2D {
@@ -97,7 +100,7 @@ public class Remote2D {
 	
 	public void start()
 	{
-		displayHandler = new DisplayHandler(1024,576,false,false);
+		displayHandler = new DisplayHandler(1024,576,1024,576,StretchType.MULTIPLES,false,false);
 		
 		initGame();
 		
@@ -179,7 +182,14 @@ public class Remote2D {
 	
 	public int[] getMouseCoords()
 	{
-		int[] r = {Mouse.getX(),displayHandler.height-Mouse.getY()};
+		Vector2 scale = displayHandler.getRenderScale();
+		ColliderBox renderArea = displayHandler.getScreenRenderArea();
+		int[] r = {(int) (Mouse.getX()),(int) (Mouse.getY())};
+		r[0] -= renderArea.pos.x;
+		r[1] -= renderArea.pos.y;
+		r[0] /= scale.x;
+		r[1] /= scale.y;
+		r[1] = (int) (displayHandler.getDimensions().y-r[1]);
 		return r;
 	}
 	
@@ -264,21 +274,24 @@ public class Remote2D {
 	public void render(float interpolation)
 	{
 		GL11.glLoadIdentity();
-				
+		
 		int color = guiList.peek().backgroundColor;
 		float r = ((color >> 16) & 0xff)/255f;
 		float g = ((color >> 8) & 0xff)/255f;
 		float b = (color & 0xff)/255f;
 		
-		GL11.glClearColor(r, g, b, 1);
+		GL11.glClearColor(0, 0, 0, 1);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		
+		Renderer.drawRect(new Vector2(0,0), displayHandler.getDimensions(), r, g, b, 1.0f);
 		
 		if(RESIZING_ENABLED)
 			displayHandler.checkDisplayResolution();
-		
+				
 		guiList.peek().render(interpolation);
 		
 		CursorLoader.render(interpolation);
+		Renderer.drawRect(new Vector2(getMouseCoords()[0]-3, getMouseCoords()[1]-3), new Vector2(6,6), 0,0,0,1);
 	}
 	
 	public Remote2DGame getGame()

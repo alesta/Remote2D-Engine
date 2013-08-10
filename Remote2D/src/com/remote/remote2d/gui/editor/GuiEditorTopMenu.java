@@ -146,12 +146,12 @@ public class GuiEditorTopMenu extends Gui {
 			if(sections.get(x).isSelected)
 				z = true;
 		}
-		return (i>0 && j>0 && i<Remote2D.getInstance().displayHandler.width && j<height) || z;
+		return (i>0 && j>0 && i<screenWidth() && j<height) || z;
 	}
 
 	@Override
 	public void render(float interpolation) {
-		Renderer.drawRect(new Vector2(0,0), new Vector2(Remote2D.getInstance().displayHandler.width,height), 1, 0.2f, 0.2f, 1);
+		Renderer.drawRect(new Vector2(0,0), new Vector2(screenWidth(),height), 1, 0.2f, 0.2f, 1);
 		
 		for(int x=0;x<sections.size();x++)
 		{

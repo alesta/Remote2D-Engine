@@ -87,11 +87,29 @@ public class GuiEditorBrowser extends Gui {
 			pushFolder(new Folder(file.getPath()));
 		else if(file.isFile())
 		{
-			String name = file.getName();
-			if(name.endsWith(Animation.getExtension()))
+			String localPath = file.getPath().substring((int) (Remote2D.getJarPath().getPath().length()));
+			if(localPath.endsWith(Animation.getExtension()))
+				Remote2D.getInstance().guiList.push(new GuiCreateSpriteSheet(new Animation(localPath)));
+			else if(localPath.endsWith(Entity.getExtension()))
 			{
-				
+				Entity e = new Entity();
+				R2DFileManager manager = new R2DFileManager(localPath,e);
+				manager.read();
+				editor.setActiveEntity(e);
+			} else if(localPath.endsWith(ParticleSystem.getExtension()))
+			{
+				ParticleSystem system = new ParticleSystem(editor.getMap());
+				R2DFileManager manager = new R2DFileManager(localPath,system);
+				manager.read();
+				editor.getInspector().setCurrentEntity(system);
+			} else if(localPath.endsWith(Map.getExtension()))
+			{
+				Map map = new Map();
+				R2DFileManager manager = new R2DFileManager(localPath,map);
+				manager.read();
+				editor.setMap(map);
 			}
+
 		}
 	}
 

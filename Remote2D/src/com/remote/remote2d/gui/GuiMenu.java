@@ -32,16 +32,6 @@ public class GuiMenu extends Gui{
 		
 	}
 	
-	protected int getWidth()
-	{
-		return Remote2D.getInstance().displayHandler.width;
-	}
-	
-	protected int getHeight()
-	{
-		return Remote2D.getInstance().displayHandler.height;
-	}
-	
 	public void renderBackground(float interpolation)
 	{
 		
@@ -73,16 +63,16 @@ public class GuiMenu extends Gui{
 	{
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glBegin(GL11.GL_LINES);
-			for(int x=0;x<=getWidth()/distance;x++)
+			for(int x=0;x<=screenWidth()/distance;x++)
 			{
 				GL11.glVertex2f(x*distance, 0);
-				GL11.glVertex2f(x*distance, getHeight());
+				GL11.glVertex2f(x*distance, screenHeight());
 			}
 			
-			for(int x=0;x<=getHeight()/distance;x++)
+			for(int x=0;x<=screenHeight()/distance;x++)
 			{
 				GL11.glVertex2f(0, x*distance);
-				GL11.glVertex2f(getWidth(), x*distance);
+				GL11.glVertex2f(screenWidth(), x*distance);
 			}
 		GL11.glEnd();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

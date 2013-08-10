@@ -17,8 +17,8 @@ public class GuiMainMenu extends GuiMenu {
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2(getWidth()/2-125,150),new Vector2(250,40),"Open Editor"));
-		buttonList.add(new GuiButton(1,new Vector2(getWidth()/2-125,200),new Vector2(250,40),"Quit"));
+		buttonList.add(new GuiButton(0,new Vector2(screenWidth()/2-125,150),new Vector2(250,40),"Open Editor"));
+		buttonList.add(new GuiButton(1,new Vector2(screenWidth()/2-125,200),new Vector2(250,40),"Quit"));
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class GuiMainMenu extends GuiMenu {
 		super.render(interpolation);
 		int[] remoteDim = Fonts.get("Logo").getStringDim("REMOTE", 100);
 		int[] otherDim = Fonts.get("Logo").getStringDim("2D", 50);
-		int remotePos = Remote2D.getInstance().displayHandler.width/2-(remoteDim[0]+otherDim[0])/2;
+		int remotePos = screenWidth()/2-(remoteDim[0]+otherDim[0])/2;
 		int otherPos = remotePos+remoteDim[0];
 		
 		Fonts.get("Logo").drawString("REMOTE", remotePos, 0, 100, 0xFF0000);

@@ -18,7 +18,7 @@ public class GuiEditorInspectorSectionString extends GuiEditorInspectorSection {
 	}
 
 	@Override
-	public int getHeight() {
+	public int sectionHeight() {
 		return 40;
 	}
 

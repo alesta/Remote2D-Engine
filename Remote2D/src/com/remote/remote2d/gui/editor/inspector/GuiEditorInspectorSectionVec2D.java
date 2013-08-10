@@ -31,7 +31,7 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 	}
 
 	@Override
-	public int getHeight() {
+	public int sectionHeight() {
 		return 40;
 	}
 

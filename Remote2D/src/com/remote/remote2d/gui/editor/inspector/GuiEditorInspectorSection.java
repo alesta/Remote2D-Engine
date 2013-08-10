@@ -17,7 +17,7 @@ public abstract class GuiEditorInspectorSection extends Gui {
 		this.width = width;
 	}
 	
-	public abstract int getHeight();
+	public abstract int sectionHeight();
 	public abstract Object getData();
 	public abstract void initSection();
 	public abstract void setData(Object o);

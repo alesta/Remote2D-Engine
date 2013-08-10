@@ -66,7 +66,7 @@ public class Map implements R2DFileSaver {
 		currentPos.y = camera.y-camera.y%gridSize-gridSize;
 		GL11.glColor4f(0,0,0,0.25f);
 		
-		for(int x=0;x<Remote2D.getInstance().displayHandler.height/scale/gridSize+2;x++)
+		for(int x=0;x<Gui.screenHeight()/scale/gridSize+2;x++)
 		{
 			int color = 0x000000;
 			float alpha = 0.25f;
@@ -76,13 +76,13 @@ public class Map implements R2DFileSaver {
 				alpha = 0.5f;
 				GL11.glLineWidth(3);
 			}
-			Renderer.drawLine(currentPos, new Vector2((Remote2D.getInstance().displayHandler.width)/scale+gridSize*2+currentPos.x,currentPos.y), color, alpha);
+			Renderer.drawLine(currentPos, new Vector2((Gui.screenWidth())/scale+gridSize*2+currentPos.x,currentPos.y), color, alpha);
 			currentPos.y+=gridSize;
 			GL11.glLineWidth(1);
 		}
 		
 		currentPos.y = camera.y-camera.y%gridSize-gridSize;
-		for(int y=0;y<Remote2D.getInstance().displayHandler.width/scale/gridSize+2;y++)
+		for(int y=0;y<Gui.screenWidth()/scale/gridSize+2;y++)
 		{
 			int color = 0x000000;
 			float alpha = 0.25f;
@@ -92,7 +92,7 @@ public class Map implements R2DFileSaver {
 				alpha = 0.5f;
 				GL11.glLineWidth(3);
 			}
-			Renderer.drawLine(currentPos, new Vector2(currentPos.x,(Remote2D.getInstance().displayHandler.height)/scale+gridSize*2+currentPos.y), color, alpha);
+			Renderer.drawLine(currentPos, new Vector2(currentPos.x,(Gui.screenHeight())/scale+gridSize*2+currentPos.y), color, alpha);
 			currentPos.x+=gridSize;
 			GL11.glLineWidth(1);
 		}

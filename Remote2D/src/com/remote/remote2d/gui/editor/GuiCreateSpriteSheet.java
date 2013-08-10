@@ -107,10 +107,10 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	{
 		buttonList.clear();
 		
-		createButton = new GuiButton(0,new Vector2(5,getHeight()-45),new Vector2(100,40),"Create");
+		createButton = new GuiButton(0,new Vector2(5,screenHeight()-45),new Vector2(100,40),"Create");
 		buttonList.add(createButton);
-		buttonList.add(new GuiButton(1,new Vector2(110,getHeight()-45),new Vector2(100,40),"Done"));
-		buttonList.add(regenButton = new GuiButton(2,new Vector2(5,getHeight()-90),new Vector2(205,40),"Regenerate"));
+		buttonList.add(new GuiButton(1,new Vector2(110,screenHeight()-45),new Vector2(100,40),"Done"));
+		buttonList.add(regenButton = new GuiButton(2,new Vector2(5,screenHeight()-90),new Vector2(205,40),"Regenerate"));
 	}
 	
 	@Override
@@ -141,7 +141,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		else if(!animSave.text.endsWith(Animation.getExtension()))
 			Fonts.get("Arial").drawString("Use "+Animation.getExtension()+" extension", 5, 335, 20, 0xff0000);
 		if(System.currentTimeMillis()-lastMessageTime <= messageTime)
-			Fonts.get("Arial").drawString(message, 5, getHeight()-110, 20, 0xffffff);
+			Fonts.get("Arial").drawString(message, 5, screenHeight()-110, 20, 0xffffff);
 	}
 	
 	@Override
@@ -157,7 +157,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			GL11.glScissor(300, 0, getWidth()-300, getHeight());
+			GL11.glScissor(300, 0, screenWidth()-300, screenHeight());
 			
 			GL11.glPushMatrix();
 				GL11.glTranslatef(realOffset.x, realOffset.y, 0);
@@ -231,10 +231,10 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			if(right)
 				offset.x -= 5;
 			
-			if(offset.x+tex.image.getWidth()*scale < getWidth())
-				offset.x = getWidth()-tex.image.getWidth();
-			if(offset.y+tex.image.getHeight()*scale < getHeight())
-				offset.y = getHeight()-tex.image.getHeight();
+			if(offset.x+tex.image.getWidth()*scale < screenWidth())
+				offset.x = screenWidth()-tex.image.getWidth();
+			if(offset.y+tex.image.getHeight()*scale < screenHeight())
+				offset.y = screenHeight()-tex.image.getHeight();
 			
 			if(offset.x > 300)
 				offset.x = 300;

@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Vector4f;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Renderer;
+import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
@@ -67,13 +68,13 @@ public class Camera {
 		if(editor || !blackBars)
 			return;
 		ColliderBox renderArea = getScreenRenderArea();
-		float width = (Remote2D.getInstance().displayHandler.width-renderArea.dim.x)/2;
-		float height = (Remote2D.getInstance().displayHandler.height-renderArea.dim.y)/2;
+		float width = (Gui.screenWidth()-renderArea.dim.x)/2;
+		float height = (Gui.screenHeight()-renderArea.dim.y)/2;
 		
-		Renderer.drawRect(new Vector2(0,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1f);
-		Renderer.drawRect(new Vector2(Remote2D.getInstance().displayHandler.width-width,0), new Vector2(width,Remote2D.getInstance().displayHandler.height), 0, 0, 0, 1f);
-		Renderer.drawRect(new Vector2(0,0), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1f);
-		Renderer.drawRect(new Vector2(0,Remote2D.getInstance().displayHandler.height-height), new Vector2(Remote2D.getInstance().displayHandler.width,height), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(0,0), new Vector2(width,Gui.screenHeight()), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(Gui.screenWidth()-width,0), new Vector2(width,Gui.screenHeight()), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(0,0), new Vector2(Gui.screenWidth(),height), 0, 0, 0, 1f);
+		Renderer.drawRect(new Vector2(0,Gui.screenHeight()-height), new Vector2(Gui.screenWidth(),height), 0, 0, 0, 1f);
 	}
 	
 	public Vector2 getTruePos(float interpolation)
@@ -84,19 +85,19 @@ public class Camera {
 	private ColliderBox getScreenRenderArea()
 	{
 		Vector2 dim;
-		float screenRatio = (float)(Remote2D.getInstance().displayHandler.width)/(float)(Remote2D.getInstance().displayHandler.height);
+		float screenRatio = (float)(Gui.screenWidth())/(float)(Gui.screenHeight());
 		float aspectRatio = targetResolution.x/targetResolution.y;
 		
 		if(screenRatio > aspectRatio) // Use height
-			dim = new Vector2((float)(Remote2D.getInstance().displayHandler.height)*aspectRatio,Remote2D.getInstance().displayHandler.height);
+			dim = new Vector2((float)(Gui.screenHeight())*aspectRatio,Gui.screenHeight());
 		else if(screenRatio < aspectRatio) // Use width
-			dim = new Vector2(Remote2D.getInstance().displayHandler.width,(float)(Remote2D.getInstance().displayHandler.width)/aspectRatio);
+			dim = new Vector2(Gui.screenWidth(),(float)(Gui.screenWidth())/aspectRatio);
 		else
-			dim = new Vector2(Remote2D.getInstance().displayHandler.width,Remote2D.getInstance().displayHandler.height);
+			dim = new Vector2(Gui.screenWidth(),Gui.screenHeight());
 		
 		if(useMultiples)
 		{
-			if(targetResolution.x <= Remote2D.getInstance().displayHandler.width && targetResolution.y <= Remote2D.getInstance().displayHandler.height)
+			if(targetResolution.x <= Gui.screenWidth() && targetResolution.y <= Gui.screenHeight())
 			{
 				dim.x -= dim.x%targetResolution.x;
 				dim.y -= dim.y%targetResolution.y;
@@ -104,14 +105,14 @@ public class Camera {
 //			else
 //			{
 //				dim = targetResolution.copy();
-//				while(dim.x > Remote2D.getInstance().displayHandler.width || dim.y > Remote2D.getInstance().displayHandler.height)
+//				while(dim.x > Gui.screenWidth() || dim.y > Gui.screenHeight())
 //				{
 //					dim = dim.divide(new Vector2(2,2));
 //				}
 //			}
 		}
 		
-		Vector2 winPos = new Vector2(Remote2D.getInstance().displayHandler.width/2-dim.x/2,Remote2D.getInstance().displayHandler.height/2-dim.y/2);
+		Vector2 winPos = new Vector2(Gui.screenWidth()/2-dim.x/2,Gui.screenHeight()/2-dim.y/2);
 		
 		return winPos.getColliderWithDim(dim);
 	}

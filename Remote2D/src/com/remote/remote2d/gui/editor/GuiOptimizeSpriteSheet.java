@@ -131,7 +131,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			GL11.glScissor(300, 0, getWidth()-300, getHeight());
+			GL11.glScissor(300, 0, screenWidth()-300, screenHeight());
 			
 			GL11.glPushMatrix();
 				GL11.glTranslatef(iOffset.x, iOffset.y, 0);
@@ -162,15 +162,15 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	 		{
 		 		GL11.glColor3f(1,0,0);
 				GL11.glBegin(GL11.GL_LINES);
-					int y = getHeight()-Mouse.getY();
+					int y = screenHeight()-Mouse.getY();
 					int x = Mouse.getX();
 					boolean right = ((float)(x-offset.x)%scale)/((float)scale) >= 0.5;
 					boolean bottom = ((float)(y-offset.y)%scale)/((float)scale) >= 0.5;
 					GL11.glVertex2f(0, y-(y-offset.y)%scale+(bottom?scale:0));
-					GL11.glVertex2f(getWidth(), y-(y-offset.y)%scale+(bottom?scale:0));
+					GL11.glVertex2f(screenWidth(), y-(y-offset.y)%scale+(bottom?scale:0));
 					
 					GL11.glVertex2f(x-(x-offset.x)%scale+(right?scale:0), 0);
-					GL11.glVertex2f(x-(x-offset.x)%scale+(right?scale:0), getHeight());
+					GL11.glVertex2f(x-(x-offset.x)%scale+(right?scale:0), screenHeight());
 				GL11.glEnd();
 				GL11.glColor3f(1,1,1);
 	 		}
@@ -265,10 +265,10 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 			if(right)
 				offset.x -= 5;
 			
-			if(offset.x+tex.image.getWidth()*scale < getWidth())
-				offset.x = getWidth()-tex.image.getWidth();
-			if(offset.y+tex.image.getHeight()*scale < getHeight())
-				offset.y = getHeight()-tex.image.getHeight();
+			if(offset.x+tex.image.getWidth()*scale < screenWidth())
+				offset.x = screenWidth()-tex.image.getWidth();
+			if(offset.y+tex.image.getHeight()*scale < screenHeight())
+				offset.y = screenHeight()-tex.image.getHeight();
 			
 			if(offset.x > 300)
 				offset.x = 300;
