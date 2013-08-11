@@ -123,8 +123,7 @@ public abstract class GuiWindow extends Gui {
 		Renderer.drawRect(pos.add(new Vector2(0,20)), dim, windowMainColor, 1.0f);
 		
 		Fonts.get("Arial").drawString(title, pos.x+10, pos.y+1, 20, 0xffffff);
-		GL11.glEnable(GL11.GL_SCISSOR_TEST);
-		GL11.glScissor((int)pos.x, (int)(screenHeight()-(pos.y+dim.y+20)), (int)dim.x, (int)dim.y);
+		Renderer.startScissor(new Vector2(pos.x,pos.y+20), dim);
 		
 		GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x,pos.y+20,0);
@@ -134,7 +133,7 @@ public abstract class GuiWindow extends Gui {
 			GL11.glTranslatef(-pos.x,-pos.y-20,0);
 		GL11.glPopMatrix();
 		
-		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		Renderer.endScissor();
 		
 		
 		Renderer.drawLineRect(pos, dim.add(new Vector2(0,20)), 0x000000, 1.0f);

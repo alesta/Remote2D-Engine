@@ -5,8 +5,10 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;
@@ -156,8 +158,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 			tex.bind();			
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
-			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			GL11.glScissor(300, 0, screenWidth()-300, screenHeight());
+			Renderer.startScissor(new Vector2(300,0), new Vector2(screenWidth()-300,screenHeight()));
 			
 			GL11.glPushMatrix();
 				GL11.glTranslatef(realOffset.x, realOffset.y, 0);
@@ -180,12 +181,12 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 					GL11.glScalef(scale, scale, 1);
 					animation.renderFrames();
 				GL11.glPopMatrix();
-				GL11.glDisable(GL11.GL_SCISSOR_TEST);
+				Renderer.endScissor();
 				
 				Vector2 spriteDim = animation.getSpriteDim();
 				animation.render(new Vector2(10,360), spriteDim);
 			}
-			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+			Renderer.endScissor();
 		}
 	}
 	
@@ -280,6 +281,12 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 				framesY.hasText() && paddingX.hasText() && paddingY.hasText()
 				&& containsKey && frameLength.hasText();
 		return total;
+	}
+	
+	@Override
+	public StretchType getOverrideStretchType()
+	{
+		return StretchType.NONE;
 	}
 
 }

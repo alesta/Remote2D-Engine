@@ -100,7 +100,8 @@ public class Remote2D {
 	
 	public void start()
 	{
-		displayHandler = new DisplayHandler(1024,576,1024,576,StretchType.MULTIPLES,false,false);
+		Vector2 gameDim = game.getDefaultResolution();
+		displayHandler = new DisplayHandler(1024,576,(int)gameDim.x,(int)gameDim.y,game.getDefaultStretchType(),false,false);
 		
 		initGame();
 		
@@ -273,6 +274,12 @@ public class Remote2D {
 	
 	public void render(float interpolation)
 	{
+		StretchType stretch = guiList.peek().getOverrideStretchType();
+		if(stretch == null)
+			stretch = game.getDefaultStretchType();
+		if(stretch != displayHandler.getStretchType())
+			displayHandler.setStretchType(stretch);
+		
 		GL11.glLoadIdentity();
 		
 		int color = guiList.peek().backgroundColor;
@@ -291,7 +298,6 @@ public class Remote2D {
 		guiList.peek().render(interpolation);
 		
 		CursorLoader.render(interpolation);
-		Renderer.drawRect(new Vector2(getMouseCoords()[0]-3, getMouseCoords()[1]-3), new Vector2(6,6), 0,0,0,1);
 	}
 	
 	public Remote2DGame getGame()

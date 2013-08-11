@@ -23,4 +23,22 @@ public abstract class Remote2DGame {
 		return null;
 	}
 	
+	/**
+	 * This is called at the beginning of each render.  If it is different than the
+	 * current stretch type, and no GuiMenus are overriding it, than the stretch type
+	 * will change to this.
+	 * 
+	 * @return The default Stretch Type - {@link StretchType#MULTIPLES} by default.
+	 * @see StretchType
+	 */
+	public StretchType getDefaultStretchType()
+	{
+		return StretchType.MULTIPLES;
+	}
+	
+	public Vector2 getDefaultResolution()
+	{
+		return new Vector2(1024,576);
+	}
+	
 }

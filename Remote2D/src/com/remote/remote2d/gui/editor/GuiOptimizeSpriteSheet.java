@@ -16,6 +16,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.Remote2DException;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
@@ -130,8 +131,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 			tex.bind();			
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
-			GL11.glEnable(GL11.GL_SCISSOR_TEST);
-			GL11.glScissor(300, 0, screenWidth()-300, screenHeight());
+			Renderer.startScissor(new Vector2(300,0), new Vector2(screenWidth()-300,screenHeight()));
 			
 			GL11.glPushMatrix();
 				GL11.glTranslatef(iOffset.x, iOffset.y, 0);
@@ -174,7 +174,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 				GL11.glEnd();
 				GL11.glColor3f(1,1,1);
 	 		}
-			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+			Renderer.endScissor();
 		}
 	}
 	
@@ -374,6 +374,12 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		 {
 			 Remote2D.getInstance().guiList.pop();
 		 }
+	}
+	
+	@Override
+	public StretchType getOverrideStretchType()
+	{
+		return StretchType.NONE;
 	}
 	
 	enum HorizontalPositioning

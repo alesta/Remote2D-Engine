@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
@@ -62,9 +63,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		{
 			windowStack = new Stack<GuiWindow>();
 		}
-		
-		if(map != null)
-			map.camera.targetResolution = screenDim();
 		
 		int previewHeight = Math.min(320, (screenHeight()-20)/3);
 		if(inspector == null)
@@ -132,6 +130,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	public void render(float interpolation)
 	{
 		super.render(interpolation);
+		
 		if(map == null)
 		{
 			int[] size = Fonts.get("Pixel_Arial").getStringDim("Remote2D Editor", 40);
@@ -208,24 +207,24 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				if(Mouse.isButtonDown(2) || (Mouse.isButtonDown(0) && (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))))
 				{
 					if(dragPoint == null)
-						dragPoint = new Vector2(i/map.camera.additionalScale+map.camera.pos.x,j/map.camera.additionalScale+map.camera.pos.y);
+						dragPoint = new Vector2(i/map.camera.scale+map.camera.pos.x,j/map.camera.scale+map.camera.pos.y);
 					else
 					{
-						map.camera.pos = dragPoint.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
+						map.camera.pos = dragPoint.subtract(new Vector2(i,j).divide(new Vector2(map.camera.scale)));
 					}
 				} else
 					dragPoint = null;
 				
 				int deltaWheel = Remote2D.getInstance().getDeltaWheel();
-				Vector2 mousePos = new Vector2(i,j).divide(new Vector2(map.camera.additionalScale));
-				if(deltaWheel > 0 && map.camera.additionalScale < 16)//zoom in, up
+				Vector2 mousePos = new Vector2(i,j).divide(new Vector2(map.camera.scale));
+				if(deltaWheel > 0 && map.camera.scale < 16)//zoom in, up
 				{
-					map.camera.additionalScale *= 2;
-					map.camera.pos = map.camera.pos.add(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
-				} else if(deltaWheel < 0 && map.camera.additionalScale > 0.25)//zoom out, down
+					map.camera.scale *= 2;
+					map.camera.pos = map.camera.pos.add(new Vector2(i,j).divide(new Vector2(map.camera.scale)));
+				} else if(deltaWheel < 0 && map.camera.scale > 0.25)//zoom out, down
 				{
-					map.camera.pos = map.camera.pos.subtract(new Vector2(i,j).divide(new Vector2(map.camera.additionalScale)));
-					map.camera.additionalScale /= 2;
+					map.camera.pos = map.camera.pos.subtract(new Vector2(i,j).divide(new Vector2(map.camera.scale)));
+					map.camera.scale /= 2;
 				}
 			}
 			
@@ -299,6 +298,12 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	{
 		Vector2 mouse = new Vector2(Remote2D.getInstance().getMouseCoords());
 		return map.screenToWorldCoords(mouse);
+	}
+	
+	@Override
+	public StretchType getOverrideStretchType()
+	{
+		return StretchType.NONE;
 	}
 
 	@Override
@@ -396,7 +401,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		if(map != null && !map.equals(map))
 			map.camera.pos.y = -20;
 		this.map = map;
-		map.camera.targetResolution = screenDim();
 		windowStack.clear();
 		inspector.setCurrentEntity(null);
 	}

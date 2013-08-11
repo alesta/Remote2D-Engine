@@ -215,6 +215,18 @@ public class DisplayHandler {
 		gameHeight = resy;
 		type = stretch;
 		initGL();
+		
+		for(int x=0;x<Remote2D.getInstance().guiList.size();x++)
+			Remote2D.getInstance().guiList.get(x).initGui();
+	}
+	
+	public void setStretchType(StretchType stretch)
+	{
+		type = stretch;
+		initGL();
+		
+		for(int x=0;x<Remote2D.getInstance().guiList.size();x++)
+			Remote2D.getInstance().guiList.get(x).initGui();
 	}
 	
 	/**

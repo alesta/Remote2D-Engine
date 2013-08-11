@@ -2,11 +2,14 @@ package com.remote.remote2d.art;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 
 /**
  * A universal renderer class.  This is used to abstract out all of the annoying GL11 calls, and consolidates them into one line.
- * This is also useful to do anywidespread changes to the render system (switching core libraries, or OpenGL versions).
+ * This is also useful to do any widespread changes to the render system (switching core libraries, or OpenGL versions).
  * 
  * TODO: Update from old OpenGL to new OpenGL.
  * @author Adrian
@@ -180,5 +183,21 @@ public class Renderer {
 		float g = ((color >> 8) & 0xff)/255f;
 		float b = (color & 0xff)/255f;
 		drawLine(vec1,vec2,r,g,b,alpha);
+	}
+	
+	public static void startScissor(Vector2 pos, Vector2 dim)
+	{
+		Vector2 newPos = pos.copy();
+		ColliderBox screenPos = Remote2D.getInstance().displayHandler.getScreenRenderArea();
+		newPos.y += dim.y;//bottom left
+		newPos.y = Gui.screenHeight()-newPos.y;//translate into GL coordinates
+		newPos = newPos.add(screenPos.pos);
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		GL11.glScissor((int)newPos.x, (int)newPos.y, (int)dim.x, (int)dim.y);
+	}
+	
+	public static void endScissor()
+	{
+		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 	}
 }

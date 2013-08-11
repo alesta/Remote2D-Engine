@@ -8,6 +8,7 @@ public class ColliderSphere extends Collider {
 	
 	public Vector2 pos;
 	public float radius;
+	public int sides = 8;
 	
 	/**
 	 * A simple Sphere Collider
@@ -31,14 +32,18 @@ public class ColliderSphere extends Collider {
 	
 	@Override
 	public void drawCollider(int color) {
-		Vector2[] verts = new Vector2[361];
-		for (int i=0; i <= 360; i++)
+		Vector2[] verts = new Vector2[sides+1];
+		float degree = 0;
+		for (int i=0; i < sides; i++)
 		{
-			float degInRad = i*(3.14159f/180f);
+			float degInRad = degree*(3.14159f/180f);
 			double x = Math.cos(degInRad)*radius+pos.x;
 			double y = Math.sin(degInRad)*radius+pos.y;
 			verts[i] = new Vector2((float)x,(float)y);
+			degree += 360f/sides;
 		}
+		
+		verts[verts.length-1] = verts[0].copy();
 		
 		Renderer.drawLinePoly(verts, color, 1.0f);
 		
@@ -52,13 +57,15 @@ public class ColliderSphere extends Collider {
 
 	@Override
 	public void updateVerts() {
-		verts = new Vector2[360];
-		for (int i=0; i < 360; i++)
+		verts = new Vector2[sides];
+		float degree = 0;
+		for (int i=0; i < sides; i++)
 		{
-			float degInRad = i*(3.14159f/180f);
+			float degInRad = degree*(3.14159f/180f);
 			double x = Math.cos(degInRad)*radius+pos.x;
 			double y = Math.sin(degInRad)*radius+pos.y;
 			verts[i] = new Vector2((int)x,(int)y);
+			degree += 360f/sides;
 		}
 	}
 

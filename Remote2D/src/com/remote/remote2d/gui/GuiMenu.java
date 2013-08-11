@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.StretchType;
 
 public class GuiMenu extends Gui{
 	
@@ -98,6 +99,15 @@ public class GuiMenu extends Gui{
 	public void actionPerformed(GuiButton button)
 	{
 		
+	}
+	
+	/**
+	 * Overrides the default stretch type, if needed.
+	 * @return Overridden stretch type, or null if there is no override.  Default is null.
+	 */
+	public StretchType getOverrideStretchType()
+	{
+		return null;
 	}
 	
 }

@@ -54,7 +54,7 @@ public class Map implements R2DFileSaver {
 	
 	public void drawGrid(float interpolation)
 	{		
-		float scale = camera.getTrueScale();
+		float scale = camera.scale;
 		Vector2 camera = this.camera.getTruePos(interpolation);
 		
 		GL11.glPushMatrix();

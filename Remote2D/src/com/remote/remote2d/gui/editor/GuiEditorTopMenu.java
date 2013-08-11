@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
@@ -281,14 +282,14 @@ public class GuiEditorTopMenu extends Gui {
 					editor.getMap().gridSize /= 2;
 			} else if(secSubTitle.equalsIgnoreCase("Zoom In"))
 			{
-				if(editor.getMap().camera.additionalScale < 16)
-					editor.getMap().camera.additionalScale *= 2;
+				if(editor.getMap().camera.scale < 16)
+					editor.getMap().camera.scale *= 2;
 			} else if(secSubTitle.equalsIgnoreCase("Zoom Out"))
 			{
-				if(editor.getMap().camera.additionalScale > 0.25)
-					editor.getMap().camera.additionalScale /= 2;
+				if(editor.getMap().camera.scale > 0.25)
+					editor.getMap().camera.scale /= 2;
 			} else if(secSubTitle.equalsIgnoreCase("Revert Zoom"))
-				editor.getMap().camera.additionalScale = 1;
+				editor.getMap().camera.scale = 1;
 		} else if(secTitle.equalsIgnoreCase("Component"))
 		{
 			if(editor.getSelectedEntity() != null)

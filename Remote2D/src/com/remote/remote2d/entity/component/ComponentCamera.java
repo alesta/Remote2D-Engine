@@ -8,10 +8,6 @@ import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Camera;
 
 public class ComponentCamera extends Component {
-	
-	public boolean useMultiples = true;
-	public boolean blackBars = true;
-	public Vector2 targetResolution = new Vector2(720,480);
 
 	public ComponentCamera(Entity e) {
 		super(e);
@@ -35,9 +31,7 @@ public class ComponentCamera extends Component {
 
 	@Override
 	public void onEntitySpawn() {
-		Camera camera = new Camera(entity.pos,targetResolution);
-		camera.blackBars = blackBars;
-		camera.useMultiples = useMultiples;
+		Camera camera = new Camera(entity.pos);
 		Remote2D.getInstance().map.camera = camera;
 	}
 
@@ -45,18 +39,14 @@ public class ComponentCamera extends Component {
 	public void renderAfter(boolean editor, float interpolation) {
 		if(editor)
 		{
-			Renderer.drawLineRect(entity.pos, targetResolution, 0, 0, 1, 1);
-			
+			Vector2 dim = Remote2D.getInstance().displayHandler.getDimensions();
+			Renderer.drawLineRect(new Vector2(entity.pos.x-dim.x/2,entity.pos.y-dim.y/2), dim, 0, 0, 1, 1);
 		}
 	}
 
 	@Override
 	public Component clone() {
 		ComponentCamera newColl = new ComponentCamera(entity);
-		newColl.blackBars = this.blackBars;
-		newColl.useMultiples = this.useMultiples;
-		if(targetResolution != null)
-			newColl.targetResolution = this.targetResolution.copy();
 		return newColl;
 	}
 

@@ -98,15 +98,14 @@ public class GuiEditorInspector extends GuiMenu {
 		super.render(interpolation);
 		
 		GL11.glPushMatrix();
-		GL11.glScissor((int)pos.x, (int)(screenHeight()-dim.y), (int)dim.x, (int)dim.y-20);
+		Renderer.startScissor(new Vector2(pos.x,pos.y+20), new Vector2(dim.x,dim.y-20));
 		GL11.glTranslatef(0, -(float)Interpolator.linearInterpolate(lastOffset, offset, interpolation), 0);
-		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		
 		for(int x=0;x<wizards.size();x++)
 		{
 			wizards.get(x).render(interpolation);
 		}
-		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		Renderer.endScissor();
 		GL11.glPopMatrix();
 	}
 	

@@ -21,21 +21,23 @@ public class Camera {
 	
 	public Vector2 pos;
 	private Vector2 oldPos;
-	public boolean useMultiples = true;
-	public boolean blackBars = true;
-	public Vector2 targetResolution;
-	public float additionalScale = 1.0f;
+	public float scale = 1.0f;
 	
-	public Camera(Vector2 pos, Vector2 targetResolution)
+	public Camera(Vector2 pos)
 	{
 		this.pos = pos.copy();
 		oldPos = pos.copy();
-		this.targetResolution = targetResolution.copy();
+	}
+	
+	private Camera(Vector2 pos, Vector2 oldPos)
+	{
+		this.pos = pos.copy();
+		this.oldPos = oldPos.copy();
 	}
 	
 	public Camera()
 	{
-		this(new Vector2(0,0),new Vector2(720,480));
+		this(new Vector2(0,0));
 	}
 	
 	public void tick(int i, int j, int k)
@@ -45,36 +47,16 @@ public class Camera {
 	
 	public void renderBefore(float interpolation, boolean editor)
 	{
-		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
-		ColliderBox renderArea = getScreenRenderArea();
-		float scale = (renderArea.dim.x/targetResolution.x)*additionalScale;
-		
+		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation).subtract(Remote2D.getInstance().displayHandler.getDimensions());		
+		Vector2 dim = getDimensions();
 		GL11.glPushMatrix();
-		GL11.glTranslatef(renderArea.pos.x, renderArea.pos.y,0);
 		GL11.glScalef(scale, scale, 0);
-		GL11.glTranslatef(-pos.x, -pos.y, 0);		
-	}
-	
-	public float getTrueScale()
-	{
-		ColliderBox renderArea = getScreenRenderArea();
-		float scale = targetResolution.x/renderArea.dim.x;
-		return scale*additionalScale;
+		GL11.glTranslatef(-pos.x-dim.x/2, -pos.y-dim.y/2, 0);		
 	}
 	
 	public void renderAfter(float interpolation, boolean editor)
 	{
 		GL11.glPopMatrix();
-		if(editor || !blackBars)
-			return;
-		ColliderBox renderArea = getScreenRenderArea();
-		float width = (Gui.screenWidth()-renderArea.dim.x)/2;
-		float height = (Gui.screenHeight()-renderArea.dim.y)/2;
-		
-		Renderer.drawRect(new Vector2(0,0), new Vector2(width,Gui.screenHeight()), 0, 0, 0, 1f);
-		Renderer.drawRect(new Vector2(Gui.screenWidth()-width,0), new Vector2(width,Gui.screenHeight()), 0, 0, 0, 1f);
-		Renderer.drawRect(new Vector2(0,0), new Vector2(Gui.screenWidth(),height), 0, 0, 0, 1f);
-		Renderer.drawRect(new Vector2(0,Gui.screenHeight()-height), new Vector2(Gui.screenWidth(),height), 0, 0, 0, 1f);
 	}
 	
 	public Vector2 getTruePos(float interpolation)
@@ -82,62 +64,27 @@ public class Camera {
 		return Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
 	}
 	
-	private ColliderBox getScreenRenderArea()
-	{
-		Vector2 dim;
-		float screenRatio = (float)(Gui.screenWidth())/(float)(Gui.screenHeight());
-		float aspectRatio = targetResolution.x/targetResolution.y;
-		
-		if(screenRatio > aspectRatio) // Use height
-			dim = new Vector2((float)(Gui.screenHeight())*aspectRatio,Gui.screenHeight());
-		else if(screenRatio < aspectRatio) // Use width
-			dim = new Vector2(Gui.screenWidth(),(float)(Gui.screenWidth())/aspectRatio);
-		else
-			dim = new Vector2(Gui.screenWidth(),Gui.screenHeight());
-		
-		if(useMultiples)
-		{
-			if(targetResolution.x <= Gui.screenWidth() && targetResolution.y <= Gui.screenHeight())
-			{
-				dim.x -= dim.x%targetResolution.x;
-				dim.y -= dim.y%targetResolution.y;
-			} 
-//			else
-//			{
-//				dim = targetResolution.copy();
-//				while(dim.x > Gui.screenWidth() || dim.y > Gui.screenHeight())
-//				{
-//					dim = dim.divide(new Vector2(2,2));
-//				}
-//			}
-		}
-		
-		Vector2 winPos = new Vector2(Gui.screenWidth()/2-dim.x/2,Gui.screenHeight()/2-dim.y/2);
-		
-		return winPos.getColliderWithDim(dim);
-	}
-	
 	public ColliderBox getMapRenderArea()
 	{
-		return pos.getColliderWithDim(targetResolution);
+		return pos.subtract(getDimensions().divide(new Vector2(2))).getColliderWithDim(getDimensions());
+	}
+	
+	public Vector2 getDimensions()
+	{
+		return Remote2D.getInstance().displayHandler.getDimensions();
 	}
 
 	public Camera copy() {
-		return new Camera(pos,targetResolution);
+		return new Camera(pos,oldPos);
 	}
 	
 	public Matrix4f getMatrix()
 	{
 		Matrix4f matrix = new Matrix4f();
-
-		ColliderBox renderArea = getScreenRenderArea();
-		float scale = (renderArea.dim.x/targetResolution.x)*additionalScale;
 		
-		Vector3f translate1 = new Vector3f(renderArea.pos.x, renderArea.pos.y,0);
 		Vector3f scaleV = new Vector3f(scale, scale, 0);
 		Vector3f translate2 = new Vector3f(-pos.x, -pos.y, 0);
 		
-		matrix.translate(translate1);
 		matrix.scale(scaleV);
 		matrix.translate(translate2);
 		
@@ -147,17 +94,12 @@ public class Camera {
 	public Matrix4f getInverseMatrix()
 	{
 		Matrix4f matrix = new Matrix4f();
-
-		ColliderBox renderArea = getScreenRenderArea();
-		float scale = (renderArea.dim.x/targetResolution.x)*additionalScale;
 		
-		Vector3f translate1 = new Vector3f(-renderArea.pos.x, -renderArea.pos.y,0);
 		Vector3f scaleV = new Vector3f(1/scale, 1/scale, 0);
 		Vector3f translate2 = new Vector3f(pos.x, pos.y, 0);
 		
 		matrix.translate(translate2);
 		matrix.scale(scaleV);
-		matrix.translate(translate1);
 		
 		return matrix;
 	}

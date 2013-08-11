@@ -46,21 +46,21 @@ public class EditorObjectWizard {
 						if(o != null)
 							sec.textField.text = (Integer)o+"";
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof String)
 					{
 						GuiEditorInspectorSectionString sec = new GuiEditorInspectorSectionString(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = (String)o+"";
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof Float)
 					{
 						GuiEditorInspectorSectionFloat sec = new GuiEditorInspectorSectionFloat(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = (Float)o+"";
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof Vector2)
 					{
 						GuiEditorInspectorSectionVec2D sec = new GuiEditorInspectorSectionVec2D(fields[x].getName(),currentPos,width);
@@ -70,33 +70,33 @@ public class EditorObjectWizard {
 							sec.textField2.text = ((Vector2)o).y+"";
 						}
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof Texture)
 					{
 						GuiEditorInspectorSectionTexture sec = new GuiEditorInspectorSectionTexture(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = ((Texture)o).textureLocation;
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof Boolean)
 					{
 						GuiEditorInspectorSectionBoolean sec = new GuiEditorInspectorSectionBoolean(fields[x].getName(),currentPos,width);
 						sec.setData((Boolean)o);
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof Animation)
 					{
 						GuiEditorInspectorSectionAnimation sec = new GuiEditorInspectorSectionAnimation(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = ((Animation)o).getPath();
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} else if(o instanceof Color)
 					{
 						GuiEditorInspectorSectionColor sec = new GuiEditorInspectorSectionColor(fields[x].getName(),currentPos,width);
 						sec.setData((Color)o);
 						sections.add(sec);
-						currentPos.y += sec.screenHeight();
+						currentPos.y += sec.sectionHeight();
 					} 
 				} catch (Exception e) {}
 				
@@ -145,7 +145,7 @@ public class EditorObjectWizard {
 	{
 		int height = 20;
 		for(int x=0;x<sections.size();x++)
-			height += sections.get(x).screenHeight();
+			height += sections.get(x).sectionHeight();
 		return height;
 	}
 	

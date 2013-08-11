@@ -40,8 +40,7 @@ public class GuiEditorPreview extends Gui {
 		GL11.glVertex2f(pos.x+dim.x, pos.y+20);
 		GL11.glEnd();
 		
-		GL11.glScissor((int)pos.x, (int)(screenHeight()-pos.y-dim.y), (int)dim.x, (int)dim.y-20);
-		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		Renderer.startScissor(pos, dim);
 		
 		if(inspector.currentEntity != null)
 		{
@@ -54,7 +53,7 @@ public class GuiEditorPreview extends Gui {
 			GL11.glPopMatrix();
 		}
 		
-		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+		Renderer.endScissor();
 		
 	}
 

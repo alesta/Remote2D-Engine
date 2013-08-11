@@ -69,7 +69,7 @@ public class ColliderBox extends Collider{
 		Vector2 pos = getPos();
 		Vector2 dim = getDim();
 		
-		Renderer.drawLineRect(pos, dim, 0xffffff, 1.0f);
+		Renderer.drawLineRect(pos, dim, color, 1.0f);
 	}
 
 	@Override
