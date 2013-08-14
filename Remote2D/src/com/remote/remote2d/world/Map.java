@@ -47,26 +47,21 @@ public class Map implements R2DFileSaver {
 	public void render(boolean editor, float interpolation)
 	{
 		//drawGrid(interpolation);
-		camera.renderBefore(interpolation, editor);
+		camera.renderBefore(interpolation);
 		entities.render(editor,interpolation);
-		camera.renderAfter(interpolation, editor);
+		camera.renderAfter(interpolation);
 	}
 	
 	public void drawGrid(float interpolation)
 	{		
-		float scale = camera.scale;
-		Vector2 camera = this.camera.getTruePos(interpolation);
-		
-		GL11.glPushMatrix();
-		
-		GL11.glScalef(scale, scale, 1);
-		GL11.glTranslatef(-camera.x, -camera.y, 0);
+		camera.renderBefore(interpolation);
+		Vector2 pos = camera.pos.subtract(new Vector2(Gui.screenWidth()/2,Gui.screenHeight()/2));
 		Vector2 currentPos = new Vector2(0,0);
-		currentPos.x = camera.x-camera.x%gridSize-gridSize;
-		currentPos.y = camera.y-camera.y%gridSize-gridSize;
+		currentPos.x = pos.x-pos.x%gridSize-gridSize;
+		currentPos.y = pos.y-pos.y%gridSize-gridSize;
 		GL11.glColor4f(0,0,0,0.25f);
 		
-		for(int x=0;x<Gui.screenHeight()/scale/gridSize+2;x++)
+		for(int x=0;x<Gui.screenHeight()/camera.scale/gridSize+2;x++)
 		{
 			int color = 0x000000;
 			float alpha = 0.25f;
@@ -76,13 +71,13 @@ public class Map implements R2DFileSaver {
 				alpha = 0.5f;
 				GL11.glLineWidth(3);
 			}
-			Renderer.drawLine(currentPos, new Vector2((Gui.screenWidth())/scale+gridSize*2+currentPos.x,currentPos.y), color, alpha);
+			Renderer.drawLine(currentPos, new Vector2((Gui.screenWidth())/camera.scale+gridSize*2+currentPos.x,currentPos.y), color, alpha);
 			currentPos.y+=gridSize;
 			GL11.glLineWidth(1);
 		}
 		
-		currentPos.y = camera.y-camera.y%gridSize-gridSize;
-		for(int y=0;y<Gui.screenWidth()/scale/gridSize+2;y++)
+		currentPos.y = pos.y-pos.y%gridSize-gridSize;
+		for(int y=0;y<Gui.screenWidth()/camera.scale/gridSize+2;y++)
 		{
 			int color = 0x000000;
 			float alpha = 0.25f;
@@ -92,7 +87,7 @@ public class Map implements R2DFileSaver {
 				alpha = 0.5f;
 				GL11.glLineWidth(3);
 			}
-			Renderer.drawLine(currentPos, new Vector2(currentPos.x,(Gui.screenHeight())/scale+gridSize*2+currentPos.y), color, alpha);
+			Renderer.drawLine(currentPos, new Vector2(currentPos.x,(Gui.screenHeight())/camera.scale+gridSize*2+currentPos.y), color, alpha);
 			currentPos.x+=gridSize;
 			GL11.glLineWidth(1);
 		}
@@ -265,6 +260,14 @@ public class Map implements R2DFileSaver {
 		Vector4f oldCoords = new Vector4f(vec.x,vec.y,0,1);
 		Vector4f newCoords = Matrix4f.transform(matrix, oldCoords, null);
 		return new Vector2(newCoords.x,newCoords.y);
+	}
+	
+	public void setScaleAroundScreenPoint(Vector2 point, float scale)
+	{
+		Vector2 mousePos = screenToWorldCoords(point);
+		camera.scale = scale;
+		Vector2 mousePos2 = screenToWorldCoords(point);
+		camera.pos = camera.pos.add(mousePos.subtract(mousePos2));
 	}
 	
 	public Map copy()

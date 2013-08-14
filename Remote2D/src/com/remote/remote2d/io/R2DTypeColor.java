@@ -36,7 +36,7 @@ public class R2DTypeColor extends R2DType {
 	@Override
 	public String toString()
 	{
-		return "0x"+data.getRGB();
+		return "0x"+Integer.toHexString(data.getRGB()).substring(2);
 	}
 
 }

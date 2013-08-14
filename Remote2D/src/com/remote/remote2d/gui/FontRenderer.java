@@ -26,7 +26,7 @@ public class FontRenderer {
 		if(s.length() == 0)
 			return null;
 		Font sizedFont = font.deriveFont(size);
-		FontRenderContext frc = new FontRenderContext(null,useAntiAliasing,true);
+		FontRenderContext frc = new FontRenderContext(null,useAntiAliasing,false);
 		int width = (int) sizedFont.getStringBounds(s, frc).getWidth();
 		int height = (int) sizedFont.getStringBounds(s, frc).getHeight();
 		BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);

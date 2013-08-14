@@ -81,10 +81,7 @@ public class EntityList {
 	{
 		for(int x=0;x<entityList.size();x++)
 		{
-			if(!entityList.get(x).isStatic)
-			{
-				entityList.get(x).tick(i, j, k);
-			}
+			entityList.get(x).tick(i, j, k);
 		}
 	}
 	

@@ -1,5 +1,7 @@
 package com.remote.remote2d;
 
+import org.lwjgl.opengl.Display;
+
 import com.remote.remote2d.logic.Vector2;
 
 public abstract class Remote2DGame {
@@ -39,6 +41,11 @@ public abstract class Remote2DGame {
 	public Vector2 getDefaultResolution()
 	{
 		return new Vector2(1024,576);
+	}
+	
+	public Vector2 getDefaultScreenResolution()
+	{
+		return new Vector2(Display.getDesktopDisplayMode().getWidth(),Display.getDesktopDisplayMode().getHeight());
 	}
 	
 }

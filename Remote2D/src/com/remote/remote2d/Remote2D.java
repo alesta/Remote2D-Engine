@@ -101,7 +101,8 @@ public class Remote2D {
 	public void start()
 	{
 		Vector2 gameDim = game.getDefaultResolution();
-		displayHandler = new DisplayHandler(1024,576,(int)gameDim.x,(int)gameDim.y,game.getDefaultStretchType(),false,false);
+		Vector2 winDim = game.getDefaultScreenResolution();
+		displayHandler = new DisplayHandler((int)winDim.x,(int)winDim.y,(int)gameDim.x,(int)gameDim.y,game.getDefaultStretchType(),false,false);
 		
 		initGame();
 		

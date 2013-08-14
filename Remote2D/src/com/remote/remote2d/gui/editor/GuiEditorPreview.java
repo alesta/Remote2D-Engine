@@ -2,7 +2,6 @@ package com.remote.remote2d.gui.editor;
 
 import org.lwjgl.opengl.GL11;
 
-import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
@@ -40,7 +39,7 @@ public class GuiEditorPreview extends Gui {
 		GL11.glVertex2f(pos.x+dim.x, pos.y+20);
 		GL11.glEnd();
 		
-		Renderer.startScissor(pos, dim);
+		Renderer.startScissor(new Vector2(pos.x,pos.y+21), dim);
 		
 		if(inspector.currentEntity != null)
 		{

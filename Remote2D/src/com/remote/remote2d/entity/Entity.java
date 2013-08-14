@@ -12,6 +12,7 @@ import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
+import com.remote.remote2d.entity.component.ComponentCollider;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.io.R2DTypeCollection;
@@ -28,15 +29,8 @@ import com.remote.remote2d.logic.Vector2;
  * 
  * @author Flafla2
  */
-public class Entity extends EditorObject implements Cloneable {
+public class Entity extends EditorObject {
 	
-	/**
-	 * If this is true, then this Entity doesn't do any logic - it only renders and
-	 * holds child Entities.  Also, non-static entities can only use their main
-	 * collider.
-	 * TODO: Tweak the collision detection algorithm to allow for moving objects with more than one collider
-	 */
-	public boolean isStatic = true;
 	public String name;
 	public Vector2 pos;
 	public Vector2 dim;
@@ -53,12 +47,6 @@ public class Entity extends EditorObject implements Cloneable {
 	protected ArrayList<Entity> children;
 	protected ArrayList<Component> components;
 	protected Entity parent;
-	
-	/**
-	 * The Sub Colliders of the Entity - these dictate some of the finer details of the
-	 * object that would otherwise lag the game if they were queried EVERY tick.
-	 */
-	protected ArrayList<Collider> colliders;
 		
 	public Entity(String name)
 	{
@@ -66,7 +54,6 @@ public class Entity extends EditorObject implements Cloneable {
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
-		colliders = new ArrayList<Collider>();
 		
 		pos = new Vector2(0,0);
 		oldPos = new Vector2(0,0);
@@ -79,7 +66,6 @@ public class Entity extends EditorObject implements Cloneable {
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
-		colliders = new ArrayList<Collider>();
 		
 		pos = new Vector2(0,0);
 		oldPos = new Vector2(0,0);
@@ -119,29 +105,9 @@ public class Entity extends EditorObject implements Cloneable {
 		return children.size();
 	}
 	
-	public void addCollider(Collider c)
-	{
-		colliders.add(c);
-	}
-	
-	public void removeCollider(Collider c)
-	{
-		colliders.remove(c);
-	}
-	
 	public Vector2 getPos(float interpolation)
 	{
 		return Interpolator.linearInterpolate2f(oldPos, pos, interpolation);
-	}
-	
-	public void removeCollider(int c)
-	{
-		colliders.remove(c);
-	}
-	
-	public Collider getCollider(int index)
-	{
-		return colliders.get(index);
 	}
 	
 	public void addComponent(Component c)
@@ -149,16 +115,6 @@ public class Entity extends EditorObject implements Cloneable {
 		Component cnew = c.clone();
 		cnew.setEntity(this);
 		components.add(cnew);
-	}
-	
-	public int indexOfCollider(Collider c)
-	{
-		for(int x=0;x<colliders.size();x++)
-		{
-			if(c.isEqual(colliders.get(x)))
-				return x;
-		}
-		return -1;
 	}
 	
 	public void addChild(Entity e)
@@ -181,6 +137,17 @@ public class Entity extends EditorObject implements Cloneable {
 		return components;
 	}
 	
+	public ArrayList<Collider> getColliders()
+	{
+		ArrayList<Collider> colliders = new ArrayList<Collider>();
+		for(Component c : components)
+		{
+			if(c instanceof ComponentCollider)
+				colliders.add(((ComponentCollider)c).getCollider());
+		}
+		return colliders;
+	}
+	
 	/**
 	 * Basically the broad phase of the collision detection algorithm.  Note that if
 	 * this Entity is non-static it isn't counted in the algorithm (we don't know
@@ -191,10 +158,8 @@ public class Entity extends EditorObject implements Cloneable {
 	 */
 	public ArrayList<Collider> getPossibleColliders(Collider coll, Vector2 movement)
 	{
-		if(!isStatic)
-			return null;
 		
-		Collider mainCollider = getMainCollider();
+		Collider mainCollider = getBroadPhaseCollider();
 		if(mainCollider == null)
 			return null;
 		
@@ -203,6 +168,7 @@ public class Entity extends EditorObject implements Cloneable {
 		if(!mainColliderCollision.collides)
 			return null;
 		
+		ArrayList<Collider> colliders = getColliders();
 		ArrayList<Collider> retColliders = new ArrayList<Collider>();
 		for(int x=0;x<colliders.size();x++)
 		{
@@ -219,9 +185,10 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public boolean isPointColliding(Vector2 vec)
 	{
-		Collider mainCollider = getMainCollider().getTransformedCollider(pos);
+		Collider mainCollider = getBroadPhaseCollider().getTransformedCollider(pos);
 		if(mainCollider.isPointInside(vec))
 		{
+			ArrayList<Collider> colliders = getColliders();
 			for(int x=0;x<colliders.size();x++)
 				if(colliders.get(x).isPointInside(vec))
 					return true;
@@ -233,7 +200,8 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public void renderColliders()
 	{
-		Collider mainCollider = getMainCollider();
+		Collider mainCollider = getBroadPhaseCollider();
+		ArrayList<Collider> colliders = getColliders();
 		GL11.glPushMatrix();
 			GL11.glTranslatef(pos.x,pos.y,0);
 			if(mainCollider != null)
@@ -244,12 +212,14 @@ public class Entity extends EditorObject implements Cloneable {
 	}
 	
 	/**
-	 * The Main Collider of the Entity - we only do logic on the sub colliders
-	 * if the main Collider is touched.
+	 * All of this Entity's colliders are guaranteed to be inside this broad collider.
+	 * 
+	 * @returns null if there are no colliders, otherwise the broad phase collider.
 	 */
-	public Collider getMainCollider()
+	public Collider getBroadPhaseCollider()
 	{
-		if(colliders.size()==0 || !isStatic)
+		ArrayList<Collider> colliders = getColliders();
+		if(colliders.size()==0)
 			return null;
 		Vector2 v1 = null;
 		Vector2 v2 = null;
@@ -279,9 +249,6 @@ public class Entity extends EditorObject implements Cloneable {
 	
 	public Collider getGeneralCollider()
 	{
-		Collider mainCollider = getMainCollider();
-		if(isStatic && mainCollider != null)
-			return mainCollider.getTransformedCollider(pos);
 		return pos.getColliderWithDim(getDim());
 	}
 	
@@ -357,7 +324,6 @@ public class Entity extends EditorObject implements Cloneable {
 		e.color = new Color(color.getRGB());
 		e.pos = this.pos.copy();
 		e.dim = this.dim.copy();
-		e.isStatic = this.isStatic;
 		e.linearScaling = this.linearScaling;
 		e.repeatTex = this.repeatTex;
 		e.resourcePath = this.resourcePath;
@@ -386,10 +352,6 @@ public class Entity extends EditorObject implements Cloneable {
 				returnComponents.add((T) components.get(x));
 		
 		return returnComponents;
-	}
-
-	public int getColliderSize() {
-		return colliders.size();
 	}
 
 	@Override

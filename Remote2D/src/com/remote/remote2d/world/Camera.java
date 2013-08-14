@@ -45,7 +45,7 @@ public class Camera {
 		this.oldPos = pos.copy();
 	}
 	
-	public void renderBefore(float interpolation, boolean editor)
+	public void renderBefore(float interpolation)
 	{
 		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation).subtract(Remote2D.getInstance().displayHandler.getDimensions());		
 		Vector2 dim = getDimensions();
@@ -54,7 +54,7 @@ public class Camera {
 		GL11.glTranslatef(-pos.x-dim.x/2, -pos.y-dim.y/2, 0);		
 	}
 	
-	public void renderAfter(float interpolation, boolean editor)
+	public void renderAfter(float interpolation)
 	{
 		GL11.glPopMatrix();
 	}
@@ -83,7 +83,7 @@ public class Camera {
 		Matrix4f matrix = new Matrix4f();
 		
 		Vector3f scaleV = new Vector3f(scale, scale, 0);
-		Vector3f translate2 = new Vector3f(-pos.x, -pos.y, 0);
+		Vector3f translate2 = new Vector3f(-pos.x+Gui.screenWidth()/2, -pos.y+Gui.screenHeight()/2, 0);
 		
 		matrix.scale(scaleV);
 		matrix.translate(translate2);
@@ -96,7 +96,7 @@ public class Camera {
 		Matrix4f matrix = new Matrix4f();
 		
 		Vector3f scaleV = new Vector3f(1/scale, 1/scale, 0);
-		Vector3f translate2 = new Vector3f(pos.x, pos.y, 0);
+		Vector3f translate2 = new Vector3f(pos.x-Gui.screenWidth()/2, pos.y-Gui.screenHeight()/2, 0);
 		
 		matrix.translate(translate2);
 		matrix.scale(scaleV);

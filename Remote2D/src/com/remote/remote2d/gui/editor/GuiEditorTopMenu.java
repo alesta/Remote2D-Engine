@@ -283,13 +283,13 @@ public class GuiEditorTopMenu extends Gui {
 			} else if(secSubTitle.equalsIgnoreCase("Zoom In"))
 			{
 				if(editor.getMap().camera.scale < 16)
-					editor.getMap().camera.scale *= 2;
+					editor.getMap().setScaleAroundScreenPoint(new Vector2(Gui.screenWidth()/2,Gui.screenHeight()/2), editor.getMap().camera.scale*2);
 			} else if(secSubTitle.equalsIgnoreCase("Zoom Out"))
 			{
 				if(editor.getMap().camera.scale > 0.25)
-					editor.getMap().camera.scale /= 2;
+					editor.getMap().setScaleAroundScreenPoint(new Vector2(Gui.screenWidth()/2,Gui.screenHeight()/2), editor.getMap().camera.scale/2);
 			} else if(secSubTitle.equalsIgnoreCase("Revert Zoom"))
-				editor.getMap().camera.scale = 1;
+				editor.getMap().setScaleAroundScreenPoint(new Vector2(Gui.screenWidth()/2,Gui.screenHeight()/2), 1);
 		} else if(secTitle.equalsIgnoreCase("Component"))
 		{
 			if(editor.getSelectedEntity() != null)

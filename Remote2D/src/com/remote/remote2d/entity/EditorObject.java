@@ -13,13 +13,12 @@ import com.remote.remote2d.logic.Vector2;
 
 /**
  * If a class implements this interface, then it is able to be edited within the
- * editor.  What this means is that ANY public variables are able to be edited through
- * the inspector pane in the editor.  Note that methods (getters and setters) are not
- * counted in this distinction.
+ * editor.  This assumes any public variables(not methods, getters/setters, etc.)
+ * are able to be edited through the inspector pane in the editor.
  * @author Flafla2
  *
  */
-public abstract class EditorObject implements R2DFileSaver {
+public abstract class EditorObject implements R2DFileSaver, Cloneable {
 	
 	private String uuid;
 	
@@ -38,7 +37,7 @@ public abstract class EditorObject implements R2DFileSaver {
 	
 	public void saveR2DFile(R2DTypeCollection collection)
 	{
-		collection.setString("this.UUID", uuid);
+		collection.setString("uuid", uuid);
 		Field[] fields = this.getClass().getFields();
 		for(int x=0;x<fields.length;x++)
 		{
@@ -78,7 +77,7 @@ public abstract class EditorObject implements R2DFileSaver {
 	}
 	public void loadR2DFile(R2DTypeCollection collection)
 	{
-		uuid = collection.getString("this.UUID");
+		uuid = collection.getString("uuid");
 		Field[] fields = this.getClass().getFields();
 		for(int x=0;x<fields.length;x++)
 		{

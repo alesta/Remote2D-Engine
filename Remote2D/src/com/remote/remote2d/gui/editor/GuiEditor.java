@@ -169,10 +169,10 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		
 		if(stampEntity != null)
 		{
-			map.camera.renderBefore(interpolation, true);
+			map.camera.renderBefore(interpolation);
 			stampEntity.render(true,interpolation);
 			stampEntity.getGeneralCollider().drawCollider(0xffffff);
-			map.camera.renderAfter(interpolation, true);
+			map.camera.renderAfter(interpolation);
 		}
 		
 		inspector.render(interpolation);
@@ -216,16 +216,12 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 					dragPoint = null;
 				
 				int deltaWheel = Remote2D.getInstance().getDeltaWheel();
-				Vector2 mousePos = new Vector2(i,j).divide(new Vector2(map.camera.scale));
+				float scale = map.camera.scale;
 				if(deltaWheel > 0 && map.camera.scale < 16)//zoom in, up
-				{
-					map.camera.scale *= 2;
-					map.camera.pos = map.camera.pos.add(new Vector2(i,j).divide(new Vector2(map.camera.scale)));
-				} else if(deltaWheel < 0 && map.camera.scale > 0.25)//zoom out, down
-				{
-					map.camera.pos = map.camera.pos.subtract(new Vector2(i,j).divide(new Vector2(map.camera.scale)));
-					map.camera.scale /= 2;
-				}
+					scale *= 2;
+				else if(deltaWheel < 0 && map.camera.scale > 0.25)//zoom out, down
+					scale /= 2;
+				map.setScaleAroundScreenPoint(new Vector2(i,j), scale);
 			}
 			
 			map.tick(i, j, k, true);
