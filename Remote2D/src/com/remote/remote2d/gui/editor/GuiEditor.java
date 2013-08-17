@@ -13,6 +13,7 @@ import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
+import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.KeyShortcut;
@@ -41,9 +42,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	private ArrayList<Operation> redoList;
 	
 	private Map map;
-	private Entity stampEntity;
 	private Entity selectedEntity = null;
-	private boolean allowEntityPlace = true;
 	
 	private Vector2 dragPoint = null;
 	
@@ -109,11 +108,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			windowStack.get(x).initGui();
 	}
 	
-	public void disableElementPlace()
-	{
-		allowEntityPlace = false;
-	}
-	
 	public GuiEditorInspector getInspector()
 	{
 		return inspector;
@@ -167,14 +161,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			}
 		}
 		
-		if(stampEntity != null)
-		{
-			map.camera.renderBefore(interpolation);
-			stampEntity.render(true,interpolation);
-			stampEntity.getGeneralCollider().drawCollider(0xffffff);
-			map.camera.renderAfter(interpolation);
-		}
-		
 		inspector.render(interpolation);
 		preview.render(interpolation);
 		heirarchy.render(interpolation);
@@ -192,10 +178,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	public void tick(int i, int j, int k)
 	{
 		super.tick(i, j, k);
-		
-		if(getMouseInWindow(i,j))
-			disableElementPlace();
-		
+		menu.tick(i, j, k);
 		for(int x=0;x<windowStack.size();x++)
 		{
 			windowStack.get(x).tick(i,j,k);
@@ -240,31 +223,11 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			browser.tick(i, j, k);
 		}
 		KeyShortcut.CAN_EXECUTE = !inspector.isTyping();
-		menu.tick(i,j,k);
-		if(stampEntity != null)
-		{
-			stampEntity.updatePos();
-			stampEntity.pos = getMapMousePos();
-			if(grid)
-			{
-				stampEntity.pos.x -= stampEntity.pos.x%map.gridSize;
-				stampEntity.pos.y -= stampEntity.pos.y%map.gridSize;
-			}
-		}
+
 		
-		if(Keyboard.isKeyDown(Keyboard.KEY_ESCAPE))
+		if(Remote2D.getInstance().hasMouseBeenPressed() && !(getMouseInWindow(i,j) || menu.isMenuHovered(i,j)))
 		{
-			stampEntity = null;
-		}
-		
-		if(Remote2D.getInstance().hasMouseBeenPressed() && allowEntityPlace)
-		{
-			if(stampEntity != null)
-			{
-				selectedEntity = stampEntity.clone();
-				map.getEntityList().addEntityToList(selectedEntity);
-				inspector.setCurrentEntity(selectedEntity);
-			} else if(map != null && !isWidgetHovered(i,j))
+			if(map != null && !isWidgetHovered(i,j))
 			{
 				selectedEntity = map.getTopEntityAtPoint(getMapMousePos());
 				inspector.setCurrentEntity(selectedEntity);
@@ -286,8 +249,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			if(right)
 				map.camera.pos.x -= 5f;
 		}
-		
-		allowEntityPlace = true;
 	}
 	
 	public Vector2 getMapMousePos()
@@ -326,6 +287,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		{
 			if(windowStack.size() != 0)
 				windowStack.peek().setSelected(false);
+			window.dontTick();
 			windowStack.push(window);
 		}else if(windowStack.peek().equals(window))
 		{
@@ -385,13 +347,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	{
 		return map;
 	}
-	
-	public void setActiveEntity(Entity e)
-	{
-		if(map == null)
-			return;
-		this.stampEntity = e;
-	}
 
 	public void setMap(Map map) {
 		if(map != null && !map.equals(map))
@@ -419,7 +374,10 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	public void confirmOperation(Operation o)
 	{
-		attemptToPutWindowOnTop(new GuiWindowConfirmOperation(this, new Vector2(40,40), getWindowBounds(), o));
+		GuiWindowConfirmOperation conf = new GuiWindowConfirmOperation(this, new Vector2(40,40), getWindowBounds(), o);
+		conf.setSelected(true);
+		conf.pos = new Vector2(screenWidth()/2-conf.dim.x/2,screenHeight()/2-conf.dim.y/2);
+		attemptToPutWindowOnTop(conf);
 	}
 	
 	public void undo()
@@ -459,6 +417,17 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			return redoList.get(0);
 		else
 			return null;
+	}
+	
+	public void insertEntity()
+	{
+		insertEntity(new Entity());
+	}
+
+	public void insertEntity(Entity e)
+	{
+		e.pos = map.screenToWorldCoords(new Vector2(Gui.screenWidth()/2,Gui.screenHeight()/2));
+		map.getEntityList().addEntityToList(e);
 	}
 	
 }

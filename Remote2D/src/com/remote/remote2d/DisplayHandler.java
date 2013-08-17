@@ -135,6 +135,7 @@ public class DisplayHandler {
 	public void initGL()
 	{
 		Log.debug("Initializing OpenGL");
+		Log.info("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
 		GL11.glEnable(GL11.GL_TEXTURE_2D);               
         
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);          
@@ -152,11 +153,6 @@ public class DisplayHandler {
 		GL11.glOrtho(0, dim.x, dim.y, 0, 1, -1);//Note, the GL coordinates are flipped!
 		
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		
-		if(Remote2D.getInstance().artLoader != null)
-		{
-			Remote2D.getInstance().artLoader.reloadArt();
-		}
 		
 		//CursorLoader.setCursor(new Texture("/res/gui/mouse.png"), new Vector2D(22,22));
 	}
@@ -308,7 +304,12 @@ public class DisplayHandler {
 	        setIcons(Remote2D.getInstance().getGame().getIconPath());
 	        Display.setVSyncEnabled(fullscreen);
 	        if(fullscreen == true)
+	        {
 	        	Display.create();
+	        	
+	        	if(Remote2D.getInstance().artLoader != null)
+	    			Remote2D.getInstance().artLoader.reloadArt();
+	        }
 	        
 	        initGL();
 	    } catch (LWJGLException e) {

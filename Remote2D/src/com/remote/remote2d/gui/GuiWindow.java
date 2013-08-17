@@ -9,6 +9,7 @@ import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.ColliderBox;
+import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.logic.Vector2;
 
@@ -24,7 +25,9 @@ public abstract class GuiWindow extends Gui {
 	protected boolean isSelected;
 	
 	private Vector2 dragOffset = new Vector2(-1,-1);
+	private Vector2 oldPos;
 	private boolean isDragging = false;
+	private boolean dontTick = false;
 	
 	private final int windowTopColor = 0xff5555;
 	private final int windowMainColor = 0xffbbbb;
@@ -33,6 +36,7 @@ public abstract class GuiWindow extends Gui {
 	{
 		this.holder = holder;
 		this.pos = pos;
+		this.oldPos = pos.copy();
 		this.dim = dim;
 		this.title = title;
 		this.allowedBounds = allowedBounds;
@@ -49,6 +53,14 @@ public abstract class GuiWindow extends Gui {
 
 	@Override
 	public void tick(int i, int j, int k) {
+		if(dontTick)
+		{
+			dontTick  = false;
+			return;
+		}
+		
+		oldPos = pos.copy();
+		
 		boolean buttonOverride = false;
 		
 		if(!pos.getColliderWithDim(dim.add(new Vector2(20,20))).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
@@ -119,6 +131,8 @@ public abstract class GuiWindow extends Gui {
 	@Override
 	public void render(float interpolation) {
 		
+		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
+		
 		Renderer.drawRect(pos, new Vector2(dim.x,20), isSelected ? windowTopColor : windowMainColor, 1.0f);
 		Renderer.drawRect(pos.add(new Vector2(0,20)), dim, windowMainColor, 1.0f);
 		
@@ -158,8 +172,14 @@ public abstract class GuiWindow extends Gui {
 		return isSelected;
 	}
 
-	public void setSelected(boolean isSelected) {
+	public GuiWindow setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
+		return this;
+	}
+	
+	public void dontTick()
+	{
+		dontTick = true;
 	}
 
 	public void actionPerformed(GuiButton button)

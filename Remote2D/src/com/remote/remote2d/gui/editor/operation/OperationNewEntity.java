@@ -14,7 +14,7 @@ public class OperationNewEntity extends Operation{
 
 	@Override
 	public void execute() {
-		editor.setActiveEntity(entity = new Entity());
+		editor.insertEntity();
 	}
 
 	@Override

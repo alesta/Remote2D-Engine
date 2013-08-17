@@ -95,7 +95,7 @@ public class GuiEditorBrowser extends Gui {
 				Entity e = new Entity();
 				R2DFileManager manager = new R2DFileManager(localPath,e);
 				manager.read();
-				editor.setActiveEntity(e);
+				editor.insertEntity();
 			} else if(localPath.endsWith(ParticleSystem.getExtension()))
 			{
 				ParticleSystem system = new ParticleSystem(editor.getMap());
