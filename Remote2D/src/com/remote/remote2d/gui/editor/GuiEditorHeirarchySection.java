@@ -39,7 +39,7 @@ public class GuiEditorHeirarchySection {
 		{
 			float currentTime = System.currentTimeMillis()-animStartTime;
 			currentTime /= animLength;
-			pos = Interpolator.linearInterpolate2f(oldAnimPos, newAnimPos, currentTime);
+			pos = Interpolator.linearInterpolate(oldAnimPos, newAnimPos, currentTime);
 		}
 				
 	
@@ -73,7 +73,7 @@ public class GuiEditorHeirarchySection {
 	}
 
 	public void render(float interpolation) {
-		Vector2 truePos = Interpolator.linearInterpolate2f(oldPos, pos, interpolation);
+		Vector2 truePos = Interpolator.linearInterpolate(oldPos, pos, interpolation);
 		if(selected)
 			Renderer.drawRect(truePos, dim, 0xffffff, 0.5f);
 		Fonts.get("Arial").drawString(content, truePos.x, truePos.y, 20, 0xffffff);

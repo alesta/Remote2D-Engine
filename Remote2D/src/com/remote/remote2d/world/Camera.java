@@ -47,7 +47,7 @@ public class Camera {
 	
 	public void renderBefore(float interpolation)
 	{
-		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation).subtract(Remote2D.getInstance().displayHandler.getDimensions());		
+		Vector2 pos = Interpolator.linearInterpolate(oldPos, this.pos, interpolation).subtract(Remote2D.getInstance().displayHandler.getDimensions());		
 		Vector2 dim = getDimensions();
 		GL11.glPushMatrix();
 		GL11.glScalef(scale, scale, 0);
@@ -61,7 +61,7 @@ public class Camera {
 	
 	public Vector2 getTruePos(float interpolation)
 	{
-		return Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
+		return Interpolator.linearInterpolate(oldPos, this.pos, interpolation);
 	}
 	
 	public ColliderBox getMapRenderArea()

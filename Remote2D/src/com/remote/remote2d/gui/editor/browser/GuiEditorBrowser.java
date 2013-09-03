@@ -92,10 +92,10 @@ public class GuiEditorBrowser extends Gui {
 				Remote2D.getInstance().guiList.push(new GuiCreateSpriteSheet(new Animation(localPath)));
 			else if(localPath.endsWith(Entity.getExtension()))
 			{
-				Entity e = new Entity();
+				Entity e = new Entity(editor.getMap());
 				R2DFileManager manager = new R2DFileManager(localPath,e);
 				manager.read();
-				editor.insertEntity();
+				editor.insertEntity(e);
 			} else if(localPath.endsWith(ParticleSystem.getExtension()))
 			{
 				ParticleSystem system = new ParticleSystem(editor.getMap());

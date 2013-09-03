@@ -8,6 +8,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.TextureLoader;
@@ -136,6 +137,7 @@ public class DisplayHandler {
 	{
 		Log.debug("Initializing OpenGL");
 		Log.info("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
+		Log.info("GLSL version: " + GL11.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION));
 		GL11.glEnable(GL11.GL_TEXTURE_2D);               
         
 		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);          

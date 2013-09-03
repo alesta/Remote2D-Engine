@@ -20,6 +20,7 @@ import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.Collision;
 import com.remote.remote2d.logic.Interpolator;
 import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.world.Map;
 
 /**
  * The basic class for all moving things in the game.  Things such as the player,
@@ -48,9 +49,9 @@ public class Entity extends EditorObject {
 	protected ArrayList<Component> components;
 	protected Entity parent;
 		
-	public Entity(String name)
+	public Entity(Map map, String name)
 	{
-		super(null);
+		super(map,null);
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
@@ -60,9 +61,9 @@ public class Entity extends EditorObject {
 		dim = new Vector2(50,50);
 	}
 	
-	public Entity(String name, String uuid)
+	public Entity(Map map, String name, String uuid)
 	{
-		super(uuid);
+		super(map,uuid);
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
@@ -72,9 +73,9 @@ public class Entity extends EditorObject {
 		dim = new Vector2(50,50);
 	}
 	
-	public Entity()
+	public Entity(Map map)
 	{
-		this("");
+		this(map, "");
 	}
 	
 	public void spawnEntityInWorld()
@@ -107,7 +108,7 @@ public class Entity extends EditorObject {
 	
 	public Vector2 getPos(float interpolation)
 	{
-		return Interpolator.linearInterpolate2f(oldPos, pos, interpolation);
+		return Interpolator.linearInterpolate(oldPos, pos, interpolation);
 	}
 	
 	public void addComponent(Component c)
@@ -272,7 +273,7 @@ public class Entity extends EditorObject {
 	
 	public void render(boolean editor, float interpolation)
 	{
-		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
+		Vector2 pos = Interpolator.linearInterpolate(oldPos, this.pos, interpolation);
 		
 		if(editor)
 			oldPos = pos.copy();
@@ -318,29 +319,11 @@ public class Entity extends EditorObject {
 	
 	public Entity clone()
 	{
-		Entity e = new Entity(name,getUUID());
-		e.alpha = this.alpha;
-		e.parent = this.parent;
-		e.color = new Color(color.getRGB());
-		e.pos = this.pos.copy();
-		e.dim = this.dim.copy();
-		e.linearScaling = this.linearScaling;
-		e.repeatTex = this.repeatTex;
-		e.resourcePath = this.resourcePath;
-		
-		for(int x=0;x<children.size();x++)
-		{
-			Entity c = children.get(x).clone();
-			c.parent = e;
-			e.children.add(e);
-		}
-		for(int x=0;x<components.size();x++)
-		{
-			Component c = components.get(x).clone();
-			c.setEntity(e);
-			e.components.add(c);
-		}
-		return e;
+		R2DTypeCollection compile = new R2DTypeCollection("Entity Clone");
+		saveR2DFile(compile);
+		Entity clone = new Entity(map);
+		clone.loadR2DFile(compile);
+		return clone;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -377,6 +360,6 @@ public class Entity extends EditorObject {
 
 	public static String getExtension() {
 		return ".entity";
-	}	
+	}
 		
 }

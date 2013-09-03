@@ -228,7 +228,7 @@ public class Map implements R2DFileSaver {
 		for(int x=0;x<entityCount;x++)
 		{
 			R2DTypeCollection c = collection.getCollection("entity_"+x);
-			Entity e = new Entity();
+			Entity e = new Entity(this);
 			e.loadR2DFile(c);
 			int componentCount = c.getInteger("componentCount");
 			for(int y=0;y<componentCount;y++)
@@ -272,9 +272,10 @@ public class Map implements R2DFileSaver {
 	
 	public Map copy()
 	{
-		EntityList entityList = entities.clone();
-		Map map = new Map(entityList);
-		map.camera = camera.copy();
+		R2DTypeCollection compile = new R2DTypeCollection("Map");
+		saveR2DFile(compile);
+		Map map = new Map();
+		map.loadR2DFile(compile);
 		return map;
 	}
 	

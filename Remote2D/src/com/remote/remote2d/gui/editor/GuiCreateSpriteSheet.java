@@ -149,7 +149,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	@Override
 	public void renderBackground(float interpolation)
 	{
-		Vector2 realOffset = Interpolator.linearInterpolate2f(oldOffset, offset, interpolation);
+		Vector2 realOffset = Interpolator.linearInterpolate(oldOffset, offset, interpolation);
 		
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text))

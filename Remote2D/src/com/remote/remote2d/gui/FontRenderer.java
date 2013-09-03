@@ -6,10 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.TextureLoader;
 
 public class FontRenderer {
@@ -81,5 +83,27 @@ public class FontRenderer {
 	{
 		int[] stringDim = getStringDim(s,size);
 		drawString(s,Remote2D.getInstance().displayHandler.getDimensions().x/2-stringDim[0]/2,y,size,color);
+	}
+	
+	public ArrayList<String> getStringSet(String s, float size, float width)
+	{
+		ArrayList<String> trueContents = new ArrayList<String>();
+		String current = "";
+		String[] tokens = s.split(" ");
+		
+		for(int x=0;x<tokens.length;x++)
+		{
+			if(getStringDim(current+" "+tokens[x], 20)[0] > width-20)
+			{
+				trueContents.add(current);
+				current = "";
+			}
+			if(!current.equals(""))
+				current += " ";
+			current += tokens[x];
+		}
+		if(!current.trim().equals(""))
+			trueContents.add(current);
+		return trueContents;
 	}
 }

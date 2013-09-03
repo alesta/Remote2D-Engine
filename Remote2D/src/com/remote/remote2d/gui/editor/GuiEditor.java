@@ -421,7 +421,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	public void insertEntity()
 	{
-		insertEntity(new Entity());
+		insertEntity(new Entity(getMap()));
 	}
 
 	public void insertEntity(Entity e)

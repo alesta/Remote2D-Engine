@@ -14,6 +14,7 @@ import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.EditorObject;
+import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.logic.Vector2;
@@ -97,7 +98,7 @@ public class EditorObjectWizard {
 						sec.setData((Color)o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} 
+					}
 				} catch (Exception e) {}
 				
 			}

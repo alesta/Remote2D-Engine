@@ -128,7 +128,7 @@ public abstract class Collider {
 			
 
 		// the axis length squared
-		double axis_length_squared = axis.dotVec(axis);
+		double axis_length_squared = axis.dot(axis);
 		assert(axis_length_squared > 0.00001);
 
 		// the mtd vector for that axis
@@ -138,7 +138,7 @@ public abstract class Collider {
 		
 
 		// the mtd vector length squared.
-		double sep_length_squared = sep.dotVec(sep);
+		double sep_length_squared = sep.dot(sep);
 		
 		// if that vector is smaller than our computed MTD (or the mtd hasn't been computed yet)
 		// use that vector as our current mtd.
@@ -168,9 +168,9 @@ public abstract class Collider {
 	protected int[] calculateInterval(Vector2[] verts, Vector2 axis) {
 		int min;
 		int max;
-		min = max = (int)verts[0].dotVec(axis);
+		min = max = (int)verts[0].dot(axis);
 		for (int i = 1; i < verts.length; i++) {
-			int d = (int)verts[i].dotVec(axis);
+			int d = (int)verts[i].dot(axis);
 			if (d < min)
 				min = d;
 			else if (d > max)

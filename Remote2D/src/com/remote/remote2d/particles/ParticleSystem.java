@@ -42,14 +42,12 @@ public class ParticleSystem extends EditorObject {
 	public long particleLife = 1000;
 	public long particleLifeDeviation = 500l;
 	
-	private Map map;
 	private long startTime;
 	private Random random;
 	
 	public ParticleSystem(Map map)
 	{
-		super(null);
-		this.map = map;
+		super(map,null);
 		particles = new ArrayList<Particle>();
 		random = new Random();
 		startTime = System.currentTimeMillis();
@@ -62,9 +60,9 @@ public class ParticleSystem extends EditorObject {
 		
 		Vector2 randomVec = new Vector2((random.nextFloat()-0.5f)*2f,(random.nextFloat()-0.5f)*2f);
 		
-		Vector2 startPos = pos.add(startPosDeviation.multiplyVec(randomVec));
+		Vector2 startPos = pos.add(startPosDeviation.multiply(randomVec));
 		randomVec = new Vector2((random.nextFloat()-0.5f)*2f,(random.nextFloat()-0.5f)*2f);
-		Vector2 velocity = baseVelocity.add(velocityDeviation.multiplyVec(randomVec));
+		Vector2 velocity = baseVelocity.add(velocityDeviation.multiply(randomVec));
 		
 		float red = (startColor.getRed()+getDeviation(colorDeviation))/255f;
 		float green = (startColor.getGreen()+getDeviation(colorDeviation))/255f;

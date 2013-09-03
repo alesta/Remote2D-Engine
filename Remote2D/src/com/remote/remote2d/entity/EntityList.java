@@ -105,14 +105,14 @@ public class EntityList {
 		return entityList.get(index);
 	}
 	
-	public EntityList clone()
+	public Entity getEntityWithUUID(String uuid)
 	{
-		EntityList newList = new EntityList();
-		for(int x=0;x<entityList.size();x++)
+		for(Entity e : entityList)
 		{
-			newList.addEntityToList(entityList.get(x).clone());
+			if(e.getUUID().equals(uuid))
+				return e;
 		}
-		return newList;
+		return null;
 	}
 
 	public void clear() {

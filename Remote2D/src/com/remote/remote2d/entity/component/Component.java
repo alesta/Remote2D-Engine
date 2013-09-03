@@ -16,7 +16,7 @@ public abstract class Component extends EditorObject{
 	
 	public Component(Entity e)
 	{
-		super(null);
+		super(e == null ? null : e.getMap(),null);
 		this.entity = e;
 	}
 	
@@ -47,10 +47,11 @@ public abstract class Component extends EditorObject{
 	public abstract void renderAfter(boolean editor, float interpolation);
 	
 	public abstract Component clone();
-	
+		
 	public void setEntity(Entity e)
 	{
 		this.entity = e;
+		this.map = e.getMap();
 	}
 	
 }

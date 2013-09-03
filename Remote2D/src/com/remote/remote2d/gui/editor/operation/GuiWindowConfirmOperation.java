@@ -20,23 +20,8 @@ public class GuiWindowConfirmOperation extends GuiWindow {
 		super(holder, pos, new Vector2(300,300), allowedBounds, "Confirm Operation");
 		this.operation = operation;
 		String contents = operation.confirmationMessage();
-		ArrayList<String> trueContents = new ArrayList<String>();
-		String current = "";
-		String[] tokens = contents.split(" ");
 		
-		for(int x=0;x<tokens.length;x++)
-		{
-			if(Fonts.get("Arial").getStringDim(current+" "+tokens[x], 20)[0] > dim.x-20)
-			{
-				trueContents.add(current);
-				current = "";
-			}
-			if(!current.equals(""))
-				current += " ";
-			current += tokens[x];
-		}
-		if(!current.trim().equals(""))
-			trueContents.add(current);
+		ArrayList<String> trueContents = Fonts.get("Arial").getStringSet(contents, 20, dim.x-20);
 		
 		Log.debug(trueContents.toString());
 		this.contents = new String[trueContents.size()];

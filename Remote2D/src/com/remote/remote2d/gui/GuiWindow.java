@@ -131,7 +131,7 @@ public abstract class GuiWindow extends Gui {
 	@Override
 	public void render(float interpolation) {
 		
-		Vector2 pos = Interpolator.linearInterpolate2f(oldPos, this.pos, interpolation);
+		Vector2 pos = Interpolator.linearInterpolate(oldPos, this.pos, interpolation);
 		
 		Renderer.drawRect(pos, new Vector2(dim.x,20), isSelected ? windowTopColor : windowMainColor, 1.0f);
 		Renderer.drawRect(pos.add(new Vector2(0,20)), dim, windowMainColor, 1.0f);

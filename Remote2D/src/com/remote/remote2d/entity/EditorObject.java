@@ -5,11 +5,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.UUID;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Texture;
+import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.io.R2DFileSaver;
 import com.remote.remote2d.io.R2DTypeCollection;
 import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.world.Map;
 
 /**
  * If a class implements this interface, then it is able to be edited within the
@@ -18,11 +21,12 @@ import com.remote.remote2d.logic.Vector2;
  * @author Flafla2
  *
  */
-public abstract class EditorObject implements R2DFileSaver, Cloneable {
+public abstract class EditorObject implements R2DFileSaver {
 	
 	private String uuid;
+	protected Map map;
 	
-	public EditorObject(String uuid)
+	public EditorObject(Map map, String uuid)
 	{
 		this.uuid = uuid;
 		if(this.uuid == null)
@@ -69,6 +73,17 @@ public abstract class EditorObject implements R2DFileSaver, Cloneable {
 					} else if(o instanceof Color)
 					{
 						collection.setColor(fields[x].getName(), (Color)o);
+					} else if(o instanceof EntityPointer)
+					{
+						collection.setString(fields[x].getName(), ((EntityPointer)o).uuid());
+					} else
+					{
+						String s = "Unknown Data Type "+o.getClass().getName()+" is a public variable of Component: "+fields[x].getName()+".";
+						if(o instanceof Entity)
+							s += "  Use EntityPointer instead!";
+						else if(o instanceof Component)
+							s += "  Use EntityPointer with getComponent() instead!";
+						Log.warn(s);
 					}
 				} catch (Exception e) {}
 				
@@ -103,11 +118,26 @@ public abstract class EditorObject implements R2DFileSaver, Cloneable {
 						field.set(this, collection.getBoolean(field.getName()));
 					else if(field.getType() == Color.class)
 						field.set(this, collection.getColor(field.getName()));
+					else if(field.getType() == EntityPointer.class)
+						field.set(this, new EntityPointer(collection.getString(fields[x].getName()),map));
+					else
+					{
+						String s = "Unknown Data Type "+field.getType().getName()+" is a public variable of Component: "+fields[x].getName()+".";
+						if(field.getType() == Entity.class)
+							s += "  Use EntityPointer instead!";
+						else if(field.getType() == Component.class)
+							s += "  Use EntityPointer with getComponent() instead!";
+						Log.warn(s);
+					}
 					
 				} catch (Exception e) {}
 			}
 		}
 	}
+	
+	public Map getMap() {
+		return map;
+	}	
 	
 	@Override
 	public boolean equals(Object o)
