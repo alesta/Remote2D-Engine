@@ -12,16 +12,17 @@ import com.remote.remote2d.io.R2DTypeCollection;
  * Components are advantageous because they can be reused on entities, allowing
  * more to be done in-editor and less in code.
  * 
+ * A 
+ * 
  * @author Flafla2
  */
 public abstract class Component extends EditorObject{
 	
 	protected Entity entity;
 	
-	public Component(Entity e)
+	public Component()
 	{
-		super(e == null ? null : e.getMap(),null);
-		this.entity = e;
+		super(null,null);
 	}
 	
 	public Class<?> getComponentClass()
@@ -54,13 +55,19 @@ public abstract class Component extends EditorObject{
 	{
         Constructor<?> ctor;
 		try {
-			ctor = componentClass.getConstructor(Entity.class);
-			Object instance = ctor.newInstance(entity);
+			ctor = componentClass.getConstructor();
+			Object instance = ctor.newInstance();
 			if(instance instanceof Component)
-	        	return (Component)instance;
+			{
+				Component ret = (Component)instance;
+	        	ret.setEntity(entity);
+				return ret;
+			}
 		} catch (Exception e) {
 			throw new Remote2DException(e);
 		}
+		
+		
         
         return null;
 	}

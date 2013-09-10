@@ -9,10 +9,6 @@ import com.remote.remote2d.world.Camera;
 
 public class ComponentCamera extends Component {
 
-	public ComponentCamera(Entity e) {
-		super(e);
-	}
-
 	@Override
 	public void tick(int i, int j, int k) {
 		
