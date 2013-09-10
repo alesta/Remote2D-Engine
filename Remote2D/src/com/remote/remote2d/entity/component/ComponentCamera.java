@@ -45,12 +45,6 @@ public class ComponentCamera extends Component {
 	}
 
 	@Override
-	public Component clone() {
-		ComponentCamera newColl = new ComponentCamera(entity);
-		return newColl;
-	}
-
-	@Override
 	public void apply() {
 		
 		

@@ -1,7 +1,11 @@
 package com.remote.remote2d.entity.component;
 
+import java.lang.reflect.Constructor;
+
+import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.entity.EditorObject;
 import com.remote.remote2d.entity.Entity;
+import com.remote.remote2d.io.R2DTypeCollection;
 
 /**
  * A component is an "attachment" to an entity, which modifies its behavior.
@@ -46,7 +50,29 @@ public abstract class Component extends EditorObject{
 	 */
 	public abstract void renderAfter(boolean editor, float interpolation);
 	
-	public abstract Component clone();
+	public static Component newInstanceWithEntity(Class<?> componentClass, Entity entity)
+	{
+        Constructor<?> ctor;
+		try {
+			ctor = componentClass.getConstructor(Entity.class);
+			Object instance = ctor.newInstance(entity);
+			if(instance instanceof Component)
+	        	return (Component)instance;
+		} catch (Exception e) {
+			throw new Remote2DException(e);
+		}
+        
+        return null;
+	}
+	
+	public Component clone()
+	{
+		R2DTypeCollection compile = new R2DTypeCollection("Component Clone");
+		saveR2DFile(compile);
+		Component clone = newInstanceWithEntity(getComponentClass(),entity);
+		clone.loadR2DFile(compile);
+		return clone;
+	}
 		
 	public void setEntity(Entity e)
 	{

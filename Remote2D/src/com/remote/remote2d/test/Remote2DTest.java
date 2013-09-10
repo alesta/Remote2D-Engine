@@ -19,7 +19,7 @@ public class Remote2DTest extends Remote2DGame {
 	public void initGame() {
 		Log.DEBUG();
 		Remote2D.getInstance().guiList.push(new GuiMainMenu());
-		Remote2D.getInstance().componentList.addInsertableComponent("Player", new ComponentPlayer(null));
+		Remote2D.getInstance().componentList.addInsertableComponent("Player", ComponentPlayer.class);
 	}
 	
 	@Override

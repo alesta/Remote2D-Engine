@@ -21,7 +21,7 @@ import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspector extends GuiMenu {
 		
-	public EditorObject currentEntity;
+	public Entity currentEntity;
 	private ArrayList<EditorObjectWizard> wizards;
 	private GuiButton button;
 	private GuiEditor editor;
@@ -109,48 +109,39 @@ public class GuiEditorInspector extends GuiMenu {
 		GL11.glPopMatrix();
 	}
 	
-	public void setCurrentEntity(EditorObject o)
+	public void setCurrentEntity(Entity o)
 	{
 		this.currentEntity = o;
 		wizards.clear();
 		button.setDisabled(currentEntity == null);
 		if(currentEntity==null)
 			return;
-		//Log.debug("Setting Inspector Entity:"+e.name);
+		
 		Vector2 currentPos = pos.copy();
 		EditorObjectWizard ew = new EditorObjectWizard(currentEntity,currentPos,(int)dim.x);
 		wizards.add(ew);
 		currentPos.y += ew.getHeight();
-		if(o instanceof Entity)
-		{
-			Entity e = (Entity)o;
-			
-			for(int x=0;x<e.getComponents().size();x++)
-			{
-				EditorObjectWizard cw = new EditorObjectWizard(e.getComponents().get(x),currentPos,(int)dim.x);
-				wizards.add(cw);
-				currentPos.y += cw.getHeight();
-			}
-		}
 		
-		//Log.debug("Component Count: "+components.size());
+		Entity e = (Entity)o;
+		
+		for(int x=0;x<e.getComponents().size();x++)
+		{
+			EditorObjectWizard cw = new EditorObjectWizard(e.getComponents().get(x),currentPos,(int)dim.x);
+			wizards.add(cw);
+			currentPos.y += cw.getHeight();
+		}
 	}
 	
 	public void apply()
 	{
-		EditorObject clone = null;
-		if(currentEntity instanceof Entity)
-			clone = ((Entity)currentEntity).clone();
+		Entity clone = currentEntity.clone();
 		for(int x=0;x<wizards.size();x++)
 		{
 			wizards.get(x).setComponentFields();
 		}
-		if(currentEntity instanceof Entity)
-		{
-			Entity before = (Entity)clone;
-			Entity after = ((Entity)currentEntity).clone();
-			editor.executeOperation(new OperationEditEntity(editor,before,after));
-		}
+		Entity before = clone;
+		Entity after = currentEntity.clone();
+		editor.executeOperation(new OperationEditEntity(editor,before,after));
 	}
 	
 	public boolean isTyping()

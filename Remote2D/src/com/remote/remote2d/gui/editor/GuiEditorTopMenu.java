@@ -83,7 +83,7 @@ public class GuiEditorTopMenu extends Gui {
 		
 		world.reloadSubWidth();
 		
-		Iterator<Entry<String,Component>> iterator = Remote2D.getInstance().componentList.getIterator();
+		Iterator<Entry<String,Class<?>>> iterator = Remote2D.getInstance().componentList.getIterator();
 		ArrayList<String> contents = new ArrayList<String>();
 		while(iterator.hasNext())
 			contents.add(iterator.next().getKey());
@@ -301,7 +301,7 @@ public class GuiEditorTopMenu extends Gui {
 		{
 			if(editor.getSelectedEntity() != null)
 			{
-				editor.getSelectedEntity().addComponent(Remote2D.getInstance().componentList.getComponent(secSubTitle));
+				editor.getSelectedEntity().addComponent(Remote2D.getInstance().componentList.getComponentWithEntity(secSubTitle,editor.getSelectedEntity()));
 				editor.getInspector().setCurrentEntity(editor.getSelectedEntity());
 			}
 		}

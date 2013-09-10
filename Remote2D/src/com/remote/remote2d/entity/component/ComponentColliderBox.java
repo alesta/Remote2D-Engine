@@ -7,7 +7,7 @@ import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 
-public class ComponentColliderBox extends ComponentCollider {
+public class ComponentColliderBox extends Component implements ComponentCollider {
 	
 	public Vector2 pos;
 	public Vector2 dim;
@@ -41,14 +41,6 @@ public class ComponentColliderBox extends ComponentCollider {
 	@Override
 	public void apply() {
 		
-	}
-
-	@Override
-	public Component clone() {
-		ComponentColliderBox newColl = new ComponentColliderBox(entity);
-		newColl.pos = this.pos;
-		newColl.dim = this.dim;
-		return newColl;
 	}
 
 	@Override

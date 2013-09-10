@@ -181,6 +181,12 @@ public abstract class GuiWindow extends Gui {
 	{
 		dontTick = true;
 	}
+	
+	public void setPos(Vector2 pos)
+	{
+		this.pos = pos.copy();
+		this.oldPos = pos.copy();
+	}
 
 	public void actionPerformed(GuiButton button)
 	{

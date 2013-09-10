@@ -323,6 +323,11 @@ public class Entity extends EditorObject {
 		saveR2DFile(compile);
 		Entity clone = new Entity(map);
 		clone.loadR2DFile(compile);
+		
+		for(Component c : components)
+		{
+			clone.addComponent(c.clone());
+		}
 		return clone;
 	}
 	
@@ -335,6 +340,14 @@ public class Entity extends EditorObject {
 				returnComponents.add((T) components.get(x));
 		
 		return returnComponents;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof Entity)
+			return ((Entity)o).getUUID().equals(getUUID());
+		return false;
 	}
 
 	@Override
