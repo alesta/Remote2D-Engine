@@ -9,10 +9,6 @@ import com.remote.remote2d.world.Camera;
 
 public class ComponentCamera extends Component {
 
-	public ComponentCamera(Entity e) {
-		super(e);
-	}
-
 	@Override
 	public void tick(int i, int j, int k) {
 		
@@ -42,12 +38,6 @@ public class ComponentCamera extends Component {
 			Vector2 dim = Remote2D.getInstance().displayHandler.getDimensions();
 			Renderer.drawLineRect(new Vector2(entity.pos.x-dim.x/2,entity.pos.y-dim.y/2), dim, 0, 0, 1, 1);
 		}
-	}
-
-	@Override
-	public Component clone() {
-		ComponentCamera newColl = new ComponentCamera(entity);
-		return newColl;
 	}
 
 	@Override

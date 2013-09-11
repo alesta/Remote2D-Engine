@@ -57,8 +57,7 @@ public class GuiWindowInsertComponent extends GuiWindow {
 		if(button.id == 0)
 		{
 			editor.getInspector().apply();
-			Component c = Remote2D.getInstance().componentList.getComponent(textField.text.trim());
-			c.setEntity(entity);
+			Component c = Remote2D.getInstance().componentList.getComponentWithEntity(textField.text.trim(),entity);
 			entity.addComponent(c.clone());
 			editor.getInspector().setCurrentEntity(entity);
 		}

@@ -9,8 +9,6 @@ import com.esotericsoftware.minlog.Log;
 
 public class KeyShortcut {
 	
-	public static boolean CAN_EXECUTE = true;
-	
 	public boolean useControl = false;
 	public boolean useMeta = false;
 	public boolean useShift = false;
@@ -43,8 +41,6 @@ public class KeyShortcut {
 	
 	public boolean getShortcutActivated()
 	{
-		if(!CAN_EXECUTE)
-			return false;
 		boolean oldPressed = pressed;
 		pressed = true;
 		boolean control = Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);

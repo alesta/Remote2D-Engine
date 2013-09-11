@@ -40,6 +40,7 @@ public class DisplayHandler {
 			Display.setDisplayMode(new DisplayMode(width,height));
 			Display.setTitle("Remote2D");
 			Display.setResizable(Remote2D.RESIZING_ENABLED);
+			Display.setLocation(0, 0);
 			Display.setFullscreen(fullscreen && !borderless);
 			
 			setIcons(Remote2D.getInstance().getGame().getIconPath());

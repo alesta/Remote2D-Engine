@@ -35,10 +35,8 @@ public class ComponentPlayer extends Component {
 	private Vector2 acceleration = new Vector2(0,2);
 	private Vector2 maxVelocity = new Vector2(10,-1);
 		
-	public ComponentPlayer(Entity entity)
+	public ComponentPlayer()
 	{
-		super(entity);
-		
 		testParticles = new ParticleSystem(Remote2D.getInstance().map);
 	}
 
@@ -181,6 +179,9 @@ public class ComponentPlayer extends Component {
 			timerLength = -1;
 		}
 		
+		if(currentAnimation == null)
+			updateAnimation();
+		
 		if(currentAnimation != null)
 		{
 			Vector2 posVec = new Vector2(0,0);
@@ -196,19 +197,6 @@ public class ComponentPlayer extends Component {
 	@Override
 	public void apply() {
 		currentAnimation = Remote2D.getInstance().artLoader.getAnimation(idleAnimation);
-	}
-
-	@Override
-	public Component clone() {
-		ComponentPlayer player = new ComponentPlayer(entity);
-		player.idleAnimation = idleAnimation;
-		player.walkAnimation = walkAnimation;
-		player.jumpAnimation = jumpAnimation;
-		player.fallAnimation = fallAnimation;
-		player.landAnimation = landAnimation;
-		player.particleTest = particleTest;
-		player.updateAnimation();
-		return player;
 	}
 	
 	enum PlayerState

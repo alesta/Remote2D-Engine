@@ -123,8 +123,8 @@ public class Remote2D {
 		keyboardList = new ArrayList<Integer>();
 		
 		componentList = new InsertableComponentList();
-		componentList.addInsertableComponent("Box Collider", new ComponentColliderBox(null));
-		componentList.addInsertableComponent("Camera", new ComponentCamera(null));
+		componentList.addInsertableComponent("Box Collider", ComponentColliderBox.class);
+		componentList.addInsertableComponent("Camera", ComponentCamera.class);
 		
 		artLoader = new ArtLoader();
 		

@@ -1,5 +1,11 @@
 package com.remote.remote2d;
 
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
+
+import javax.swing.JFrame;
+
 import org.lwjgl.opengl.Display;
 
 import com.remote.remote2d.logic.Vector2;
@@ -45,7 +51,14 @@ public abstract class Remote2DGame {
 	
 	public Vector2 getDefaultScreenResolution()
 	{
-		return new Vector2(Display.getDesktopDisplayMode().getWidth(),Display.getDesktopDisplayMode().getHeight());
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		Dimension screenDimension = env.getMaximumWindowBounds().getSize();
+		
+		JFrame frame = new JFrame("Top lel");
+		frame.pack();
+		Insets inset = frame.getInsets();
+		frame.dispose();
+		return new Vector2(screenDimension.width-inset.left-inset.right,screenDimension.height-inset.top-inset.bottom);
 	}
 	
 }

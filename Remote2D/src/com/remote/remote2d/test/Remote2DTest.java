@@ -3,6 +3,7 @@ package com.remote.remote2d.test;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.Remote2DGame;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.test.entity.ComponentPlayer;
@@ -19,7 +20,7 @@ public class Remote2DTest extends Remote2DGame {
 	public void initGame() {
 		Log.DEBUG();
 		Remote2D.getInstance().guiList.push(new GuiMainMenu());
-		Remote2D.getInstance().componentList.addInsertableComponent("Player", new ComponentPlayer(null));
+		Remote2D.getInstance().componentList.addInsertableComponent("Player", ComponentPlayer.class);
 	}
 	
 	@Override

@@ -222,16 +222,12 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 			heirarchy.tick(i, j, k);
 			browser.tick(i, j, k);
 		}
-		KeyShortcut.CAN_EXECUTE = !inspector.isTyping();
 
 		
 		if(Remote2D.getInstance().hasMouseBeenPressed() && !(getMouseInWindow(i,j) || menu.isMenuHovered(i,j)))
 		{
 			if(map != null && !isWidgetHovered(i,j))
-			{
-				selectedEntity = map.getTopEntityAtPoint(getMapMousePos());
-				inspector.setCurrentEntity(selectedEntity);
-			}
+				setSelectedEntity(map.getEntityList().indexOf(map.getTopEntityAtPoint(getMapMousePos())));
 		}
 		
 		if(map != null)

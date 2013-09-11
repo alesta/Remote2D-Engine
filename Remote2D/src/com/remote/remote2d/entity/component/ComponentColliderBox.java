@@ -7,16 +7,10 @@ import com.remote.remote2d.logic.Collider;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 
-public class ComponentColliderBox extends ComponentCollider {
+public class ComponentColliderBox extends Component implements ComponentCollider {
 	
-	public Vector2 pos;
-	public Vector2 dim;
-	
-	public ComponentColliderBox(Entity e) {
-		super(e);
-		pos = new Vector2(0,0);
-		dim = new Vector2(10,10);
-	}
+	public Vector2 pos = new Vector2(0,0);
+	public Vector2 dim = new Vector2(10,10);
 
 	@Override
 	public void tick(int i, int j, int k) {
@@ -41,14 +35,6 @@ public class ComponentColliderBox extends ComponentCollider {
 	@Override
 	public void apply() {
 		
-	}
-
-	@Override
-	public Component clone() {
-		ComponentColliderBox newColl = new ComponentColliderBox(entity);
-		newColl.pos = this.pos;
-		newColl.dim = this.dim;
-		return newColl;
 	}
 
 	@Override
