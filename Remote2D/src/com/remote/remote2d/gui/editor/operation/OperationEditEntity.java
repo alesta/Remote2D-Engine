@@ -17,18 +17,34 @@ public class OperationEditEntity extends Operation {
 
 	@Override
 	public void execute() {
-		int position = editor.getMap().getEntityList().indexOf(before);
-		after.updatePos();
-		editor.getMap().getEntityList().set(position,after);
-		editor.setSelectedEntity(position);
+//		int position = editor.getMap().getEntityList().indexOf(before);
+//		after.updatePos();
+//		editor.getMap().getEntityList().set(position,after);
+//		editor.setSelectedEntity(position);
+		for(int x=0;x<editor.getMap().getEntityList().size();x++)
+		{
+			if(editor.getMap().getEntityList().get(x).getUUID().equals(before.getUUID()))
+			{
+				editor.getMap().getEntityList().set(x, after);
+				return;
+			}
+		}
 	}
 
 	@Override
 	public void undo() {
-		int position = editor.getMap().getEntityList().indexOf(after);
-		before.updatePos();
-		editor.getMap().getEntityList().set(position,before);
-		editor.setSelectedEntity(position);
+//		int position = editor.getMap().getEntityList().indexOf(after);
+//		before.updatePos();
+//		editor.getMap().getEntityList().set(position,before);
+//		editor.setSelectedEntity(position);
+		for(int x=0;x<editor.getMap().getEntityList().size();x++)
+		{
+			if(editor.getMap().getEntityList().get(x).getUUID().equals(after.getUUID()))
+			{
+				editor.getMap().getEntityList().set(x, before);
+				return;
+			}
+		}
 	}
 
 	@Override

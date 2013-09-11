@@ -179,6 +179,9 @@ public class ComponentPlayer extends Component {
 			timerLength = -1;
 		}
 		
+		if(currentAnimation == null)
+			updateAnimation();
+		
 		if(currentAnimation != null)
 		{
 			Vector2 posVec = new Vector2(0,0);

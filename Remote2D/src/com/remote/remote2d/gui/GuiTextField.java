@@ -1,5 +1,9 @@
 package com.remote.remote2d.gui;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
@@ -30,6 +34,7 @@ public class GuiTextField extends Gui {
 	private boolean blink = true;
 	private int blinkTimer = 50;
 	private int backTimer = 20;
+	private KeyShortcut shortcut;
 	
 	
 	public GuiTextField(Vector2 pos, Vector2 dim, int fontsize)
@@ -37,6 +42,7 @@ public class GuiTextField extends Gui {
 		this.pos = pos;
 		this.dim = dim;
 		this.fontsize = fontsize;
+		shortcut = new KeyShortcut(new int[]{Keyboard.KEY_V});
 	}
 
 	@Override
@@ -59,9 +65,15 @@ public class GuiTextField extends Gui {
 		else
 			blinkTimer--;
 		
+		String paste = "";
+		if(shortcut.getShortcutActivated())
+			paste = getClipboardContents();
+		
 		if(isSelected)
 		{
-			ArrayList<Character> typedChars = Remote2D.getInstance().getLimitedKeyboardList();
+			ArrayList<Character> typedChars = (ArrayList<Character>) Remote2D.getInstance().getLimitedKeyboardList().clone();
+			for(char c : paste.toCharArray())
+				typedChars.add(c);
 			for(int x=0;x<typedChars.size();x++)
 			{
 				char key = typedChars.get(x);
@@ -139,4 +151,21 @@ public class GuiTextField extends Gui {
 		return isSelected;
 	}
 	
+	public String getClipboardContents() {
+		String result = "";
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		//odd: the Object param of getContents is not currently used
+		Transferable contents = clipboard.getContents(null);
+		boolean hasTransferableText = (contents != null) && contents.isDataFlavorSupported(DataFlavor.stringFlavor);
+		if ( hasTransferableText ) {
+			try {
+				result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+			}
+			catch(Exception e)
+			{
+				return null;
+			}
+		}
+		return result;
+	}
 }

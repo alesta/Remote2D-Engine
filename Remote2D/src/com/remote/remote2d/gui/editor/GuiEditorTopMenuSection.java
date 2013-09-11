@@ -133,7 +133,7 @@ public class GuiEditorTopMenuSection extends Gui {
 			if(keyCombos[x] == null)
 				continue;
 			boolean hasComboBeenPressed = keyCombos[x].getShortcutActivated();
-			if(hasComboBeenPressed)
+			if(hasComboBeenPressed && !menu.editor.getInspector().isTyping())
 			{
 				selectedBox = x;
 			}
