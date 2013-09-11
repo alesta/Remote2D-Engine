@@ -3,6 +3,7 @@ package com.remote.remote2d.test;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.Remote2DGame;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.test.entity.ComponentPlayer;
