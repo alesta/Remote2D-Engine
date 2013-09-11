@@ -67,5 +67,10 @@ public class Console {
 		while(messageStack.size() > maxMessages)
 			messageStack.get(messageStack.size()-1);
 	}
+	
+	public static void clear()
+	{
+		messageStack.clear();
+	}
 
 }
