@@ -224,11 +224,7 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text) )
 		{
-			if(!tex.textureLocation.equals(texID.text))
-			{
-				tex.removeTexture();
-				tex = new Texture(texID.text);
-			}
+			reloadTex();
 			boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
 			boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 			boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
@@ -251,6 +247,16 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 				offset.x = 300;
 			if(offset.y > 0)
 				offset.y = 0;
+		}
+	}
+	
+	public void reloadTex()
+	{
+		if(tex == null || !tex.textureLocation.equals(texID.text))
+		{
+			if(tex != null)
+				tex.removeTexture();
+			tex = new Texture(texID.text);
 		}
 	}
 	
@@ -291,15 +297,6 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 				framesY.hasText() && paddingX.hasText() && paddingY.hasText()
 				&& containsKey && frameLength.hasText();
 		return total;
-	}
-	
-	public void reloadTex()
-	{
-		if(!tex.textureLocation.equals(texID.text))
-		{
-			tex.removeTexture();
-			tex = new Texture(texID.text);
-		}
 	}
 	
 	@Override

@@ -63,7 +63,8 @@ public class Entity extends EditorObject {
 		components = new ArrayList<Component>();
 		
 		slashTex = new Texture(slashLoc,false,true);
-		tex = new Texture(resourcePath,linearScaling,repeatTex);
+		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
+			tex = new Texture(resourcePath,linearScaling,repeatTex);
 		
 		pos = new Vector2(0,0);
 		oldPos = new Vector2(0,0);
@@ -296,17 +297,18 @@ public class Entity extends EditorObject {
 		{
 			float maxX = ((float)dim.x)/32f;
 			float maxY = ((float)dim.y)/32f;
-			slashTex.bind();
 			int color = 0xffffff;
 			if(selected)
 				color = 0xff0000;
 			else
 				color = 0xffaaaa;
-			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color, 1);
+			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), slashTex, color, 1);
 		}
 		
 		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
 		{
+			if(tex == null)
+				tex = new Texture(resourcePath);
 			float maxX = 1;
 			float maxY = 1;
 			if(repeatTex)

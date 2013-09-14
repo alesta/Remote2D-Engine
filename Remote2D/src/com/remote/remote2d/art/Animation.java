@@ -47,6 +47,7 @@ public class Animation implements R2DFileSaver {
 		R2DFileManager manager = new R2DFileManager(path,this);
 		manager.read();
 		this.path = path;
+		this.tex = new Texture(texPath);
 	}
 	
 	@Override
@@ -195,6 +196,12 @@ public class Animation implements R2DFileSaver {
 
 	public static String getExtension() {
 		return ".anim";
+	}
+	
+	public Animation clone()
+	{
+		Animation newAnim = new Animation(texPath, startPos.copy(), spriteDim.copy(), padding.copy(), frames.copy(), framelength);
+		return newAnim;
 	}
 	
 }
