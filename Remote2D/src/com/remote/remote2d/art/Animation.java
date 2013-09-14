@@ -22,14 +22,16 @@ public class Animation implements R2DFileSaver {
 	private int framelength;
 	private long lastFrameTime;
 	private String path;
+	private Texture tex;
 	
 	public boolean flippedX = false;
 	public boolean flippedY = false;
 	
 	
-	public Animation(String tex, Vector2 startPos, Vector2 spriteDim, Vector2 padding, Vector2 frames, int framelength)
+	public Animation(String texPath, Vector2 startPos, Vector2 spriteDim, Vector2 padding, Vector2 frames, int framelength)
 	{
-		this.texPath = tex;
+		this.texPath = texPath;
+		this.tex = new Texture(texPath);
 		this.startPos = startPos;
 		this.spriteDim = spriteDim;
 		this.padding = padding;
@@ -101,8 +103,6 @@ public class Animation implements R2DFileSaver {
 				currentframe = 0;
 			lastFrameTime = System.currentTimeMillis();
 		}
-		
-		Texture tex = Remote2D.getInstance().artLoader.getTexture(texPath);
 		
 		ColliderBox collider = framePos[currentframe];
 		Vector2 imgPos = collider.pos.divide(new Vector2(tex.image.getWidth(),tex.image.getHeight()));

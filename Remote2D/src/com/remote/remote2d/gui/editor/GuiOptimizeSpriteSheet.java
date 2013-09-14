@@ -44,6 +44,7 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 	int scale = 1;
 	boolean isPickingBG = false;
 	int bgColor = 0xffffff;
+	Texture tex;
 	
 	
 	HorizontalPositioning horizontal = HorizontalPositioning.MIDDLE;
@@ -127,7 +128,11 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texturePath.text))
 		{
-			Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text);
+			if(!tex.textureLocation.equals(texturePath.text))
+			{
+				tex.removeTexture();
+				tex = new Texture(texturePath.text);
+			}
 			tex.bind();			
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
@@ -198,7 +203,11 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 			{
 				if(isPickingBG)
 				{
-					Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text); 
+					if(!tex.textureLocation.equals(texturePath.text))
+					{
+						tex.removeTexture();
+						tex = new Texture(texturePath.text);
+					}
 					int x = (int) ((i-offset.x)/scale);
 					int y = (int) ((j-offset.y)/scale);
 					if(tex != null && x < tex.getImage().getWidth() && y < tex.getImage().getHeight())
@@ -251,7 +260,11 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		
 		if(Remote2D.getInstance().artLoader.textureExists(texturePath.text) )
 		{
-			Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text); 
+			if(!tex.textureLocation.equals(texturePath.text))
+			{
+				tex.removeTexture();
+				tex = new Texture(texturePath.text);
+			}
 			boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
 			boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 			boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
@@ -307,7 +320,11 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 				vertical = VerticalPositioning.BOTTOM;
 		 else if(button.id == 8)
 		 {
-			 Texture tex = Remote2D.getInstance().artLoader.getTexture(texturePath.text); 
+			if(!tex.textureLocation.equals(texturePath.text))
+			{
+				tex.removeTexture();
+				tex = new Texture(texturePath.text);
+			}
 			 BufferedImage source = tex.image;
 			 Vector2 frameSize = new Vector2(0,0);
 			 for(int x=0;x<frameDefiners.size();x++)

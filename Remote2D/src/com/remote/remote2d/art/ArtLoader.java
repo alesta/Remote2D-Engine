@@ -24,36 +24,11 @@ import com.remote.remote2d.world.Map;
  */
 public class ArtLoader {
 	
-	private ArrayList<Texture> artList;
 	private HashMap<String,Animation> animList;
 	
 	public ArtLoader()
 	{
-		artList = new ArrayList<Texture>();
 		animList = new HashMap<String,Animation>();
-	}
-	
-	public Texture getTexture(String s)
-	{
-		return getTexture(s,false,false);
-	}
-	
-	public Texture getTexture(String s, boolean linearScaling, boolean repeat)
-	{
-		if(!textureExists(s))
-			return null;
-		
-		for(int x=0;x<artList.size();x++)
-		{
-			if(artList.get(x).textureLocation.equals(s) && artList.get(x).repeat == repeat && artList.get(x).linearScaling == linearScaling)
-			{
-				return artList.get(x);
-			}
-		}
-		
-		Log.debug("New texture added to list: "+s);
-		artList.add(new Texture(s,linearScaling,repeat));
-		return artList.get(artList.size()-1);
 	}
 	
 	public Animation getAnimation(String s)
@@ -67,13 +42,6 @@ public class ArtLoader {
 			animList.put(s, animation);
 		}
 		return animList.get(s);
-	}
-	
-	public void reloadArt()
-	{
-		for(int x=0;x<artList.size();x++)
-			artList.get(x).removeTexture();
-		artList.clear();
 	}
 	
 	public boolean textureExists(String s)

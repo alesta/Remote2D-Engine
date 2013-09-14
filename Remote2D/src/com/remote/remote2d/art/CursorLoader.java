@@ -10,13 +10,12 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.logic.Vector2;
 
 public class CursorLoader {
-	
-	public static String tex;
-	public static Vector2 hotspot;
+	private static Texture tex;
+	private static Vector2 hotspot;
 	
 	public static void setCursor(String tex, Vector2 hotspot)
 	{
-		CursorLoader.tex = tex;
+		CursorLoader.tex = new Texture(tex);
 		CursorLoader.hotspot = hotspot;
 		
 		if(tex != null)
@@ -40,7 +39,6 @@ public class CursorLoader {
 	
 	public static void render(float interpolation)
 	{
-		Texture tex = Remote2D.getInstance().artLoader.getTexture(CursorLoader.tex);
 		if(tex != null)
 		{
 			Vector2 renderpos = new Vector2(Remote2D.getInstance().getMouseCoords()).subtract(hotspot);
@@ -50,6 +48,12 @@ public class CursorLoader {
 			Renderer.drawRect(renderpos, renderDim, new Vector2(0,0), new Vector2(1,1), tex, 0xffffff, 1.0f);
 			
 		}
+	}
+	
+	public static void setMouseTexLoc(String tex)
+	{
+		CursorLoader.tex.removeTexture();
+		CursorLoader.tex = new Texture(tex);
 	}
 	
 }

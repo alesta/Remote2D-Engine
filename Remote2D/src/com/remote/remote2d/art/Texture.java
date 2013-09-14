@@ -4,8 +4,15 @@ import java.awt.image.BufferedImage;
 
 import org.lwjgl.opengl.GL11;
 
+import com.remote.remote2d.Remote2D;
+
 public class Texture {
+	
+	public static boolean DEFAULT_LINEAR_SCALE = false;
+	public static boolean DEFAULT_REPEAT = false;
+	
 	public boolean linearScaling = false;
+	private long lastReload;
 	public boolean repeat = false;
 	public String textureLocation;
 	public BufferedImage image;
@@ -18,6 +25,7 @@ public class Texture {
 		this.repeat = repeat;
 		image = TextureLoader.loadImage(textureLocation);
 		glId = TextureLoader.loadTexture(image,linearScaling,repeat);
+		lastReload = System.currentTimeMillis();
 	}
 	
 	public Texture(BufferedImage image, boolean linearScaling,boolean repeat) {
@@ -26,10 +34,23 @@ public class Texture {
 		this.linearScaling = linearScaling;
 		this.repeat = repeat;
 		glId = TextureLoader.loadTexture(image,linearScaling,repeat);
+		lastReload = System.currentTimeMillis();
+	}
+	
+	public Texture(String loc)
+	{
+		this(loc,DEFAULT_LINEAR_SCALE,DEFAULT_REPEAT);
+	}
+	
+	public Texture(BufferedImage image)
+	{
+		this(image,DEFAULT_LINEAR_SCALE,DEFAULT_REPEAT);
 	}
 
 	public void bind()
 	{
+		if(lastReload < Remote2D.getInstance().displayHandler.getLastTexReload())
+			reload();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, glId);
 	}
 	
@@ -51,7 +72,9 @@ public class Texture {
 	}
 
 	public void reload() {
-		GL11.glDeleteTextures(glId);
+		if(lastReload >= Remote2D.getInstance().displayHandler.getLastTexReload())
+			GL11.glDeleteTextures(glId);
 		glId = TextureLoader.loadTexture(image,linearScaling,repeat);
+		lastReload = System.currentTimeMillis();
 	}
 }

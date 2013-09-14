@@ -41,6 +41,8 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 	
 	int scale = 1;
 	
+	Texture tex;
+	
 	String message = "";
 	long messageTime = 5000;
 	long lastMessageTime = 0;
@@ -154,7 +156,11 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		drawBlueprintBackground();
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text))
 		{
-			Texture tex = Remote2D.getInstance().artLoader.getTexture(texID.text);
+			if(!tex.textureLocation.equals(texID.text))
+			{
+				tex.removeTexture();
+				tex = new Texture(texID.text);
+			}
 			tex.bind();			
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
@@ -218,7 +224,11 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 
 		if(Remote2D.getInstance().artLoader.textureExists(texID.text) )
 		{
-			Texture tex = Remote2D.getInstance().artLoader.getTexture(texID.text); 
+			if(!tex.textureLocation.equals(texID.text))
+			{
+				tex.removeTexture();
+				tex = new Texture(texID.text);
+			}
 			boolean up = Keyboard.isKeyDown(Keyboard.KEY_UP);
 			boolean down = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 			boolean left = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
@@ -281,6 +291,15 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 				framesY.hasText() && paddingX.hasText() && paddingY.hasText()
 				&& containsKey && frameLength.hasText();
 		return total;
+	}
+	
+	public void reloadTex()
+	{
+		if(!tex.textureLocation.equals(texID.text))
+		{
+			tex.removeTexture();
+			tex = new Texture(texID.text);
+		}
 	}
 	
 	@Override

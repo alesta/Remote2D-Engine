@@ -215,7 +215,7 @@ public class R2DTypeCollection extends R2DType {
 	{
 		if(!data.containsKey(key))
 			return null;
-		return Remote2D.getInstance().artLoader.getTexture(((R2DTypeTexture) data.get(key)).data.textureLocation);
+		return new Texture(((R2DTypeTexture) data.get(key)).data.textureLocation);
 	}
 	
 	public Animation getAnimation(String key)

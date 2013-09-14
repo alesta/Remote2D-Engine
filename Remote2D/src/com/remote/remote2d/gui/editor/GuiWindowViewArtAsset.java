@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Renderer;
+import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.GuiWindow;
@@ -15,6 +16,7 @@ public class GuiWindowViewArtAsset extends GuiWindow {
 	
 	GuiTextField field;
 	GuiButton doneButton;
+	Texture tex;
 
 	public GuiWindowViewArtAsset(WindowHolder holder, Vector2 pos, ColliderBox allowedBounds) {
 		super(holder, pos, new Vector2(400,450), allowedBounds, "Art Viewer/Selecter");
@@ -32,8 +34,20 @@ public class GuiWindowViewArtAsset extends GuiWindow {
 	public void renderContents(float interpolation) {
 		field.render(interpolation);
 
+		if(tex == null)
+			reloadTex();
+		else if(!field.text.equals(tex.textureLocation))
+			reloadTex();
+	}
+	
+	public void reloadTex()
+	{
 		if(Remote2D.getInstance().artLoader.textureExists(field.text))
-			Renderer.drawRect(new Vector2(10,60), new Vector2(380,330), Remote2D.getInstance().artLoader.getTexture(field.text), 0xffffff, 1.0f);
+		{
+			if(tex != null)
+				tex.removeTexture();
+			tex = new Texture(field.text);
+		}
 	}
 	
 	@Override

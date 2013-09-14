@@ -33,7 +33,7 @@ public class GuiButton extends Gui {
 		this.dim = dim;
 		this.text = text;
 		
-		tex = Remote2D.getInstance().artLoader.getTexture("/res/gui/controls.png");
+		tex = new Texture("/res/gui/controls.png");
 	}
 	
 	public void render(float interpolation)

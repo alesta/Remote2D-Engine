@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.art.Texture;
@@ -41,6 +42,11 @@ public class Entity extends EditorObject {
 	public Color color = new Color(0xaaaaaa);
 	public float alpha = 1.0f;
 	
+	private Texture slashTex;
+	//TODO: Allow for changing textures on the fly
+	//TODO: Use an all-encompassing Material system instead of this resoursePath bullshit.
+	private Texture tex;
+	
 	private Vector2 oldPos;
 	
 	private static final String slashLoc = "/res/gui/slash.png";
@@ -55,6 +61,9 @@ public class Entity extends EditorObject {
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
+		
+		slashTex = new Texture(slashLoc,false,true);
+		tex = new Texture(resourcePath,linearScaling,repeatTex);
 		
 		pos = new Vector2(0,0);
 		oldPos = new Vector2(0,0);
@@ -285,10 +294,9 @@ public class Entity extends EditorObject {
 					selected = true;
 		if(editor)
 		{
-			Texture tex = Remote2D.getInstance().artLoader.getTexture(slashLoc, false, true);
 			float maxX = ((float)dim.x)/32f;
 			float maxY = ((float)dim.y)/32f;
-			tex.bind();
+			slashTex.bind();
 			int color = 0xffffff;
 			if(selected)
 				color = 0xff0000;
@@ -299,7 +307,6 @@ public class Entity extends EditorObject {
 		
 		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
 		{
-			Texture tex = Remote2D.getInstance().artLoader.getTexture(resourcePath,linearScaling,repeatTex);
 			float maxX = 1;
 			float maxY = 1;
 			if(repeatTex)

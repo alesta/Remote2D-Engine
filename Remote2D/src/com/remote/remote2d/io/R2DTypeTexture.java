@@ -22,7 +22,7 @@ public class R2DTypeTexture extends R2DType {
 
 	@Override
 	public void read(DataInput d) throws IOException {
-		data = Remote2D.getInstance().artLoader.getTexture(d.readUTF());
+		data = new Texture(d.readUTF());
 	}
 
 	@Override

@@ -25,6 +25,7 @@ public class DisplayHandler {
 	private boolean fullscreen;
 	private boolean borderless;
 	private StretchType type;
+	private long lastTexReload;
 	
 	public DisplayHandler(int width, int height, int gameWidth, int gameHeight, StretchType type, boolean fullscreen, boolean borderless)
 	{
@@ -156,6 +157,8 @@ public class DisplayHandler {
 		GL11.glOrtho(0, dim.x, dim.y, 0, 1, -1);//Note, the GL coordinates are flipped!
 		
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		
+		lastTexReload = System.currentTimeMillis();
 		
 		//CursorLoader.setCursor(new Texture("/res/gui/mouse.png"), new Vector2D(22,22));
 	}
@@ -309,9 +312,6 @@ public class DisplayHandler {
 	        if(fullscreen == true)
 	        {
 	        	Display.create();
-	        	
-	        	if(Remote2D.getInstance().artLoader != null)
-	    			Remote2D.getInstance().artLoader.reloadArt();
 	        }
 	        
 	        initGL();
@@ -321,6 +321,16 @@ public class DisplayHandler {
 	    
 	    for(int x=0;x<Remote2D.getInstance().guiList.size();x++)
 			Remote2D.getInstance().guiList.get(x).initGui();
+	}
+	
+	/**
+	 * The time, in milliseconds since the last OpenGL reload.  At this time,
+	 * all textures clear and must be reloaded.
+	 * @return The time in milliseconds.
+	 */
+	public long getLastTexReload()
+	{
+		return lastTexReload;
 	}
 
 }
