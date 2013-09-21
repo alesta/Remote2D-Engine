@@ -31,6 +31,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 	
 	public Vector2 posOffset = new Vector2(0,0);
 	public boolean grid = false;
+	public DraggableObject dragObject;
 	
 	private GuiEditorTopMenu menu;
 	private GuiEditorInspector inspector;
@@ -172,6 +173,10 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		}
 		
 		menu.render(interpolation);
+		if(dragObject != null)
+		{
+			dragObject.render(interpolation);
+		}
 	}
 	
 	@Override
@@ -244,6 +249,13 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 				map.camera.pos.x += 5f;
 			if(right)
 				map.camera.pos.x -= 5f;
+		}
+		
+		if(dragObject != null)
+		{
+			dragObject.tick(i, j, k);
+			if(dragObject.shouldDelete())
+				dragObject = null;
 		}
 	}
 	

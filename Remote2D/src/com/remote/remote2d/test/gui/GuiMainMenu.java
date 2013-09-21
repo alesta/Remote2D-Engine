@@ -1,6 +1,7 @@
 package com.remote.remote2d.test.gui;
 
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.StretchType;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;

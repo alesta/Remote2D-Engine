@@ -15,17 +15,16 @@ import com.remote.remote2d.particles.ParticleSystem;
 
 public class ComponentPlayer extends Component {
 	
-	public String idleAnimation = "";
-	public String walkAnimation = "";
-	public String jumpAnimation = "";
-	public String fallAnimation = "";
-	public String landAnimation = "";
+	public Animation idleAnimation;
+	public Animation walkAnimation;
+	public Animation jumpAnimation;
+	public Animation fallAnimation;
+	public Animation landAnimation;
 	public boolean spriteFacesRight = true;
 	public boolean particleTest = false;
 	
 	private PlayerState state = PlayerState.IDLE;
 	private FacingState facing = FacingState.RIGHT;
-	private Animation currentAnimation;
 	private long lastLand = 0;
 	private long timerLength = -1;
 	
@@ -115,30 +114,24 @@ public class ComponentPlayer extends Component {
 		if(entity.pos.y < top)
 			Remote2D.getInstance().map.camera.pos.y -= top-entity.pos.y;
 		
+		Animation anim = getAnim();
+		
 		if(state != oldState)
 		{
-			currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());
-			if(state == PlayerState.LAND && currentAnimation != null)
+			
+			if(state == PlayerState.LAND && anim != null)
 			{
-				timerLength = (int) (currentAnimation.getFramelength()*currentAnimation.getFrames().x*currentAnimation.getFrames().y);
+				timerLength = (int) (anim.getFramelength()*anim.getFrames().x*anim.getFrames().y);
 				lastLand = System.currentTimeMillis();
 			}
 				
 		}
-		
-		if(currentAnimation != null)
-			currentAnimation.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
 		
 		
 		testParticles.pos = new Vector2(i,j).add(Remote2D.getInstance().map.camera.pos);
 		if(particleTest)
 			testParticles.tick(false);
 			
-	}
-	
-	public void updateAnimation()
-	{
-		currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());
 	}
 
 	@Override
@@ -148,25 +141,29 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void onEntitySpawn() {
-		updateAnimation();
+		
 	}
 	
-	public String getPath()
+	public Animation getAnim()
 	{
+		Animation anim = null;
 		switch(state)
 		{
 		case IDLE:
-			return idleAnimation;
+			anim = idleAnimation;
 		case WALK:
-			return walkAnimation;
+			anim = walkAnimation;
 		case JUMP:
-			return jumpAnimation;
+			anim = jumpAnimation;
 		case FALL:
-			return fallAnimation;
+			anim = fallAnimation;
 		case LAND:
-			return landAnimation;
+			anim = landAnimation;
 		}
-		return "";
+		
+		if(anim != null)
+			anim.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
+		return null;
 	}
 
 	@Override
@@ -175,19 +172,16 @@ public class ComponentPlayer extends Component {
 		if(state == PlayerState.LAND && System.currentTimeMillis()-lastLand >= timerLength && timerLength != -1)
 		{
 			state = PlayerState.IDLE;
-			currentAnimation = Remote2D.getInstance().artLoader.getAnimation(getPath());
 			timerLength = -1;
 		}
 		
-		if(currentAnimation == null)
-			updateAnimation();
-		
-		if(currentAnimation != null)
+		Animation anim = getAnim();
+		if(anim != null)
 		{
 			Vector2 posVec = new Vector2(0,0);
-			posVec.x = entity.getPos(interpolation).x+entity.getDim().x/2-currentAnimation.getSpriteDim().x/2;
-			posVec.y = entity.getPos(interpolation).y+entity.getDim().y/2-currentAnimation.getSpriteDim().y/2;
-			currentAnimation.render(posVec, new Vector2(currentAnimation.getSpriteDim().getElements()));
+			posVec.x = entity.getPos(interpolation).x+entity.getDim().x/2-anim.getSpriteDim().x/2;
+			posVec.y = entity.getPos(interpolation).y+entity.getDim().y/2-anim.getSpriteDim().y/2;
+			anim.render(posVec, new Vector2(anim.getSpriteDim().getElements()));
 		}
 		
 		if(particleTest)
@@ -196,7 +190,7 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void apply() {
-		currentAnimation = Remote2D.getInstance().artLoader.getAnimation(idleAnimation);
+		
 	}
 	
 	enum PlayerState

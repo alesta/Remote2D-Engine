@@ -78,7 +78,7 @@ public class GuiTextField extends Gui {
 			{
 				char key = typedChars.get(x);
 				
-				boolean intLimit = Character.isDigit(key) || key == '-' || limitToDigits != TextLimiter.LIMIT_TO_INTEGER;
+				boolean intLimit = Character.isDigit(key) || (key == '-' && !text.contains("-")) || limitToDigits != TextLimiter.LIMIT_TO_INTEGER;
 				boolean floatLimit = (key == '.' || key == '-' || Character.isDigit(key)) || limitToDigits != TextLimiter.LIMIT_TO_FLOAT;
 				boolean hexLimit = hexList.contains(""+key) || limitToDigits != TextLimiter.LIMIT_TO_HEX;
 				boolean maxLimit = text.length() < maxLength || maxLength == -1;

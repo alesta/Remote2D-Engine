@@ -12,6 +12,7 @@ import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiButton;
 import com.remote.remote2d.gui.GuiMenu;
+import com.remote.remote2d.gui.editor.DraggableObject;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.gui.editor.GuiWindowInsertComponent;
 import com.remote.remote2d.gui.editor.operation.OperationEditEntity;
@@ -118,7 +119,7 @@ public class GuiEditorInspector extends GuiMenu {
 			return;
 		
 		Vector2 currentPos = pos.copy();
-		EditorObjectWizard ew = new EditorObjectWizard(currentEntity,currentPos,(int)dim.x);
+		EditorObjectWizard ew = new EditorObjectWizard(editor,currentEntity,currentPos,(int)dim.x);
 		wizards.add(ew);
 		currentPos.y += ew.getHeight();
 		
@@ -126,10 +127,20 @@ public class GuiEditorInspector extends GuiMenu {
 		
 		for(int x=0;x<e.getComponents().size();x++)
 		{
-			EditorObjectWizard cw = new EditorObjectWizard(e.getComponents().get(x),currentPos,(int)dim.x);
+			EditorObjectWizard cw = new EditorObjectWizard(editor,e.getComponents().get(x),currentPos,(int)dim.x);
 			wizards.add(cw);
 			currentPos.y += cw.getHeight();
 		}
+	}
+	
+	public boolean recieveDraggableObject(DraggableObject drag)
+	{
+		for(int x=0;x<wizards.size();x++)
+		{
+			if(wizards.get(x).recieveDraggableObject(drag))
+				return true;
+		}
+		return false;
 	}
 	
 	public void apply()

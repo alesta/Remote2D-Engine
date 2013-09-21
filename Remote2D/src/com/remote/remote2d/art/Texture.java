@@ -1,6 +1,7 @@
 package com.remote.remote2d.art;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import org.lwjgl.opengl.GL11;
 

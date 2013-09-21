@@ -106,6 +106,11 @@ public class GuiEditorBrowser extends Gui {
 
 		}
 	}
+	
+	public GuiEditor getEditor()
+	{
+		return editor;
+	}
 
 	@Override
 	public void render(float interpolation) {

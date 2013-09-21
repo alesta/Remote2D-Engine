@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
@@ -17,18 +18,22 @@ import com.remote.remote2d.entity.EditorObject;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.gui.editor.DraggableObject;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Vector2;
 
 public class EditorObjectWizard {
 	
 	private EditorObject object;
+	private GuiEditor editor;
 	private Vector2 pos;
 	private int width;
 	public ArrayList<GuiEditorInspectorSection> sections;
 	
-	public EditorObjectWizard(EditorObject c, Vector2 pos, int width)
+	public EditorObjectWizard(GuiEditor editor, EditorObject c, Vector2 pos, int width)
 	{
 		object = c;
+		this.editor = editor;
 		this.pos = pos.copy();
 		this.width = width;
 		
@@ -41,28 +46,29 @@ public class EditorObjectWizard {
 			{
 				try {
 					Object o = fields[x].get(object);
-					if(o instanceof Integer)
+					Class type = fields[x].getType();
+					if(type == int.class)
 					{
 						GuiEditorInspectorSectionInt sec = new GuiEditorInspectorSectionInt(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = (Integer)o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof String)
+					} else if(type == String.class)
 					{
 						GuiEditorInspectorSectionString sec = new GuiEditorInspectorSectionString(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = (String)o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof Float)
+					} else if(type == float.class)
 					{
 						GuiEditorInspectorSectionFloat sec = new GuiEditorInspectorSectionFloat(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = (Float)o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof Vector2)
+					} else if(type == Vector2.class)
 					{
 						GuiEditorInspectorSectionVec2D sec = new GuiEditorInspectorSectionVec2D(fields[x].getName(),currentPos,width);
 						if(o != null)
@@ -72,27 +78,27 @@ public class EditorObjectWizard {
 						}
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof Texture)
+					} else if(type == Texture.class)
 					{
 						GuiEditorInspectorSectionTexture sec = new GuiEditorInspectorSectionTexture(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = ((Texture)o).textureLocation;
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof Boolean)
+					} else if(type == boolean.class)
 					{
 						GuiEditorInspectorSectionBoolean sec = new GuiEditorInspectorSectionBoolean(fields[x].getName(),currentPos,width);
 						sec.setData((Boolean)o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof Animation)
+					} else if(type == Animation.class)
 					{
 						GuiEditorInspectorSectionAnimation sec = new GuiEditorInspectorSectionAnimation(fields[x].getName(),currentPos,width);
 						if(o != null)
 							sec.textField.text = ((Animation)o).getPath();
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
-					} else if(o instanceof Color)
+					} else if(type == Color.class)
 					{
 						GuiEditorInspectorSectionColor sec = new GuiEditorInspectorSectionColor(fields[x].getName(),currentPos,width);
 						sec.setData((Color)o);
@@ -164,10 +170,31 @@ public class EditorObjectWizard {
 			sections.get(x).tick(i, j, k);
 	}
 	
+	public boolean recieveDraggableObject(DraggableObject drag)
+	{
+		int[] mouse = Remote2D.getInstance().getMouseCoords();
+		Vector2 mouseVec = new Vector2(mouse[0],mouse[1]);
+		for(int x=0;x<sections.size();x++)
+		{
+			Vector2 secDim = new Vector2(width,sections.get(x).sectionHeight());
+			boolean inside = sections.get(x).pos.getColliderWithDim(secDim).isPointInside(mouseVec);
+			if(sections.get(x).acceptsDraggableObject(drag) && inside)
+			{
+				sections.get(x).acceptDraggableObject(drag);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void render(float interpolation)
 	{
 		for(int x=0;x<sections.size();x++)
+		{
+			if(editor.dragObject != null && sections.get(x).acceptsDraggableObject(editor.dragObject))
+				Renderer.drawRect(pos, new Vector2(width,sections.get(x).sectionHeight()), 0xffffff, 0.5f);
 			sections.get(x).render(interpolation);
+		}
 		
 		Renderer.drawLine(new Vector2(pos.x,pos.y+20), new Vector2(pos.x+width,pos.y+20), 0xffffff, 1.0f);
 		Renderer.drawLine(new Vector2(pos.x,pos.y+getHeight()), new Vector2(pos.x+width,pos.y+getHeight()), 0xffffff, 1.0f);

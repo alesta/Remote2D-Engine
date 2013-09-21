@@ -1,6 +1,7 @@
 package com.remote.remote2d.gui.editor.inspector;
 
 import com.remote.remote2d.gui.Gui;
+import com.remote.remote2d.gui.editor.DraggableObject;
 import com.remote.remote2d.io.R2DType;
 import com.remote.remote2d.logic.Vector2;
 
@@ -25,4 +26,14 @@ public abstract class GuiEditorInspectorSection extends Gui {
 	public abstract boolean isSelected();
 	public abstract boolean isComplete();
 	public abstract boolean hasFieldBeenChanged();
+	
+	public boolean acceptsDraggableObject(DraggableObject object)
+	{
+		return false;
+	}
+	
+	public void acceptDraggableObject(DraggableObject object)
+	{
+		
+	}
 }

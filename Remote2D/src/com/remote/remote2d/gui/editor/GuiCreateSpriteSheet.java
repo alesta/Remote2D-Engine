@@ -154,14 +154,14 @@ public class GuiCreateSpriteSheet extends GuiMenu {
 		Vector2 realOffset = Interpolator.linearInterpolate(oldOffset, offset, interpolation);
 		
 		drawBlueprintBackground();
-		if(Remote2D.getInstance().artLoader.textureExists(texID.text))
+		if(Remote2D.getInstance().artLoader.textureExists(texID.text) && tex != null)
 		{
 			if(!tex.textureLocation.equals(texID.text))
 			{
 				tex.removeTexture();
 				tex = new Texture(texID.text);
 			}
-			tex.bind();			
+			tex.bind();	
 			Vector2 dim = new Vector2(tex.image.getWidth(),tex.image.getHeight());
 			
 			Renderer.startScissor(new Vector2(300,0), new Vector2(screenWidth()-300,screenHeight()));
