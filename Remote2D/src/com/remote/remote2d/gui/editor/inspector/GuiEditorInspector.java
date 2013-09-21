@@ -110,6 +110,11 @@ public class GuiEditorInspector extends GuiMenu {
 		GL11.glPopMatrix();
 	}
 	
+	public float getScrollOffset(float interpolation)
+	{
+		return (float)Interpolator.linearInterpolate(lastOffset, offset, interpolation);
+	}
+	
 	public void setCurrentEntity(Entity o)
 	{
 		this.currentEntity = o;

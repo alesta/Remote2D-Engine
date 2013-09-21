@@ -47,30 +47,34 @@ public class EditorObjectWizard {
 				try {
 					Object o = fields[x].get(object);
 					Class type = fields[x].getType();
+					
+					String name = splitCamelCase(fields[x].getName());
+					if(Character.isLowerCase(name.charAt(0)))
+						name = Character.toUpperCase(name.charAt(0))+name.substring(1);
 					if(type == int.class)
 					{
-						GuiEditorInspectorSectionInt sec = new GuiEditorInspectorSectionInt(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionInt sec = new GuiEditorInspectorSectionInt(name,currentPos,width);
 						if(o != null)
 							sec.textField.text = (Integer)o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == String.class)
 					{
-						GuiEditorInspectorSectionString sec = new GuiEditorInspectorSectionString(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionString sec = new GuiEditorInspectorSectionString(name,currentPos,width);
 						if(o != null)
 							sec.textField.text = (String)o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == float.class)
 					{
-						GuiEditorInspectorSectionFloat sec = new GuiEditorInspectorSectionFloat(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionFloat sec = new GuiEditorInspectorSectionFloat(name,currentPos,width);
 						if(o != null)
 							sec.textField.text = (Float)o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Vector2.class)
 					{
-						GuiEditorInspectorSectionVec2D sec = new GuiEditorInspectorSectionVec2D(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionVec2D sec = new GuiEditorInspectorSectionVec2D(name,currentPos,width);
 						if(o != null)
 						{
 							sec.textField1.text = ((Vector2)o).x+"";
@@ -80,27 +84,27 @@ public class EditorObjectWizard {
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Texture.class)
 					{
-						GuiEditorInspectorSectionTexture sec = new GuiEditorInspectorSectionTexture(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionTexture sec = new GuiEditorInspectorSectionTexture(name,currentPos,width);
 						if(o != null)
 							sec.textField.text = ((Texture)o).textureLocation;
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == boolean.class)
 					{
-						GuiEditorInspectorSectionBoolean sec = new GuiEditorInspectorSectionBoolean(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionBoolean sec = new GuiEditorInspectorSectionBoolean(name,currentPos,width);
 						sec.setData((Boolean)o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Animation.class)
 					{
-						GuiEditorInspectorSectionAnimation sec = new GuiEditorInspectorSectionAnimation(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionAnimation sec = new GuiEditorInspectorSectionAnimation(name,currentPos,width);
 						if(o != null)
 							sec.textField.text = ((Animation)o).getPath();
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Color.class)
 					{
-						GuiEditorInspectorSectionColor sec = new GuiEditorInspectorSectionColor(fields[x].getName(),currentPos,width);
+						GuiEditorInspectorSectionColor sec = new GuiEditorInspectorSectionColor(name,currentPos,width);
 						sec.setData((Color)o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
@@ -110,6 +114,17 @@ public class EditorObjectWizard {
 			}
 		}
 	}
+	
+	public static String splitCamelCase(String s) {
+		   return s.replaceAll(
+		      String.format("%s|%s|%s",
+		         "(?<=[A-Z])(?=[A-Z][a-z])",
+		         "(?<=[^A-Z])(?=[A-Z])",
+		         "(?<=[A-Za-z])(?=[^A-Za-z])"
+		      ),
+		      " "
+		   );
+		}
 	
 	public void setComponentFields()
 	{
@@ -177,7 +192,7 @@ public class EditorObjectWizard {
 		for(int x=0;x<sections.size();x++)
 		{
 			Vector2 secDim = new Vector2(width,sections.get(x).sectionHeight());
-			boolean inside = sections.get(x).pos.getColliderWithDim(secDim).isPointInside(mouseVec);
+			boolean inside = sections.get(x).pos.add(new Vector2(0,editor.getInspector().getScrollOffset(0))).getColliderWithDim(secDim).isPointInside(mouseVec);
 			if(sections.get(x).acceptsDraggableObject(drag) && inside)
 			{
 				sections.get(x).acceptDraggableObject(drag);
@@ -191,8 +206,13 @@ public class EditorObjectWizard {
 	{
 		for(int x=0;x<sections.size();x++)
 		{
-			if(editor.dragObject != null && sections.get(x).acceptsDraggableObject(editor.dragObject))
-				Renderer.drawRect(pos, new Vector2(width,sections.get(x).sectionHeight()), 0xffffff, 0.5f);
+			
+			Vector2 sizeVec = new Vector2(width,sections.get(x).sectionHeight());
+			boolean highlight = sections.get(x).pos.add(new Vector2(0,editor.getInspector().getScrollOffset(0))).getColliderWithDim(sizeVec).isPointInside(new Vector2(Remote2D.getInstance().getMouseCoords()));
+			if(editor.dragObject != null && sections.get(x).acceptsDraggableObject(editor.dragObject) && highlight)
+			{
+				Renderer.drawRect(sections.get(x).pos, new Vector2(width,sections.get(x).sectionHeight()), 0xffffff, 0.5f);
+			}
 			sections.get(x).render(interpolation);
 		}
 		

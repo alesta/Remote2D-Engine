@@ -98,7 +98,12 @@ public class GuiEditorInspectorSectionAnimation extends GuiEditorInspectorSectio
 			if(fileobj.file != null)
 			{
 				if(fileobj.file.getName().endsWith(Animation.getExtension()))
+				{
 					textField.text = fileobj.file.getPath();
+					if(textField.text.startsWith(Remote2D.getJarPath().getAbsolutePath()))
+						textField.text = textField.text.substring((int) Remote2D.getJarPath().getAbsolutePath().length());
+					textField.text.replace('\\', '/');
+				}
 			}
 		}
 	}
