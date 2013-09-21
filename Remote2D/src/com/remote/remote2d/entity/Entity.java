@@ -44,7 +44,7 @@ public class Entity extends EditorObject {
 	
 	private Texture slashTex;
 	//TODO: Allow for changing textures on the fly
-	//TODO: Use an all-encompassing Material system instead of this resoursePath bullshit.
+	//TODO: Use an all-encompassing Material system instead of this resourcePath bullshit.
 	private Texture tex;
 	
 	private Vector2 oldPos;

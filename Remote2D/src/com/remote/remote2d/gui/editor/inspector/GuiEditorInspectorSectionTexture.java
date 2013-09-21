@@ -3,10 +3,13 @@ package com.remote.remote2d.gui.editor.inspector;
 import org.lwjgl.input.Keyboard;
 
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
+import com.remote.remote2d.gui.editor.DraggableObject;
+import com.remote.remote2d.gui.editor.DraggableObjectFile;
 import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection {
@@ -70,6 +73,38 @@ public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection 
 	@Override
 	public boolean hasFieldBeenChanged() {
 		return textField.isSelected() && isComplete() && Remote2D.getInstance().getIntegerKeyboardList().contains(Keyboard.KEY_RETURN);
+	}
+	
+	public boolean acceptsDraggableObject(DraggableObject object)
+	{
+		if(object instanceof DraggableObjectFile)
+		{
+			DraggableObjectFile fileobj = ((DraggableObjectFile)object);
+			if(fileobj.file != null)
+			{
+				if(fileobj.file.getName().endsWith(".png"))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public void acceptDraggableObject(DraggableObject object)
+	{
+		if(object instanceof DraggableObjectFile)
+		{
+			DraggableObjectFile fileobj = ((DraggableObjectFile)object);
+			if(fileobj.file != null)
+			{
+				if(fileobj.file.getName().endsWith(".png"))
+				{
+					textField.text = fileobj.file.getPath();
+					if(textField.text.startsWith(Remote2D.getJarPath().getAbsolutePath()))
+						textField.text = textField.text.substring((int) Remote2D.getJarPath().getAbsolutePath().length());
+					textField.text.replace('\\', '/');
+				}
+			}
+		}
 	}
 
 }
