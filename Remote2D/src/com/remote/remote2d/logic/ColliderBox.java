@@ -60,7 +60,7 @@ public class ColliderBox extends Collider{
 		Vector2 pos = getPos();
 		Vector2 dim = getDim();
 		
-		return vec.x > pos.x && vec.y > pos.y && vec.x < pos.x+dim.x && vec.y < pos.y+dim.y;
+		return vec.x >= pos.x && vec.y >= pos.y && vec.x <= pos.x+dim.x && vec.y <= pos.y+dim.y;
 		
 	}
 

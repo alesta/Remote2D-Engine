@@ -48,6 +48,10 @@ public class DraggableObject extends Gui {
 			{
 				shouldDelete = true;
 				return;
+			} else if(editor.getHeirarchy().recieveDraggableObject(this))
+			{
+				shouldDelete = true;
+				return;
 			}
 		} else if(!letgo)
 		{

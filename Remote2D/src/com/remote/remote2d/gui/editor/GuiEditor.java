@@ -114,6 +114,11 @@ public class GuiEditor extends GuiMenu implements WindowHolder {
 		return inspector;
 	}
 	
+	public GuiEditorHeirarchy getHeirarchy()
+	{
+		return heirarchy;
+	}
+	
 	public void replaceSelectedEntity(Entity e)
 	{
 		int index = map.getEntityList().indexOf(selectedEntity);

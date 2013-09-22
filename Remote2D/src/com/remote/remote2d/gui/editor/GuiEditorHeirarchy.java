@@ -53,7 +53,6 @@ public class GuiEditorHeirarchy extends GuiMenu {
 		
 		for(int x=0;x < sections.size();x++)
 			sections.get(x).tick(i,j,k);
-
 	}
 
 	@Override
@@ -186,6 +185,53 @@ public class GuiEditorHeirarchy extends GuiMenu {
 
 	public GuiEditor getEditor() {
 		return editor;
+	}
+	
+	public boolean recieveDraggableObject(DraggableObject object)
+	{
+		if(object != null && object instanceof DraggableObjectEntity)
+		{
+			Vector2 mouse = new Vector2(Remote2D.getInstance().getMouseCoords());
+			for(int x=0;x < sections.size();x++)
+			{
+				DraggableObjectEntity drag = (DraggableObjectEntity)object;
+				Entity e = editor.getMap().getEntityList().getEntityWithUUID(drag.uuid);
+				int index = editor.getMap().getEntityList().indexOf(e);
+				if(sections.get(x).pos.getColliderWithDim(sections.get(x).dim).isPointInside(mouse))
+				{
+					float localY = mouse.y-sections.get(x).pos.y;
+					if(localY >=0 && localY <=5 && x > 0 && x != getSelected()+1 && x != getSelected())
+					{
+						int placeToGo = x;
+						if(index < x)
+							placeToGo -= 1;
+						editor.getMap().getEntityList().removeEntityFromList(index);
+						editor.getMap().getEntityList().addEntityToList(e,placeToGo);
+						return true;
+					}
+					else if(localY > 5 && localY < 15 && x != getSelected())
+					{
+						//TODO: Add children
+						return true;
+					}
+					else if(localY >= 15 && localY < 20 && x != getSelected()-1 && x != getSelected())
+					{
+						int placeToGo = x;
+						if(index > x)
+							placeToGo += 1;
+						editor.getMap().getEntityList().removeEntityFromList(index);
+						editor.getMap().getEntityList().addEntityToList(e,placeToGo);
+						return true;
+					}
+				} else if (x == sections.size()-1 && pos.getColliderWithDim(dim).isPointInside(mouse) && mouse.y > sections.get(x).pos.y+sections.get(x).dim.y)
+				{
+					editor.getMap().getEntityList().removeEntityFromList(index);
+					editor.getMap().getEntityList().addEntityToList(e,x);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 }
