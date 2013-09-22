@@ -47,10 +47,8 @@ public class EditorObjectWizard {
 				try {
 					Object o = fields[x].get(object);
 					Class type = fields[x].getType();
+					String name = fields[x].getName();
 					
-					String name = splitCamelCase(fields[x].getName());
-					if(Character.isLowerCase(name.charAt(0)))
-						name = Character.toUpperCase(name.charAt(0))+name.substring(1);
 					if(type == int.class)
 					{
 						GuiEditorInspectorSectionInt sec = new GuiEditorInspectorSectionInt(name,currentPos,width);
@@ -114,17 +112,6 @@ public class EditorObjectWizard {
 			}
 		}
 	}
-	
-	public static String splitCamelCase(String s) {
-		   return s.replaceAll(
-		      String.format("%s|%s|%s",
-		         "(?<=[A-Z])(?=[A-Z][a-z])",
-		         "(?<=[^A-Z])(?=[A-Z])",
-		         "(?<=[A-Za-z])(?=[^A-Za-z])"
-		      ),
-		      " "
-		   );
-		}
 	
 	public void setComponentFields()
 	{

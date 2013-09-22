@@ -9,6 +9,7 @@ public abstract class GuiEditorInspectorSection extends Gui {
 	
 	public Vector2 pos;
 	protected String name;
+	public String renderName;
 	protected int width;
 	
 	public GuiEditorInspectorSection(String name, Vector2 pos, int width)
@@ -16,6 +17,10 @@ public abstract class GuiEditorInspectorSection extends Gui {
 		this.pos = pos.copy();
 		this.name = name;
 		this.width = width;
+		
+		renderName = splitCamelCase(name);
+		if(Character.isLowerCase(renderName.charAt(0)))
+			renderName = Character.toUpperCase(name.charAt(0))+name.substring(1);
 	}
 	
 	public abstract int sectionHeight();
@@ -35,5 +40,16 @@ public abstract class GuiEditorInspectorSection extends Gui {
 	public void acceptDraggableObject(DraggableObject object)
 	{
 		
+	}
+	
+	public static String splitCamelCase(String s) {
+	   return s.replaceAll(
+	      String.format("%s|%s|%s",
+	         "(?<=[A-Z])(?=[A-Z][a-z])",
+	         "(?<=[^A-Z])(?=[A-Z])",
+	         "(?<=[A-Za-z])(?=[^A-Za-z])"
+	      ),
+	      " "
+	   );
 	}
 }

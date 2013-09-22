@@ -45,7 +45,7 @@ public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection 
 
 	@Override
 	public void render(float interpolation) {
-		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
+		Fonts.get("Arial").drawString(renderName, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
 		Renderer.drawLineRect(new Vector2(pos.x+width-20,pos.y), new Vector2(20), 0xffffff, 1.0f);
 		
 		if(isTrue)

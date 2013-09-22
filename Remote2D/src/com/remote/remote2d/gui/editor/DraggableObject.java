@@ -16,6 +16,7 @@ public class DraggableObject extends Gui {
 	public Vector2 pos;
 	public Vector2 origPos;
 	public Vector2 dim;
+	private boolean hasShown = false; // If it has been dragged past a certian threshold, usually 20 pixels.
 	private GuiEditor editor;
 	private long dragTime = 0;
 	private long letGoTime = 0;
@@ -37,13 +38,7 @@ public class DraggableObject extends Gui {
 	@Override
 	public void tick(int i, int j, int k) {
 		oldPos = pos.copy();
-		if(k == 1)
-		{
-			if(pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
-			{
-				dragTime = System.currentTimeMillis();
-			}
-		} else if(!letgo)
+		if(k != 1 && !letgo)
 		{
 			letGoTime = System.currentTimeMillis();
 			interpolatePos = pos.copy();
@@ -54,14 +49,15 @@ public class DraggableObject extends Gui {
 				shouldDelete = true;
 				return;
 			}
-		}
-		
-		if(!letgo)
+		} else if(!letgo)
 		{
 			pos = new Vector2(i,j).subtract(mouseOffset);
-		}
-		
-		if(letgo)
+			
+			Vector2 vec = pos.subtract(origPos);//combined vector of old->new pos
+			float length = (float) Math.sqrt(vec.x*vec.x+vec.y*vec.y);
+			if(length > 20)
+				hasShown = true;
+		} else
 		{
 			long timesinceletgo = System.currentTimeMillis()-letGoTime;
 			if(timesinceletgo > 200)
@@ -80,11 +76,10 @@ public class DraggableObject extends Gui {
 	public void render(float interpolation) {
 		Vector2 pos = Interpolator.linearInterpolate(oldPos, this.pos, interpolation);
 		
-		Vector2 vec = pos.subtract(origPos);//combined vector of old->new pos
-		float length = (float) Math.sqrt(vec.x*vec.x+vec.y*vec.y);
-		if(length > 20)
+		if(hasShown)
 		{
-			Renderer.drawRect(pos, dim, 0x000000, 0.4f);
+			//Renderer.drawRect(pos, dim, 0x000000, 0.4f);
+			Fonts.get("Arial").drawString(name, pos.x+11, pos.y+1, 20, 0x444444);
 			Fonts.get("Arial").drawString(name, pos.x+10, pos.y, 20, 0xffffff);
 		}
 	}

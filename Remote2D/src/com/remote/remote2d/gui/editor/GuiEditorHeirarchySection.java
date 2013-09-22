@@ -1,5 +1,7 @@
 package com.remote.remote2d.gui.editor;
 
+import org.lwjgl.input.Mouse;
+
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
@@ -12,10 +14,8 @@ public class GuiEditorHeirarchySection {
 	private Vector2 newAnimPos;
 	private long animStartTime;
 	private long animLength;
+	private long lastClickEvent = -1;
 	private Vector2 oldPos;
-	private boolean dragging = false;
-	private long lastDragTime = -1;
-	private Vector2 dragPos = new Vector2(-1,-1);
 	public Vector2 pos;
 	public Vector2 dim;
 	
@@ -41,34 +41,32 @@ public class GuiEditorHeirarchySection {
 			currentTime /= animLength;
 			pos = Interpolator.linearInterpolate(oldAnimPos, newAnimPos, currentTime);
 		}
-				
-	
-		if(Remote2D.getInstance().hasMouseBeenPressed() && !dragging)
+		
+		long time = System.currentTimeMillis();
+		if(Remote2D.getInstance().hasMouseBeenPressed())
 		{
 			if(pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
 			{
 				heirarchy.setAllUnselected();
 				selected = true;
 				heirarchy.updateSelected();
-				lastDragTime = System.currentTimeMillis();
-			}
-		} else if(k == 1 && !dragging)
-		{
-			if(System.currentTimeMillis()-lastDragTime > 100 && lastDragTime != -1 && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
+				
+				if(lastClickEvent != -1 && time-lastClickEvent <= 500)
+				{
+					//TODO: Enable entity focusing on double click
+					lastClickEvent = -1;
+				} else
+				{
+					lastClickEvent = time;
+				}
+			} else
 			{
-				dragging = true;
-				dragPos = new Vector2(i-pos.x,j-pos.y);
+				lastClickEvent = -1;
 			}
-		} else if(k== 1)
+		} else if(Mouse.isButtonDown(0) && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)) && heirarchy.getEditor().dragObject == null)
 		{
-			pos = new Vector2(pos.x,j-dragPos.y);
-		}
-		
-		if(k == 0 && dragging)
-		{
-			lastDragTime = -1;
-			dragging = false;
-			heirarchy.animateSections();
+			String uuid = heirarchy.getEntityForSec(this).uuid();
+			heirarchy.getEditor().dragObject = new DraggableObjectEntity(heirarchy.getEditor(),content,uuid,pos,dim,new Vector2(i,j).subtract(pos));
 		}
 	}
 
@@ -77,11 +75,6 @@ public class GuiEditorHeirarchySection {
 		if(selected)
 			Renderer.drawRect(truePos, dim, 0xffffff, 0.5f);
 		Fonts.get("Arial").drawString(content, truePos.x, truePos.y, 20, 0xffffff);
-	}
-	
-	public boolean isDragging()
-	{
-		return dragging;
 	}
 	
 	public boolean isAnimating()

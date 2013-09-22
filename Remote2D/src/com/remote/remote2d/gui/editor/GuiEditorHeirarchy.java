@@ -10,6 +10,7 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
+import com.remote.remote2d.entity.EntityPointer;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.logic.Vector2;
@@ -21,6 +22,8 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	public Vector2 dim;
 	private ArrayList<GuiEditorHeirarchySection> sections;
 	private GuiEditor editor;
+	
+	//TODO: Implement scrolling in the heirarchy view.
 	
 	public GuiEditorHeirarchy(Vector2 pos, Vector2 dim, GuiEditor editor)
 	{
@@ -40,10 +43,10 @@ public class GuiEditorHeirarchy extends GuiMenu {
 
 	@Override
 	public void tick(int i, int j, int k) {
-		if(editor.getMap() == null)
+		if(getEditor().getMap() == null)
 			return;
 		
-		if(!isSecDragging() && !Mouse.isButtonDown(0) && !isSecAnimating())
+		if(!Mouse.isButtonDown(0) && !isSecAnimating())
 		{
 			reloadSections();
 		}
@@ -57,18 +60,37 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	public void render(float interpolation) {
 		Renderer.drawRect(pos, dim, 0x000000, 0.5f);
 		
-		if(editor.getMap() == null)
+		if(getEditor().getMap() == null)
 			return;
 		
 		for(int x=0;x < sections.size();x++)
-			sections.get(x).render(interpolation);		
+			sections.get(x).render(interpolation);
+		
+		DraggableObject object = editor.dragObject;
+		if(object != null && object instanceof DraggableObjectEntity)
+		{
+			Vector2 mouse = new Vector2(Remote2D.getInstance().getMouseCoords());
+			for(int x=0;x < sections.size();x++)
+			{
+				if(sections.get(x).pos.getColliderWithDim(sections.get(x).dim).isPointInside(mouse))
+				{
+					float localY = mouse.y-sections.get(x).pos.y;
+					if(localY >=0 && localY <=5 && x > 0 && x != getSelected()+1 && x != getSelected())
+						Renderer.drawRect(new Vector2(pos.x,sections.get(x).pos.y-2.5f), new Vector2(dim.x,5), 0xaaaaff, 0.5f);
+					else if(localY > 5 && localY < 15 && x != getSelected())
+						Renderer.drawRect(new Vector2(pos.x,sections.get(x).pos.y), new Vector2(dim.x,sections.get(x).dim.y), 0xaaaaff, 0.5f);
+					else if(localY >= 15 && localY < 20 && x < sections.size()-1 && x != getSelected()-1 && x != getSelected())
+						Renderer.drawRect(new Vector2(pos.x,sections.get(x).pos.y+17.5f), new Vector2(dim.x,5), 0xaaaaff, 0.5f);
+				}
+			}
+		}
 	}
 	
 	public void updateSelected()
 	{
 		for(int x=0;x<sections.size();x++)
 			if(sections.get(x).selected)
-				editor.setSelectedEntity(x);
+				getEditor().setSelectedEntity(x);
 	}
 	
 	public void animateSections()
@@ -85,12 +107,12 @@ public class GuiEditorHeirarchy extends GuiMenu {
 		
 		if(newSelectedIndex < 0)
 			newSelectedIndex = 0;
-		if(newSelectedIndex >= editor.getMap().getEntityList().size()-1)
-			newSelectedIndex = editor.getMap().getEntityList().size()-1;
+		if(newSelectedIndex >= getEditor().getMap().getEntityList().size()-1)
+			newSelectedIndex = getEditor().getMap().getEntityList().size()-1;
 		
-		Entity e = editor.getMap().getEntityList().get(selectedIndex);
-		editor.getMap().getEntityList().removeEntityFromList(e);
-		editor.getMap().getEntityList().addEntityToList(e,newSelectedIndex);
+		Entity e = getEditor().getMap().getEntityList().get(selectedIndex);
+		getEditor().getMap().getEntityList().removeEntityFromList(e);
+		getEditor().getMap().getEntityList().addEntityToList(e,newSelectedIndex);
 		
 		sections.remove(sec);
 		sections.add(newSelectedIndex, sec);
@@ -107,16 +129,6 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	{
 		for(int x=0;x<sections.size();x++)
 			sections.get(x).selected = false;
-	}
-	
-	private boolean isSecDragging()
-	{
-		for(int x=0;x<sections.size();x++)
-		{
-			if(sections.get(x).isDragging())
-				return true;
-		}
-		return false;
 	}
 	
 	private boolean isSecAnimating()
@@ -142,14 +154,14 @@ public class GuiEditorHeirarchy extends GuiMenu {
 	private void reloadSections()
 	{
 		sections.clear();
-		if(editor.getMap() == null)
+		if(getEditor().getMap() == null)
 			return;
 		
 		float currentYPos = pos.y;
-		int selected = editor.getMap().getEntityList().indexOf(editor.getSelectedEntity());
-		for(int x=0;x<editor.getMap().getEntityList().size();x++)
+		int selected = getEditor().getMap().getEntityList().indexOf(getEditor().getSelectedEntity());
+		for(int x=0;x<getEditor().getMap().getEntityList().size();x++)
 		{
-			String name = editor.getMap().getEntityList().get(x).name;
+			String name = getEditor().getMap().getEntityList().get(x).name;
 			if(name.equals(""))
 				name = "Untitled";
 			GuiEditorHeirarchySection sec = new GuiEditorHeirarchySection(this,name, new Vector2(pos.x,currentYPos),new Vector2(dim.x,20));
@@ -160,6 +172,20 @@ public class GuiEditorHeirarchy extends GuiMenu {
 			currentYPos += 20;
 		}
 		
+	}
+	
+	public EntityPointer getEntityForSec(GuiEditorHeirarchySection section)
+	{
+		for(int x=0;x<sections.size();x++)
+		{
+			if(sections.get(x).equals(section))
+				return new EntityPointer(editor.getMap().getEntityList().get(x),editor.getMap());
+		}
+		return null;
+	}
+
+	public GuiEditor getEditor() {
+		return editor;
 	}
 	
 }

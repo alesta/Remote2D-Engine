@@ -43,7 +43,7 @@ public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection 
 
 	@Override
 	public void render(float interpolation) {
-		Fonts.get("Arial").drawString(name, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
+		Fonts.get("Arial").drawString(renderName, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
 		textField.render(interpolation);
 	}
 	
