@@ -10,7 +10,6 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
-import com.remote.remote2d.entity.EntityPointer;
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.logic.Vector2;
@@ -173,12 +172,12 @@ public class GuiEditorHeirarchy extends GuiMenu {
 		
 	}
 	
-	public EntityPointer getEntityForSec(GuiEditorHeirarchySection section)
+	public Entity getEntityForSec(GuiEditorHeirarchySection section)
 	{
 		for(int x=0;x<sections.size();x++)
 		{
 			if(sections.get(x).equals(section))
-				return new EntityPointer(editor.getMap().getEntityList().get(x),editor.getMap());
+				return editor.getMap().getEntityList().get(x);
 		}
 		return null;
 	}

@@ -10,14 +10,15 @@ import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
 import com.remote.remote2d.gui.editor.DraggableObject;
 import com.remote.remote2d.gui.editor.DraggableObjectFile;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection {
 	
 	GuiTextField textField;
 
-	public GuiEditorInspectorSectionTexture(String name, Vector2 pos, int width) {
-		super(name, pos, width);
+	public GuiEditorInspectorSectionTexture(String name, GuiEditor inspector, Vector2 pos, int width) {
+		super(name, inspector, pos, width);
 		textField = new GuiTextField(pos.add(new Vector2(10,20)), new Vector2(width-20,20), 20);
 	}
 

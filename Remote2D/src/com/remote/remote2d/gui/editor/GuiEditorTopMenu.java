@@ -271,8 +271,7 @@ public class GuiEditorTopMenu extends Gui {
 				editor.confirmOperation(new OperationNewEntity(editor));
 			} else if(secSubTitle.equalsIgnoreCase("Run Map"))
 			{
-				Remote2D.getInstance().map = editor.getMap().copy();
-				Remote2D.getInstance().guiList.push(new GuiInGame());
+				Remote2D.getInstance().guiList.push(new GuiInGame(editor.getMap().copy()));
 			} else if(secSubTitle.equalsIgnoreCase("Delete Entity"))
 			{
 				OperationDeleteEntity delete = new OperationDeleteEntity(editor);

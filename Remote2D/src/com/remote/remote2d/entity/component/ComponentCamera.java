@@ -28,7 +28,7 @@ public class ComponentCamera extends Component {
 	@Override
 	public void onEntitySpawn() {
 		Camera camera = new Camera(entity.pos);
-		Remote2D.getInstance().map.camera = camera;
+		entity.getMap().camera = camera;
 	}
 
 	@Override

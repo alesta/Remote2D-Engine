@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.remote.remote2d.entity.component.Component;
+import com.remote.remote2d.world.Map;
 
 public class EntityList {
 	
@@ -12,6 +13,7 @@ public class EntityList {
 	 * The actual entity list.
 	 */
 	private ArrayList<Entity> entityList;
+	private Map map;
 	
 	/**
 	 * A big list of all of the Entities that are available.  When spawning an Entity into
@@ -19,9 +21,10 @@ public class EntityList {
 	 * or render()ed.
 	 */
 	
-	public EntityList()
+	public EntityList(Map map)
 	{
 		 entityList = new ArrayList<Entity>();
+		 this.map = map;
 	}
 	
 	public void addEntityToList(Entity e)
@@ -105,12 +108,34 @@ public class EntityList {
 		return entityList.get(index);
 	}
 	
+	/**
+	 * Searches the entity list for the given UUID. Equivalent to {@link #getEntityWithUUID(String, boolean)} where mapLoad is false.
+	 * @param uuid The UUID that is being searched for.
+	 * @return An entity with the given UUID
+	 */
 	public Entity getEntityWithUUID(String uuid)
+	{
+		return getEntityWithUUID(uuid,false);
+	}
+	
+	/**
+	 * Searches the entity list for the given UUID.
+	 * @param uuid The UUID that is being searched for.
+	 * @param mapLoad This is used by the map loader to automatically create new Entities when none can be found.
+	 * @return An entity with the given UUID
+	 */
+	public Entity getEntityWithUUID(String uuid, boolean mapLoad)
 	{
 		for(Entity e : entityList)
 		{
 			if(e.getUUID().equals(uuid))
 				return e;
+		}
+		if(mapLoad)
+		{
+			Entity newEnt = new Entity(map,uuid);
+			entityList.add(newEnt);
+			return newEnt;
 		}
 		return null;
 	}

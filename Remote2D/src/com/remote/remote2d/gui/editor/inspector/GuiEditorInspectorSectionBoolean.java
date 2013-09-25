@@ -7,6 +7,7 @@ import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection {
@@ -14,8 +15,8 @@ public class GuiEditorInspectorSectionBoolean extends GuiEditorInspectorSection 
 	boolean isTrue = false;
 	private boolean hasBeenChanged = false;
 
-	public GuiEditorInspectorSectionBoolean(String name, Vector2 pos, int width) {
-		super(name, pos, width);
+	public GuiEditorInspectorSectionBoolean(String name, GuiEditor inspector, Vector2 pos, int width) {
+		super(name, inspector, pos, width);
 	}
 
 	@Override

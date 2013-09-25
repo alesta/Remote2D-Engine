@@ -186,6 +186,68 @@ public class Renderer {
 		drawLine(vec1,vec2,r,g,b,alpha);
 	}
 	
+	public static void drawCircleHollow(Vector2 center, float radius, int sides, float red, float green, float blue, float alpha)
+	{
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(red, green, blue, alpha);
+		GL11.glBegin(GL11.GL_LINE_STRIP);
+		
+		float degree = 0;
+		for (int i=0; i < sides+1; i++)
+		{
+			float degInRad = degree*(3.14159f/180f);
+			double x = Math.cos(degInRad)*radius+center.x;
+			double y = Math.sin(degInRad)*radius+center.y;
+			GL11.glVertex2d(x, y);
+			degree += 360f/sides;
+			if(degree >= 360)//this finishes the circle
+				degree = 0;
+		}
+		
+		GL11.glEnd();
+		GL11.glColor3f(1, 1, 1);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	public static void drawCircleHollow(Vector2 center, float radius, int sides, int color, float alpha) {
+		float r = ((color >> 16) & 0xff)/255f;
+		float g = ((color >> 8) & 0xff)/255f;
+		float b = (color & 0xff)/255f;
+		drawCircleHollow(center,radius,sides,r,g,b,alpha);
+	}
+	
+	public static void drawCircleOpaque(Vector2 center, float radius, int sides, float red, float green, float blue, float alpha)
+	{
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(red, green, blue, alpha);
+		GL11.glBegin(GL11.GL_TRIANGLES);
+		
+		float degree = 0;
+		for (int i=0; i < sides+1; i++)
+		{
+			float degInRad = degree*(3.14159f/180f);
+			double x = Math.cos(degInRad)*radius+center.x;
+			double y = Math.sin(degInRad)*radius+center.y;
+			if(x % 2 == 0)
+				GL11.glVertex2f(center.x,center.y);
+			GL11.glVertex2d(x, y);
+			degree += 360f/sides;
+			if(degree >= 360)//this finishes the circle
+				degree = 0;
+		}
+		
+		GL11.glEnd();
+		GL11.glColor3f(1, 1, 1);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	public static void drawCircleOpaque(Vector2 center, float radius, int sides, int color, float alpha) {
+		float r = ((color >> 16) & 0xff)/255f;
+		float g = ((color >> 8) & 0xff)/255f;
+		float b = (color & 0xff)/255f;
+		drawCircleOpaque(center,radius,sides,r,g,b,alpha);
+	}
+	
 	public static void startScissor(Vector2 pos, Vector2 dim)
 	{
 		Vector2 newPos = pos.copy();

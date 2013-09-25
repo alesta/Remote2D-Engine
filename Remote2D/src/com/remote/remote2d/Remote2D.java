@@ -18,8 +18,10 @@ import com.remote.remote2d.entity.InsertableComponentList;
 import com.remote.remote2d.entity.component.ComponentCamera;
 import com.remote.remote2d.entity.component.ComponentColliderBox;
 import com.remote.remote2d.gui.GuiMenu;
+import com.remote.remote2d.gui.MapHolder;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
+import com.remote.remote2d.world.Console;
 import com.remote.remote2d.world.Map;
 
 public class Remote2D {
@@ -61,7 +63,6 @@ public class Remote2D {
 	private final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 	
 	/*----------GAME VARIABLES--------------*/
-	public Map map;
 	/**
 	 * ALL rendering and ticking, besides REALLY basic stuff goes through here.  Even in-game!
 	 */
@@ -116,7 +117,6 @@ public class Remote2D {
 	
 	public void initGame()
 	{
-		map = new Map();
 		guiList = new Stack<GuiMenu>();
 		charList = new ArrayList<Character>();
 		charListLimited = new ArrayList<Character>();
@@ -125,7 +125,7 @@ public class Remote2D {
 		componentList = new InsertableComponentList();
 		componentList.addInsertableComponent("Box Collider", ComponentColliderBox.class);
 		componentList.addInsertableComponent("Camera", ComponentCamera.class);
-		
+				
 		artLoader = new ArtLoader();
 		
 		game.initGame();
@@ -309,6 +309,23 @@ public class Remote2D {
 	public int getFPS()
 	{
 		return fps;
+	}
+	
+	/**
+	 * Finds the best version of the map by scanning through all available GUIs.
+	 * The first one that it finds (starting from the top of the stack) that implements
+	 * MapHolder is assumed to be the most plausible map to use.
+	 * 
+	 * @return The Map on the top of the stack.
+	 */
+	public Map getMap()
+	{
+		for(GuiMenu menu : guiList)
+		{
+			if(menu instanceof MapHolder)
+				return ((MapHolder)menu).getMap();
+		}
+		return null;
 	}
 	
 	public void shutDown()

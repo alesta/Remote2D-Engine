@@ -20,6 +20,7 @@ public class ComponentPlayer extends Component {
 	public Animation jumpAnimation;
 	public Animation fallAnimation;
 	public Animation landAnimation;
+	public Entity testEntity;
 	public boolean spriteFacesRight = true;
 	public boolean particleTest = false;
 	
@@ -33,11 +34,6 @@ public class ComponentPlayer extends Component {
 	private Vector2 velocity = new Vector2(0,0);
 	private Vector2 acceleration = new Vector2(0,2);
 	private Vector2 maxVelocity = new Vector2(10,-1);
-		
-	public ComponentPlayer()
-	{
-		testParticles = new ParticleSystem(Remote2D.getInstance().map);
-	}
 
 	@Override
 	public void tick(int i, int j, int k) {
@@ -84,7 +80,7 @@ public class ComponentPlayer extends Component {
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && (state == PlayerState.WALK || state == PlayerState.IDLE))
 			velocity.y -= 20;
 		
-		Vector2 correction = Remote2D.getInstance().map.getCorrection(entity.pos.getColliderWithDim(entity.getDim()),new Vector2(velocity.getElements()));
+		Vector2 correction = entity.getMap().getCorrection(entity.pos.getColliderWithDim(entity.getDim()),new Vector2(velocity.getElements()));
 		velocity = velocity.add(correction);
 		
 		//velocity = velocity.multiply(new Vector2DF(friction,friction));
@@ -99,20 +95,20 @@ public class ComponentPlayer extends Component {
 			state = PlayerState.LAND;
 		//velocity.print();
 		
-		ColliderBox renderarea = Remote2D.getInstance().map.camera.getMapRenderArea();
+		ColliderBox renderarea = entity.getMap().camera.getMapRenderArea();
 		float right = renderarea.pos.x+renderarea.dim.x;
 		float left = renderarea.pos.x;
 		if(entity.pos.x+entity.getDim().x > right)
-			Remote2D.getInstance().map.camera.pos.x += (entity.pos.x+entity.getDim().x)-right;
+			entity.getMap().camera.pos.x += (entity.pos.x+entity.getDim().x)-right;
 		if(entity.pos.x < left)
-			Remote2D.getInstance().map.camera.pos.x -= left-entity.pos.x;
+			entity.getMap().camera.pos.x -= left-entity.pos.x;
 		
 		float bottom = renderarea.pos.y+renderarea.dim.y;
 		float top = renderarea.pos.y;
 		if(entity.pos.y+entity.getDim().y > bottom)
-			Remote2D.getInstance().map.camera.pos.y += (entity.pos.y+entity.getDim().y)-bottom;
+			entity.getMap().camera.pos.y += (entity.pos.y+entity.getDim().y)-bottom;
 		if(entity.pos.y < top)
-			Remote2D.getInstance().map.camera.pos.y -= top-entity.pos.y;
+			entity.getMap().camera.pos.y -= top-entity.pos.y;
 		
 		Animation anim = getAnim();
 		
@@ -128,7 +124,7 @@ public class ComponentPlayer extends Component {
 		}
 		
 		
-		testParticles.pos = new Vector2(i,j).add(Remote2D.getInstance().map.camera.pos);
+		testParticles.pos = new Vector2(i,j).add(entity.getMap().camera.pos);
 		if(particleTest)
 			testParticles.tick(false);
 			
@@ -141,7 +137,8 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void onEntitySpawn() {
-		
+		Log.debug(testEntity.name);
+		testParticles = new ParticleSystem(entity.getMap());
 	}
 	
 	public Animation getAnim()

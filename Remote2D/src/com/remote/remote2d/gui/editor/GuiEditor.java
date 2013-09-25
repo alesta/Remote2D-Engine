@@ -17,6 +17,7 @@ import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.GuiWindow;
 import com.remote.remote2d.gui.KeyShortcut;
+import com.remote.remote2d.gui.MapHolder;
 import com.remote.remote2d.gui.WindowHolder;
 import com.remote.remote2d.gui.editor.browser.GuiEditorBrowser;
 import com.remote.remote2d.gui.editor.inspector.GuiEditorInspector;
@@ -27,7 +28,7 @@ import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Camera;
 import com.remote.remote2d.world.Map;
 
-public class GuiEditor extends GuiMenu implements WindowHolder {
+public class GuiEditor extends GuiMenu implements WindowHolder,MapHolder {
 	
 	public Vector2 posOffset = new Vector2(0,0);
 	public boolean grid = false;

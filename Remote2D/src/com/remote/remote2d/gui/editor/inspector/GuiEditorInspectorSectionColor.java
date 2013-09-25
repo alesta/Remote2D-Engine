@@ -9,14 +9,15 @@ import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionColor extends GuiEditorInspectorSection {
 	
 	GuiTextField textField;
 
-	public GuiEditorInspectorSectionColor(String name, Vector2 pos, int width) {
-		super(name, pos, width);
+	public GuiEditorInspectorSectionColor(String name, GuiEditor inspector, Vector2 pos, int width) {
+		super(name, inspector, pos, width);
 		textField = new GuiTextField(pos.add(new Vector2(10,20)), new Vector2(width-20,20), 20);
 		textField.limitToDigits = TextLimiter.LIMIT_TO_HEX;
 		textField.prefix = "0x";

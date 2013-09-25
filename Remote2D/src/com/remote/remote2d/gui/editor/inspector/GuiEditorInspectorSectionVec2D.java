@@ -9,6 +9,7 @@ import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.gui.GuiTextField;
 import com.remote.remote2d.gui.TextLimiter;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Vector2;
 
 public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
@@ -21,8 +22,8 @@ public class GuiEditorInspectorSectionVec2D extends GuiEditorInspectorSection {
 	float old2 = 0.0f;
 	
 
-	public GuiEditorInspectorSectionVec2D(String name, Vector2 pos, int width) {
-		super(name, pos, width);
+	public GuiEditorInspectorSectionVec2D(String name, GuiEditor inspector, Vector2 pos, int width) {
+		super(name, inspector, pos, width);
 		textField1 = new GuiTextField(pos.add(new Vector2(10,20)), new Vector2(width/2-10,20), 20);
 		textField1.limitToDigits = TextLimiter.LIMIT_TO_FLOAT;
 		

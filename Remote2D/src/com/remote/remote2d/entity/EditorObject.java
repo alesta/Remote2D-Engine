@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.UUID;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
@@ -73,9 +74,9 @@ public abstract class EditorObject implements R2DFileSaver {
 					} else if(o instanceof Color)
 					{
 						collection.setColor(fields[x].getName(), (Color)o);
-					} else if(o instanceof EntityPointer)
+					} else if(o instanceof Entity)
 					{
-						collection.setString(fields[x].getName(), ((EntityPointer)o).uuid());
+						collection.setString(fields[x].getName(), ((Entity)o).getUUID());
 					} else
 					{
 						String s = "Unknown Data Type "+o.getClass().getName()+" is a public variable of Component: "+fields[x].getName()+".";
@@ -118,8 +119,14 @@ public abstract class EditorObject implements R2DFileSaver {
 						field.set(this, collection.getBoolean(field.getName()));
 					else if(field.getType() == Color.class)
 						field.set(this, collection.getColor(field.getName()));
-					else if(field.getType() == EntityPointer.class)
-						field.set(this, new EntityPointer(collection.getString(fields[x].getName()),map));
+					else if(field.getType() == Entity.class)
+					{
+						String uuid = collection.getString(field.getName());
+						Entity e = null;
+						if(!uuid.trim().equals(""))
+							Remote2D.getInstance().getMap().getEntityList().getEntityWithUUID(uuid,true);
+						field.set(this, uuid);
+					}
 					else
 					{
 						String s = "Unknown Data Type "+field.getType().getName()+" is a public variable of Component: "+fields[x].getName()+".";

@@ -2,6 +2,7 @@ package com.remote.remote2d.gui.editor.inspector;
 
 import com.remote.remote2d.gui.Gui;
 import com.remote.remote2d.gui.editor.DraggableObject;
+import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.io.R2DType;
 import com.remote.remote2d.logic.Vector2;
 
@@ -11,12 +12,14 @@ public abstract class GuiEditorInspectorSection extends Gui {
 	protected String name;
 	public String renderName;
 	protected int width;
+	protected GuiEditor inspector;
 	
-	public GuiEditorInspectorSection(String name, Vector2 pos, int width)
+	public GuiEditorInspectorSection(String name, GuiEditor inspector, Vector2 pos, int width)
 	{
 		this.pos = pos.copy();
 		this.name = name;
 		this.width = width;
+		this.inspector = inspector;
 		
 		renderName = splitCamelCase(name);
 		if(Character.isLowerCase(renderName.charAt(0)))

@@ -65,7 +65,7 @@ public class GuiEditorHeirarchySection {
 			}
 		} else if(Mouse.isButtonDown(0) && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)) && heirarchy.getEditor().dragObject == null)
 		{
-			String uuid = heirarchy.getEntityForSec(this).uuid();
+			String uuid = heirarchy.getEntityForSec(this).getUUID();
 			heirarchy.getEditor().dragObject = new DraggableObjectEntity(heirarchy.getEditor(),content,uuid,pos,dim,new Vector2(i,j).subtract(pos));
 		}
 	}

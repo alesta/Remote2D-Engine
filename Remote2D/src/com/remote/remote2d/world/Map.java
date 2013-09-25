@@ -34,7 +34,7 @@ public class Map implements R2DFileSaver {
 	
 	public Map()
 	{
-		entities = new EntityList();
+		entities = new EntityList(this);
 		camera = new Camera();
 	}
 	
@@ -228,7 +228,12 @@ public class Map implements R2DFileSaver {
 		for(int x=0;x<entityCount;x++)
 		{
 			R2DTypeCollection c = collection.getCollection("entity_"+x);
-			Entity e = new Entity(this);
+			Entity e = entities.getEntityWithUUID(c.getString("uuid"));
+			if(e == null)
+				e = new Entity(this);
+			else
+				entities.removeEntityFromList(e);	//Will be moved to the top after we load.
+													//This is done in order to keep all Entity pointers intact.
 			e.loadR2DFile(c);
 			int componentCount = c.getInteger("componentCount");
 			for(int y=0;y<componentCount;y++)

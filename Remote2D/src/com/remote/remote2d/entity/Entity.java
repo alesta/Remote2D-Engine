@@ -98,7 +98,7 @@ public class Entity extends EditorObject {
 	
 	public void removeEntityFromWorld()
 	{
-		Remote2D.getInstance().map.getEntityList().removeEntityFromList(this);
+		map.getEntityList().removeEntityFromList(this);
 	}
 	
 	public Entity getChild(int index)
