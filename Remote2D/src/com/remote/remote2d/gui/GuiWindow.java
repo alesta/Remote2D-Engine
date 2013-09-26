@@ -72,7 +72,7 @@ public abstract class GuiWindow extends Gui {
 		{
 			if(pos.getColliderWithDim(dim.add(new Vector2(20,20))).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
 			{
-				holder.attemptToPutWindowOnTop(this);
+				holder.pushWindow(this);
 				buttonOverride = true;
 			}
 			if(!isSelected)

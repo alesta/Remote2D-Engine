@@ -19,6 +19,8 @@ import com.remote.remote2d.entity.component.ComponentCamera;
 import com.remote.remote2d.entity.component.ComponentColliderBox;
 import com.remote.remote2d.gui.GuiMenu;
 import com.remote.remote2d.gui.MapHolder;
+import com.remote.remote2d.gui.editor.GuiEditor;
+import com.remote.remote2d.gui.editor.GuiWindowConsole;
 import com.remote.remote2d.logic.ColliderBox;
 import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Console;
@@ -149,7 +151,23 @@ public class Remote2D {
 			{
 				int i = getMouseCoords()[0];
 				int j = getMouseCoords()[1];
-				tick(i, j, getMouseDown());
+				try
+				{
+					tick(i, j, getMouseDown());
+				} catch(Exception e)
+				{
+					GuiEditor editor = getEditor();
+					if(editor != null)
+					{
+						Log.error("Exception detected on tick()!", e);
+						while(!(guiList.peek() instanceof GuiEditor))
+						{
+							guiList.pop();
+						}
+						editor.pushWindow(new GuiWindowConsole(editor,new Vector2(100),new Vector2(300),editor.getWindowBounds()));
+					} else
+						throw new Remote2DException(e);
+				}
 				lastUpdateTime += TIME_BETWEEN_UPDATES;
 				updateCount++;
 			}
@@ -159,9 +177,25 @@ public class Remote2D {
 				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
 			}
 			
-			float interpolation = Math.min(1.0f, (float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES) );
-			render(interpolation);
-			fpsCounter++;
+			try
+			{
+				float interpolation = Math.min(1.0f, (float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES) );
+				render(interpolation);
+				fpsCounter++;
+			} catch(Exception e)
+			{
+				GuiEditor editor = getEditor();
+				if(editor != null)
+				{
+					Log.error("Exception detected on render()!", e);
+					while(!(guiList.peek() instanceof GuiEditor))
+					{
+						guiList.pop();
+					}
+					editor.pushWindow(new GuiWindowConsole(editor,new Vector2(100),new Vector2(300),editor.getWindowBounds()));
+				} else
+					throw new Remote2DException(e);
+			}
 			Display.update();
 			lastRenderTime = now;
 			   
@@ -301,6 +335,18 @@ public class Remote2D {
 		guiList.peek().render(interpolation);
 		
 		CursorLoader.render(interpolation);
+	}
+	
+	/**
+	 * Returns the topmost instance of the Editor in the Gui Stack.
+	 * @return Instance of GuiEditor, or null if none exist.
+	 */
+	public GuiEditor getEditor()
+	{
+		for(int x=0;x<guiList.size();x++)
+			if(guiList.get(x) instanceof GuiEditor)
+				return (GuiEditor)guiList.get(x);
+		return null;
 	}
 	
 	public Remote2DGame getGame()

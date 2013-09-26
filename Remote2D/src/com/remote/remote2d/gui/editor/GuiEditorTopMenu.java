@@ -236,7 +236,7 @@ public class GuiEditorTopMenu extends Gui {
 						false);
 			} else if(secSubTitle.equalsIgnoreCase("Console"))
 			{
-				editor.attemptToPutWindowOnTop(new GuiWindowConsole(editor, new Vector2(100), new Vector2(400), editor.getWindowBounds()));
+				editor.pushWindow(new GuiWindowConsole(editor, new Vector2(100), new Vector2(400), editor.getWindowBounds()));
 			} else if(secSubTitle.equalsIgnoreCase("Exit"))
 			{
 				Remote2D.getInstance().guiList.pop();
@@ -251,27 +251,27 @@ public class GuiEditorTopMenu extends Gui {
 			{
 				GuiWindowViewArtAsset window = new GuiWindowViewArtAsset(editor, new Vector2(200,200), editor.getWindowBounds());
 				window.setSelected(true);
-				editor.attemptToPutWindowOnTop(window);
+				editor.pushWindow(window);
 			} else if(secSubTitle.equalsIgnoreCase("Fancypants Collider Test"))
 			{
 				GuiWindowCollisionTest window = new GuiWindowCollisionTest(editor, new Vector2(300,300), editor.getWindowBounds());
 				window.setSelected(true);
-				editor.attemptToPutWindowOnTop(window);
+				editor.pushWindow(window);
 			} else if(secSubTitle.equalsIgnoreCase("Normal Collider Test"))
 			{
 				GuiWindowGeneralColliderTest window = new GuiWindowGeneralColliderTest(editor, new Vector2(300,300), editor.getWindowBounds());
 				window.setSelected(true);
-				editor.attemptToPutWindowOnTop(window);
+				editor.pushWindow(window);
 			} else if(secSubTitle.equalsIgnoreCase("1D Perlin Noise"))
 			{
 				GuiWindowPerlin1D window = new GuiWindowPerlin1D(editor, new Vector2(10,30), editor.getWindowBounds());
 				window.setSelected(true);
-				editor.attemptToPutWindowOnTop(window);
+				editor.pushWindow(window);
 			} else if(secSubTitle.equalsIgnoreCase("2D Perlin Noise"))
 			{
 				GuiWindowPerlin2D window = new GuiWindowPerlin2D(editor, new Vector2(20,30), editor.getWindowBounds());
 				window.setSelected(true);
-				editor.attemptToPutWindowOnTop(window);
+				editor.pushWindow(window);
 			}
 		} else if(secTitle.equalsIgnoreCase("World"))
 		{

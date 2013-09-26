@@ -296,7 +296,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder,MapHolder {
 	}
 
 	@Override
-	public void attemptToPutWindowOnTop(GuiWindow window) {
+	public void pushWindow(GuiWindow window) {
 		if(!(windowStack.contains(window)))
 		{
 			if(windowStack.size() != 0)
@@ -391,7 +391,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder,MapHolder {
 		GuiWindowConfirmOperation conf = new GuiWindowConfirmOperation(this, new Vector2(40,40), getWindowBounds(), o);
 		conf.setSelected(true);
 		conf.pos = new Vector2(screenWidth()/2-conf.dim.x/2,screenHeight()/2-conf.dim.y/2);
-		attemptToPutWindowOnTop(conf);
+		pushWindow(conf);
 	}
 	
 	public void undo()
