@@ -117,6 +117,8 @@ public class Remote2D {
 	
 	public void initGame()
 	{
+		Log.setLogger(new ConsoleLogger());
+		
 		guiList = new Stack<GuiMenu>();
 		charList = new ArrayList<Character>();
 		charListLimited = new ArrayList<Character>();

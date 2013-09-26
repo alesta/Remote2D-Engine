@@ -7,20 +7,36 @@ import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Renderer;
+import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.art.TextureLoader;
+import com.remote.remote2d.logic.Vector2;
 
 public class FontRenderer {
-	Font font;
-	boolean useAntiAliasing;
+	private Font font;
+	private Map<RenderData,Texture> cache;
+	public final boolean useAntiAliasing;
+	
 	public FontRenderer(Font f, boolean useAntiAliasing)
 	{
 		font = f;
 		this.useAntiAliasing = useAntiAliasing;
+		
+		cache = new LinkedHashMap<RenderData,Texture>(16, 0.75f, true) {
+			@Override
+	    	protected boolean removeEldestEntry(Map.Entry<RenderData,Texture> eldest) {
+				if(size() > 30)
+					eldest.getValue().removeTexture();
+				return size() > 30;
+	    	}
+	    };
 	}
 	
 	public BufferedImage createImageFromString(String s, float size, int color)
@@ -56,27 +72,41 @@ public class FontRenderer {
 	
 	public void drawString(String s, float x, float y, float size, int color)
 	{
-		BufferedImage image = createImageFromString(s,size,color);
-		if(s.equals("") || image == null)
+		if(s.equals(""))
 			return;
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		int texID = TextureLoader.loadTexture(image,true,false);
 		
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
-		GL11.glBegin(GL11.GL_QUADS);
+		RenderData data = new RenderData(s,size,color);
+		Texture tex;
+		if(cache.containsKey(data))
+			tex = cache.get(data);
+		else
 		{
-			GL11.glTexCoord2f(0, 0);
-			GL11.glVertex2f(x, y);
-			GL11.glTexCoord2f(1, 0);
-			GL11.glVertex2f(x+image.getWidth(), y);
-			GL11.glTexCoord2f(1, 1);
-			GL11.glVertex2f(x+image.getWidth(), y+image.getHeight());
-			GL11.glTexCoord2f(0, 1);
-			GL11.glVertex2f(x, y+image.getHeight());
+			BufferedImage image = createImageFromString(s,size,color);
+			if(image == null)
+				return;
+			tex = new Texture(image,true,false);
+			cache.put(data, tex);
 		}
-		GL11.glEnd();
-		GL11.glDeleteTextures(texID);
-		image = null;
+		Renderer.drawRect(new Vector2(x,y), new Vector2(tex.image.getWidth(),tex.image.getHeight()), tex, 0xffffff, 1);
+		
+//		GL11.glEnable(GL11.GL_TEXTURE_2D);
+//		int texID = TextureLoader.loadTexture(image,true,false);
+//		
+//		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
+//		GL11.glBegin(GL11.GL_QUADS);
+//		{
+//			GL11.glTexCoord2f(0, 0);
+//			GL11.glVertex2f(x, y);
+//			GL11.glTexCoord2f(1, 0);
+//			GL11.glVertex2f(x+image.getWidth(), y);
+//			GL11.glTexCoord2f(1, 1);
+//			GL11.glVertex2f(x+image.getWidth(), y+image.getHeight());
+//			GL11.glTexCoord2f(0, 1);
+//			GL11.glVertex2f(x, y+image.getHeight());
+//		}
+//		GL11.glEnd();
+//		GL11.glDeleteTextures(texID);
+//		image = null;
 	}
 	
 	public void drawCenteredString(String s, int y, float size, int color)
@@ -105,5 +135,30 @@ public class FontRenderer {
 		if(!current.trim().equals(""))
 			trueContents.add(current);
 		return trueContents;
+	}
+	
+	private class RenderData
+	{
+		public String s;
+		public float size;
+		public int color;
+		
+		public RenderData(String s, float size, int color)
+		{
+			this.s = s;
+			this.size = size;
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			if(o instanceof RenderData)
+			{
+				RenderData obj = (RenderData)o;
+				return s.equals(obj.s) && size == obj.size && color == obj.color;
+			}
+			return false;
+		}
 	}
 }

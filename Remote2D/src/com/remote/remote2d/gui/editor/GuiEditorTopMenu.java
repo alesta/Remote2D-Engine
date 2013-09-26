@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.StretchType;
+import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.entity.component.Component;
@@ -94,11 +95,12 @@ public class GuiEditorTopMenu extends Gui {
 		if(component.getEnabled())
 			currentX += component.width;
 		
-		String[] windowContents = {"Toggle Fullscreen","Exit"};
+		String[] windowContents = {"Toggle Fullscreen","Console","Exit"};
 		GuiEditorTopMenuSection window = new GuiEditorTopMenuSection(currentX, 0, height, windowContents, "Window", this);
 		if(window.getEnabled())
 			currentX += window.width;
 		window.keyCombos[0] = new KeyShortcut(new int[]{Keyboard.KEY_F});
+		window.keyCombos[1] = new KeyShortcut(new int[]{Keyboard.KEY_C}).setUseShift(true);
 		
 		window.reloadSubWidth();
 		
@@ -158,6 +160,10 @@ public class GuiEditorTopMenu extends Gui {
 		{
 			sections.get(x).render(interpolation);
 		}
+		
+		String fps = "FPS: "+Remote2D.getInstance().getFPS();
+		int width = Fonts.get("Arial").getStringDim(fps, 20)[0];
+		Fonts.get("Arial").drawString(fps, Remote2D.getInstance().displayHandler.getDimensions().x-width, 0, 20, 0xffffff);
 	}
 
 	@Override
@@ -228,7 +234,10 @@ public class GuiEditorTopMenu extends Gui {
 				Remote2D.getInstance().displayHandler.setDisplayMode(Display.getDesktopDisplayMode().getWidth(),
 						Display.getDesktopDisplayMode().getHeight(), !Display.isFullscreen(), 
 						false);
-			}else if(secSubTitle.equalsIgnoreCase("Exit"))
+			} else if(secSubTitle.equalsIgnoreCase("Console"))
+			{
+				editor.attemptToPutWindowOnTop(new GuiWindowConsole(editor, new Vector2(100), new Vector2(400), editor.getWindowBounds()));
+			} else if(secSubTitle.equalsIgnoreCase("Exit"))
 			{
 				Remote2D.getInstance().guiList.pop();
 			}
