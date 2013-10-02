@@ -12,7 +12,11 @@ import com.remote.remote2d.io.R2DTypeCollection;
  * Components are advantageous because they can be reused on entities, allowing
  * more to be done in-editor and less in code.
  * 
- * A 
+ * A component MUST FILL these requirements:
+ * <ol>
+ * 	<li>MUST be a direct subclass of component (can't be subclass of subclass of Component)</li>
+ * 	<li>Constructor CAN NOT have parameters, and must call super()</li>
+ * </ol>
  * 
  * @author Flafla2
  */
@@ -36,8 +40,8 @@ public abstract class Component extends EditorObject{
 	 */
 	public abstract void tick(int i, int j, int k);
 	/**
-	 * A render method for before the entity renders (but not necessarily directly;
-	 * other components may get in between).
+	 * A render method for before the entity renders (but not necessarily directly
+	 * before; other components may get in between).
 	 */
 	public abstract void renderBefore(boolean editor, float interpolation);
 	/**
@@ -46,8 +50,8 @@ public abstract class Component extends EditorObject{
 	 */
 	public abstract void onEntitySpawn();
 	/**
-	 * A render method for after the entity renders (again, not necessarily directly
-	 * after).
+	 * A render method for after the entity renders (not necessarily directly
+	 * after; other components may get in between).
 	 */
 	public abstract void renderAfter(boolean editor, float interpolation);
 	
@@ -67,8 +71,6 @@ public abstract class Component extends EditorObject{
 			throw new Remote2DException(e);
 		}
 		
-		
-        
         return null;
 	}
 	

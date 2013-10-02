@@ -92,6 +92,11 @@ public class Animation implements R2DFileSaver {
 	
 	public void render(Vector2 pos, Vector2 dim)
 	{
+		render(pos,dim,0xffffff,1);
+	}
+	
+	public void render(Vector2 pos, Vector2 dim, int color, float alpha)
+	{
 		if(framePos == null)
 		{
 			Log.debug("framePos == null!");
@@ -121,7 +126,7 @@ public class Animation implements R2DFileSaver {
 			imgDim.y *= -1;
 		}
 		
-		Renderer.drawRect(pos, dim, imgPos, imgDim, tex, 0xffffff, 1.0f);
+		Renderer.drawRect(pos, dim, imgPos, imgDim, tex, color, alpha);
 	}
 	
 	public Vector2 getStartPos() {

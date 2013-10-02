@@ -3,11 +3,14 @@ package com.remote.remote2d.entity;
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Animation;
+import com.remote.remote2d.art.Material;
+import com.remote.remote2d.art.Material.RenderType;
 import com.remote.remote2d.art.Texture;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.io.R2DFileSaver;
@@ -19,8 +22,8 @@ import com.remote.remote2d.world.Map;
  * If a class implements this interface, then it is able to be edited within the
  * editor.  This assumes any public variables(not methods, getters/setters, etc.)
  * are able to be edited through the inspector pane in the editor.
+ * 
  * @author Flafla2
- *
  */
 public abstract class EditorObject implements R2DFileSaver {
 	
@@ -65,26 +68,38 @@ public abstract class EditorObject implements R2DFileSaver {
 						collection.setVector2D(fields[x].getName(), (Vector2)o);
 					} else if(o instanceof Texture)
 					{
-						collection.setTexture(fields[x].getName(), (Texture)o);
+						collection.setString(fields[x].getName(), ((Texture)o).getTextureLocation());
 					} else if(o instanceof Boolean)
 					{
 						collection.setBoolean(fields[x].getName(), (Boolean)o);
 					} else if(o instanceof Animation)
 					{
-						collection.setAnimation(fields[x].getName(), (Animation)o);
+						collection.setString(fields[x].getName(), ((Animation)o).getPath());
 					} else if(o instanceof Color)
 					{
-						collection.setColor(fields[x].getName(), (Color)o);
+						collection.setInteger(fields[x].getName(), ((Color)o).getRGB());
 					} else if(o instanceof Entity)
 					{
 						collection.setString(fields[x].getName(), ((Entity)o).getUUID());
+					} else if(o instanceof Material)
+					{
+						Material mat = (Material)o;
+						R2DTypeCollection matColl = new R2DTypeCollection(fields[x].getName());
+						matColl.setByte("RenderType", mat.renderTypeToByte(mat.getRenderType()));
+						matColl.setInteger("Color", mat.getColor());
+						if(mat.getTexture() != null)
+							matColl.setString("Texture", mat.getTexture().getTextureLocation());
+						if(mat.getAnimation() != null)
+							matColl.setString("Animation", mat.getAnimation().getPath());
+						matColl.setFloat("Alpha", mat.getAlpha());
+						collection.setCollection(matColl);
 					} else
 					{
 						String s = "Unknown Data Type "+o.getClass().getName()+" is a public variable of Component: "+fields[x].getName()+".";
-						if(o instanceof Entity)
-							s += "  Use EntityPointer instead!";
-						else if(o instanceof Component)
-							s += "  Use EntityPointer with getComponent() instead!";
+						if(o instanceof Component)
+							s += "  Use Entity with getComponent() instead!";
+						else if(o instanceof ArrayList)
+							s += " ArrayList currently not supported!";
 						Log.warn(s);
 					}
 				} catch (Exception e) {}
@@ -111,15 +126,15 @@ public abstract class EditorObject implements R2DFileSaver {
 					else if(field.getType() == long.class)
 						field.set(this, collection.getLong(field.getName()));
 					else if(field.getType() == Texture.class)
-						field.set(this, collection.getTexture(field.getName()));
+						field.set(this, new Texture(collection.getString(field.getName())));
 					else if(field.getType() == Vector2.class)
 						field.set(this, collection.getVector2D(field.getName()));
 					else if(field.getType() == Animation.class)
-						field.set(this, collection.getAnimation(field.getName()));
+						field.set(this, new Animation(collection.getString(field.getName())));
 					else if(field.getType() == boolean.class)
 						field.set(this, collection.getBoolean(field.getName()));
 					else if(field.getType() == Color.class)
-						field.set(this, collection.getColor(field.getName()));
+						field.set(this, new Color(collection.getInteger(field.getName())));
 					else if(field.getType() == Entity.class)
 					{
 						String uuid = collection.getString(field.getName());
@@ -127,6 +142,19 @@ public abstract class EditorObject implements R2DFileSaver {
 						if(!uuid.trim().equals(""))
 							e = map.getEntityList().getEntityWithUUID(uuid,true);
 						field.set(this, e);
+					} else if(field.getType() == Material.class)
+					{
+						R2DTypeCollection matColl = collection.getCollection(fields[x].getName());
+						RenderType renderType = Material.byteToRenderType(matColl.getByte("RenderType"));
+						int color = matColl.getInteger("Color");
+						Texture tex = null;
+						if(matColl.getString("Texture") != null && !matColl.getString("Texture").trim().equals(""))
+							tex = new Texture(matColl.getString("Texture"));
+						Animation anim = null;
+						if(matColl.getString("Animation") != null && !matColl.getString("Animation").trim().equals(""))
+							anim = new Animation(matColl.getString("Animation"));
+						float alpha = matColl.getFloat("Alpha");
+						field.set(this, new Material(renderType,tex,anim,color,alpha));
 					}
 					else
 					{

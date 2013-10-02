@@ -103,9 +103,6 @@ public class GuiEditor extends GuiMenu implements WindowHolder,MapHolder {
 		}
 		browser.resetSections();
 		
-		if(map != null)
-			map.getEntityList().reloadTextures();
-		
 		for(int x=0;x<windowStack.size();x++)
 			windowStack.get(x).initGui();
 	}

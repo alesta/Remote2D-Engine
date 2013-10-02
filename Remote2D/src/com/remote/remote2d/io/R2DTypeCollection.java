@@ -148,16 +148,16 @@ public class R2DTypeCollection extends R2DType {
 	{
 		setType(key,new R2DTypeVec2D(key,value));
 	}
-	
-	public void setTexture(String key, Texture value)
-	{
-		setType(key,new R2DTypeTexture(key,value));
-	}
-	
-	public void setAnimation(String key, Animation value)
-	{
-		setType(key,new R2DTypeAnimation(key,value));
-	}
+//	
+//	public void setTexture(String key, Texture value)
+//	{
+//		setType(key,new R2DTypeTexture(key,value));
+//	}
+//	
+//	public void setAnimation(String key, Animation value)
+//	{
+//		setType(key,new R2DTypeAnimation(key,value));
+//	}
 	
 	public void setString(String key, String value)
 	{
@@ -174,9 +174,9 @@ public class R2DTypeCollection extends R2DType {
 		setType(collection.name, collection);
 	}
 	
-	public void setColor(String key, Color value) {
-		setType(key,new R2DTypeColor(key,value));
-	}
+//	public void setColor(String key, Color value) {
+//		setType(key,new R2DTypeColor(key,value));
+//	}
 	
 	public R2DType getType(String key)
 	{
@@ -210,20 +210,20 @@ public class R2DTypeCollection extends R2DType {
 			return null;
 		return ((R2DTypeVec2D) data.get(key)).data.copy();
 	}
-	
-	public Texture getTexture(String key)
-	{
-		if(!data.containsKey(key))
-			return null;
-		return new Texture(((R2DTypeTexture) data.get(key)).data.textureLocation);
-	}
-	
-	public Animation getAnimation(String key)
-	{
-		if(!data.containsKey(key))
-			return null;
-		return Remote2D.getInstance().artLoader.getAnimation(((R2DTypeAnimation) data.get(key)).data.getPath());
-	}
+//	
+//	public Texture getTexture(String key)
+//	{
+//		if(!data.containsKey(key))
+//			return null;
+//		return new Texture(((R2DTypeTexture) data.get(key)).data.textureLocation);
+//	}
+//	
+//	public Animation getAnimation(String key)
+//	{
+//		if(!data.containsKey(key))
+//			return null;
+//		return Remote2D.getInstance().artLoader.getAnimation(((R2DTypeAnimation) data.get(key)).data.getPath());
+//	}
 	
 	public long getLong(String key)
 	{
@@ -274,12 +274,12 @@ public class R2DTypeCollection extends R2DType {
 		return (R2DTypeCollection) data.get(key);
 	}
 	
-	public Color getColor(String key)
-	{
-		if(!data.containsKey(key))
-			return null;
-		return ((R2DTypeColor)data.get(key)).data;
-	}
+//	public Color getColor(String key)
+//	{
+//		if(!data.containsKey(key))
+//			return null;
+//		return ((R2DTypeColor)data.get(key)).data;
+//	}
 
 	@Override
 	public byte getId() {

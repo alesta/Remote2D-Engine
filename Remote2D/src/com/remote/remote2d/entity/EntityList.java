@@ -57,14 +57,6 @@ public class EntityList {
 		entityList.remove(i);
 	}
 	
-	public void reloadTextures()
-	{
-		for(int i=0;i<entityList.size();i++)
-		{
-			entityList.get(i).reloadTextures();
-		}
-	}
-	
 	public void render(boolean editor, float interpolation)
 	{
 		for(int i=0;i<entityList.size();i++)

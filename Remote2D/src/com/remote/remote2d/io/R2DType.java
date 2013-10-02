@@ -89,12 +89,12 @@ public abstract class R2DType {
 				return new R2DTypeCollection(name);
 			case 11:
 				return new R2DTypeVec2D(name);
-			case 12:
-				return new R2DTypeTexture(name);
-			case 13:
-				return new R2DTypeAnimation(name);
-			case 14:
-				return new R2DTypeColor(name);
+//			case 12:
+//				return new R2DTypeTexture(name);
+//			case 13:
+//				return new R2DTypeAnimation(name);
+//			case 14:
+//				return new R2DTypeColor(name);
 			default:
 				return null;
 		}
@@ -128,12 +128,12 @@ public abstract class R2DType {
 				return "TYPE_COLLECTION";
 			case 11:
 				return "TYPE_VEC2D";
-			case 12:
-				return "TYPE_TEXTURE";
-			case 13:
-				return "TYPE_ANIMATION";
-			case 14:
-				return "TYPE_COLOR";
+//			case 12:
+//				return "TYPE_TEXTURE";
+//			case 13:
+//				return "TYPE_ANIMATION";
+//			case 14:
+//				return "TYPE_COLOR";
 			default:
 				return "TYPE_NULL";
 		}

@@ -264,11 +264,6 @@ public class Entity extends EditorObject {
 		return pos.getColliderWithDim(getDim());
 	}
 	
-	public void reloadTextures()
-	{
-		
-	}
-	
 	public Vector2 getDim()
 	{
 		return dim;

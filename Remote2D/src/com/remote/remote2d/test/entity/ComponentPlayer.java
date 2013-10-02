@@ -15,6 +15,7 @@ import com.remote.remote2d.particles.ParticleSystem;
 
 public class ComponentPlayer extends Component {
 	
+	//PUBLIC VARIABLES: Since this is a component these are editable within the editor
 	public Animation idleAnimation;
 	public Animation walkAnimation;
 	public Animation jumpAnimation;
@@ -24,6 +25,7 @@ public class ComponentPlayer extends Component {
 	public boolean spriteFacesRight = true;
 	public boolean particleTest = false;
 	
+	//PRIVATE VARIABLES: These are NOT editable within the editor
 	private PlayerState state = PlayerState.IDLE;
 	private FacingState facing = FacingState.RIGHT;
 	private long lastLand = 0;
@@ -31,9 +33,9 @@ public class ComponentPlayer extends Component {
 	
 	private ParticleSystem testParticles;
 	
-	private Vector2 velocity = new Vector2(0,0);
+	private Vector2 velocity = new Vector2(0,0);		//Physics stuff - simple velocity and acceleration
 	private Vector2 acceleration = new Vector2(0,2);
-	private Vector2 maxVelocity = new Vector2(10,-1);
+	private Vector2 maxVelocity = new Vector2(10,-1);	//Max Velocity is required because we aren't accounting for friction.
 
 	@Override
 	public void tick(int i, int j, int k) {

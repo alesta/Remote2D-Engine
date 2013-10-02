@@ -23,7 +23,7 @@ public abstract class GuiEditorInspectorSection extends Gui {
 		
 		renderName = splitCamelCase(name);
 		if(Character.isLowerCase(renderName.charAt(0)))
-			renderName = Character.toUpperCase(name.charAt(0))+name.substring(1);
+			renderName = Character.toUpperCase(renderName.charAt(0))+renderName.substring(1);
 	}
 	
 	public abstract int sectionHeight();
