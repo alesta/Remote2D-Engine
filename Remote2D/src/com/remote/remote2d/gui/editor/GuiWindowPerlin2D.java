@@ -50,5 +50,11 @@ public class GuiWindowPerlin2D extends GuiWindow {
 		if(button.id == 0)
 			generate();
 	}
+	
+	@Override
+	public boolean canResize()
+	{
+		return false;
+	}
 
 }

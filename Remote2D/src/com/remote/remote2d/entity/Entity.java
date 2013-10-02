@@ -77,6 +77,7 @@ public class Entity extends EditorObject {
 		this.name = name;
 		children = new ArrayList<Entity>();
 		components = new ArrayList<Component>();
+		slashTex = new Texture(slashLoc,false,true);
 		
 		pos = new Vector2(0,0);
 		oldPos = new Vector2(0,0);

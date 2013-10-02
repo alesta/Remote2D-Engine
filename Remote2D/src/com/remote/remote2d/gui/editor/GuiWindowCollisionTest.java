@@ -47,5 +47,11 @@ public class GuiWindowCollisionTest extends GuiWindow {
 			
 		
 	}
+	
+	@Override
+	public boolean canResize()
+	{
+		return false;
+	}
 
 }

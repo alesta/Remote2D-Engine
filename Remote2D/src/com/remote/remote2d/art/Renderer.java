@@ -18,8 +18,15 @@ import com.remote.remote2d.logic.Vector2;
  */
 public class Renderer {
 	
+	private static boolean wireframe = false;
+	
 	public static void drawPoly(Vector2[] vectors, Vector2[] uv, Texture tex, float red, float green, float blue, float alpha)
 	{
+		if(isWireframe())
+		{
+			drawLinePoly(vectors,red,green,blue,alpha);
+			return;
+		}
 		tex.bind();
 		GL11.glColor4f(red, green, blue, alpha);
 		GL11.glBegin(GL11.GL_POLYGON);
@@ -37,6 +44,11 @@ public class Renderer {
 	
 	public static void drawPoly(Vector2[] vectors, float red, float green, float blue, float alpha)
 	{
+		if(isWireframe())
+		{
+			drawLinePoly(vectors,red,green,blue,alpha);
+			return;
+		}
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(red, green, blue, alpha);
 		GL11.glBegin(GL11.GL_POLYGON);
@@ -93,6 +105,11 @@ public class Renderer {
 	
 	public static void drawRect(Vector2 pos, Vector2 dim, Vector2 uvPos, Vector2 uvDim, Texture tex, float red, float green, float blue, float alpha)
 	{
+		if(isWireframe())
+		{
+			drawCrossRect(pos,dim,red,green,blue,alpha);
+			return;
+		}
 		tex.bind();
 		GL11.glColor4f(red, green, blue, alpha);
 		GL11.glBegin(GL11.GL_QUADS);
@@ -123,6 +140,11 @@ public class Renderer {
 	
 	public static void drawRect(Vector2 pos, Vector2 dim, float red, float green, float blue, float alpha)
 	{
+		if(isWireframe())
+		{
+			drawCrossRect(pos,dim,red,green,blue,alpha);
+			return;
+		}
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(red, green, blue, alpha);
 		GL11.glBegin(GL11.GL_QUADS);
@@ -154,6 +176,20 @@ public class Renderer {
 		
 		GL11.glColor3f(1, 1, 1);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	
+	public static void drawCrossRect(Vector2 pos, Vector2 dim, float red, float green, float blue, float alpha)
+	{
+		drawLineRect(pos,dim,red,green,blue,alpha);
+		drawLine(pos,pos.add(dim),red,green,blue,alpha);
+		drawLine(new Vector2(pos.x+dim.x,pos.y),new Vector2(pos.x,pos.y+dim.y),red,green,blue,alpha);
+	}
+	
+	public static void drawCrossRect(Vector2 pos, Vector2 dim, int color, float alpha) {
+		float r = ((color >> 16) & 0xff)/255f;
+		float g = ((color >> 8) & 0xff)/255f;
+		float b = (color & 0xff)/255f;
+		drawCrossRect(pos,dim,r,g,b,alpha);
 	}
 
 	public static void drawLineRect(Vector2 pos, Vector2 dim, int color, float alpha) {
@@ -218,19 +254,24 @@ public class Renderer {
 	
 	public static void drawCircleOpaque(Vector2 center, float radius, int sides, float red, float green, float blue, float alpha)
 	{
+		if(isWireframe())
+		{
+			drawCircleHollow(center,radius,sides,red,green,blue,alpha);
+			return;
+		}
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(red, green, blue, alpha);
-		GL11.glBegin(GL11.GL_TRIANGLES);
+		GL11.glBegin(GL11.GL_TRIANGLE_FAN);
 		
+		GL11.glVertex2f(center.x,center.y);
 		float degree = 0;
 		for (int i=0; i < sides+1; i++)
 		{
 			float degInRad = degree*(3.14159f/180f);
 			double x = Math.cos(degInRad)*radius+center.x;
 			double y = Math.sin(degInRad)*radius+center.y;
-			if(x % 2 == 0)
-				GL11.glVertex2f(center.x,center.y);
 			GL11.glVertex2d(x, y);
+			
 			degree += 360f/sides;
 			if(degree >= 360)//this finishes the circle
 				degree = 0;
@@ -262,5 +303,14 @@ public class Renderer {
 	public static void endScissor()
 	{
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
+	}
+	
+	public static void setWireframe(boolean wireframe)
+	{
+		Renderer.wireframe = wireframe;
+	}
+
+	public static boolean isWireframe() {
+		return wireframe;
 	}
 }

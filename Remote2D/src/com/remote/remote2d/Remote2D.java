@@ -73,6 +73,7 @@ public class Remote2D {
 	public InsertableComponentList componentList;
 	
 	private boolean mousePressed = false;
+	private boolean mouseReleased = false;
 	private int deltaWheel = 0;
 	private ArrayList<Character> charList;
 	private ArrayList<Character> charListLimited;
@@ -256,9 +257,15 @@ public class Remote2D {
 		return mousePressed;
 	}
 	
+	public boolean hasMouseBeenReleased()
+	{
+		return mouseReleased;
+	}
+	
 	private void updateKeyboardList()
 	{
 		mousePressed = false;
+		mouseReleased = false;
 		while(Mouse.next())
 		{
 			boolean button = Mouse.getEventButtonState();
@@ -266,7 +273,8 @@ public class Remote2D {
 			if(button && eventButton == 0)
 			{
 				mousePressed = true;
-			}
+			} else if(!button && eventButton == 0)
+				mouseReleased = true;
 		}
 		
 		deltaWheel = Mouse.getDWheel();

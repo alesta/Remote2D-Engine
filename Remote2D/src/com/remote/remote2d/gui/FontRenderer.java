@@ -33,13 +33,12 @@ public class FontRenderer {
 		cache = new LinkedHashMap<RenderData,Texture>(16, 0.75f, true) {
 			@Override
 	    	protected boolean removeEldestEntry(Map.Entry<RenderData,Texture> eldest) {
-				if(size() > 50)
+				if(size() > 16)
 				{
 					eldest.getValue().removeTexture();
 					eldest.getValue().image.flush();
-					eldest.getValue().image = null;
-				}
-				return size() > 50;
+					eldest.getValue().image = null;				}
+				return size() > 16;
 	    	}
 	    };
 	}

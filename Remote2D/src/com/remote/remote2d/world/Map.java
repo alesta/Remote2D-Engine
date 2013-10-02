@@ -230,7 +230,7 @@ public class Map implements R2DFileSaver {
 			R2DTypeCollection c = collection.getCollection("entity_"+x);
 			Entity e = entities.getEntityWithUUID(c.getString("uuid"));
 			if(e == null)
-				e = new Entity(this);
+				e = new Entity(this,"",c.getString("uuid"));
 			else
 				entities.removeEntityFromList(e);	//Will be moved to the top after we load.
 													//This is done in order to keep all Entity pointers intact.

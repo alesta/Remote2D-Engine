@@ -104,10 +104,12 @@ public class GuiEditorTopMenu extends Gui {
 		
 		window.reloadSubWidth();
 		
-		String[] devContents = {"Reinitialize Editor", "View Art Asset", "Fancypants Collider Test","Normal Collider Test", "1D Perlin Noise", "2D Perlin Noise"};
+		String[] devContents = {"Reinitialize Editor", "View Art Asset", "Fancypants Collider Test","Normal Collider Test", "1D Perlin Noise", "2D Perlin Noise", "Toggle Wireframe"};
 		GuiEditorTopMenuSection dev = new GuiEditorTopMenuSection(currentX, 0, height, devContents, "Developer", this);
 		if(dev.getEnabled())
 			currentX += dev.width;
+		
+		dev.keyCombos[6] = new KeyShortcut(new int[]{Keyboard.KEY_W});
 		
 		sections.add(file);
 		sections.add(world);
@@ -272,6 +274,10 @@ public class GuiEditorTopMenu extends Gui {
 				GuiWindowPerlin2D window = new GuiWindowPerlin2D(editor, new Vector2(20,30), editor.getWindowBounds());
 				window.setSelected(true);
 				editor.pushWindow(window);
+			} else if(secSubTitle.equalsIgnoreCase("Toggle Wireframe"))
+			{
+				Renderer.setWireframe(!Renderer.isWireframe());
+					
 			}
 		} else if(secTitle.equalsIgnoreCase("World"))
 		{

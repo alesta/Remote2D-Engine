@@ -1,5 +1,6 @@
 package com.remote.remote2d.gui.editor.inspector;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.Entity;
@@ -40,10 +41,12 @@ public class GuiEditorInspectorSectionEntity extends GuiEditorInspectorSection {
 	@Override
 	public void render(float interpolation) {
 		Fonts.get("Arial").drawString(renderName, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
-		final int outerRad = 18;
-		final Vector2 circleCenter = new Vector2(sectionHeight()/2,width-outerRad-10);
-		Renderer.drawCircleHollow(pos.add(circleCenter), outerRad, 10, 0xffffff, 1);
-		Renderer.drawCircleOpaque(pos.add(circleCenter), outerRad/2, 5, 0xffffff, 1);
+		final int outerRad = 9;
+		final Vector2 circleCenter = new Vector2(width-outerRad-10,sectionHeight()/2);
+		if(isComplete())
+			Renderer.drawCircleOpaque(pos.add(circleCenter), outerRad, 9, 0xffffff, 1);
+		else
+			Renderer.drawCircleHollow(pos.add(circleCenter), outerRad, 9, 0xffffff, 1);
 	}
 	
 	@Override
@@ -66,7 +69,7 @@ public class GuiEditorInspectorSectionEntity extends GuiEditorInspectorSection {
 
 	@Override
 	public boolean isComplete() {
-		return true;
+		return entity != null;
 	}
 	
 	@Override
@@ -100,6 +103,7 @@ public class GuiEditorInspectorSectionEntity extends GuiEditorInspectorSection {
 				if(!fileobj.uuid.trim().equals(""))
 				{
 					setData(inspector.getMap().getEntityList().getEntityWithUUID(fileobj.uuid));
+					changed = true;
 				}
 			}
 		}

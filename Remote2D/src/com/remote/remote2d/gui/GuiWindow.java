@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.art.Renderer;
@@ -25,9 +26,12 @@ public abstract class GuiWindow extends Gui {
 	protected boolean isSelected;
 	
 	private Vector2 dragOffset = new Vector2(-1,-1);
+	private Vector2 resizeOffset = new Vector2(-1,-1);
 	private Vector2 oldPos;
 	private boolean isDragging = false;
+	private boolean isResizing = false;
 	private boolean dontTick = false;
+	private boolean hoverX = false;
 	
 	private final int windowTopColor = 0xff5555;
 	private final int windowMainColor = 0xffbbbb;
@@ -70,7 +74,7 @@ public abstract class GuiWindow extends Gui {
 		}
 		if(!isSelected)
 		{
-			if(pos.getColliderWithDim(dim.add(new Vector2(20,20))).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
+			if(pos.getColliderWithDim(dim.add(new Vector2(0,20))).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenPressed())
 			{
 				holder.pushWindow(this);
 				buttonOverride = true;
@@ -86,11 +90,25 @@ public abstract class GuiWindow extends Gui {
 			}
 		}
 		
+		if(new Vector2(pos.x+dim.x-20,pos.y).getColliderWithDim(new Vector2(20)).isPointInside(new Vector2(i,j)) && !isDragging)
+		{
+			hoverX = true;
+			if(k == 1)
+				holder.closeWindow(this);
+		} else
+			hoverX = false;
+		
 		if(pos.getColliderWithDim(new Vector2(dim.x,20)).isPointInside(new Vector2(i,j)) && k == 1)
 		{
 			isDragging = true;
 		} else if(k == 0)
 			isDragging = false;
+		
+		if(pos.add(new Vector2(dim.x-20,dim.y)).getColliderWithDim(new Vector2(20)).isPointInside(new Vector2(i,j)) && k == 1)
+		{
+			isResizing = true;
+		} else if(k == 0)
+			isResizing = false;
 		
 		if(isDragging)
 		{
@@ -107,6 +125,27 @@ public abstract class GuiWindow extends Gui {
 			}
 		} else
 			dragOffset = new Vector2(-1,-1);
+		
+		if(canResize())
+		{
+			if(isResizing)
+			{
+				
+				if(resizeOffset.x == -1 || resizeOffset.y == -1)
+					resizeOffset = new Vector2(i-pos.x-dim.x+20,j-pos.y-dim.y+20);
+				else
+				{
+					float x = i-pos.x+20-resizeOffset.x;
+					float y = j-pos.y+20-resizeOffset.y;
+					
+					dim = new Vector2(x,y);
+				}
+			} else if(resizeOffset.x != -1 || resizeOffset.y != -1)
+			{
+				initGui();
+				resizeOffset = new Vector2(-1,-1);
+			}
+		}
 		
 		for(int x=0;x<buttonList.size();x++)
 		{
@@ -135,7 +174,11 @@ public abstract class GuiWindow extends Gui {
 		
 		Renderer.drawRect(pos, new Vector2(dim.x,20), isSelected ? windowTopColor : windowMainColor, 1.0f);
 		Renderer.drawRect(pos.add(new Vector2(0,20)), dim, windowMainColor, 1.0f);
-		
+		if(hoverX)
+			Renderer.drawRect(new Vector2(pos.x+dim.x-20,pos.y), new Vector2(20), 0x000000, 1);
+		Renderer.drawLineRect(new Vector2(pos.x+dim.x-20,pos.y), new Vector2(20), 0x000000, 1);
+		Renderer.drawLine(new Vector2(pos.x+dim.x-20,pos.y), new Vector2(pos.x+dim.x,pos.y+20), 0xffffff, 1);
+		Renderer.drawLine(new Vector2(pos.x+dim.x,pos.y), new Vector2(pos.x+dim.x-20,pos.y+20), 0xffffff, 1);
 		Fonts.get("Arial").drawString(title, pos.x+10, pos.y+1, 20, 0xffffff);
 		Renderer.startScissor(new Vector2(pos.x,pos.y+20), dim);
 		
@@ -166,6 +209,12 @@ public abstract class GuiWindow extends Gui {
 		GL11.glColor3f(1, 1, 1);
 		
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		
+		if(canResize())
+		{
+			Renderer.drawLine(new Vector2(pos.x+dim.x-15,pos.y+dim.y+20), new Vector2(pos.x+dim.x,pos.y+dim.y+5), 0x000000, 1);
+			Renderer.drawLine(new Vector2(pos.x+dim.x-9,pos.y+dim.y+20), new Vector2(pos.x+dim.x,pos.y+dim.y+11), 0x000000, 1);
+		}
 	}
 	
 	public boolean isSelected() {
@@ -191,6 +240,16 @@ public abstract class GuiWindow extends Gui {
 	public void actionPerformed(GuiButton button)
 	{
 		
+	}
+	
+	public boolean canClose()
+	{
+		return true;
+	}
+	
+	public boolean canResize()
+	{
+		return true;
 	}
 
 }

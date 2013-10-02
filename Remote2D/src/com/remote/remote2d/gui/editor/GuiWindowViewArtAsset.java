@@ -66,6 +66,10 @@ public class GuiWindowViewArtAsset extends GuiWindow {
 		}
 	}
 	
-	
+	@Override
+	public boolean canResize()
+	{
+		return false;
+	}
 	
 }

@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.Remote2D;
+import com.remote.remote2d.Remote2DException;
 import com.remote.remote2d.art.Fonts;
 import com.remote.remote2d.io.R2DFileManager;
 import com.remote.remote2d.world.Map;
@@ -16,7 +17,7 @@ public class GuiInGame extends GuiMenu implements MapHolder {
 	public GuiInGame(String mapPath)
 	{
 		Log.info("Loading Map...");
-		Map map = new Map();
+		map = new Map();
 		R2DFileManager mapManager = new R2DFileManager(mapPath,map);
 		mapManager.read();
 		backgroundColor = map.backgroundColor;
@@ -27,13 +28,13 @@ public class GuiInGame extends GuiMenu implements MapHolder {
 		this.map = map;
 		Log.info("Loading Map...");
 		backgroundColor = map.backgroundColor;
-		map.spawn();
+		this.map.spawn();
 	}
 
 	@Override
 	public void initGui()
 	{
-		map.getEntityList().reloadTextures();
+		
 	}
 	
 	@Override

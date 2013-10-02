@@ -33,10 +33,12 @@ public class GuiWindowConsole extends GuiWindow {
 		float offset = (float) Interpolator.linearInterpolate(oldOffset, this.offset, interpolation);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0, -offset, 0);
+		int yPos = 0;
 		for(ConsoleMessage message : messages)
 		{
-			if((message.pos.y > offset && message.pos.y < offset+dim.y) || (message.pos.y+message.dim.y > offset && message.pos.y+message.dim.y < offset+dim.y))
-			message.render(interpolation);
+			if((yPos > offset && yPos < offset+dim.y) || (yPos+message.dim.y > offset && yPos+message.dim.y < offset+dim.y))
+				message.render(new Vector2(0,yPos),interpolation);
+			yPos += message.dim.y;
 		}
 		GL11.glPopMatrix();
 	}
@@ -71,7 +73,7 @@ public class GuiWindowConsole extends GuiWindow {
 		int ypos = 0;
 		for(int x=0;x<Console.size();x++)
 		{
-			ConsoleMessage mess = new ConsoleMessage(Console.getMessage(x),new Vector2(0,ypos),(int)dim.x);
+			ConsoleMessage mess = new ConsoleMessage(this,Console.getMessage(x));
 			messages.add(mess);
 			ypos += mess.getDim().y;
 		}
@@ -88,18 +90,20 @@ public class GuiWindowConsole extends GuiWindow {
 	private class ConsoleMessage
 	{
 		private Message message;
-		public Vector2 pos;
 		private Vector2 dim;
+		private GuiWindowConsole console;
 		
-		public ConsoleMessage(Message message, Vector2 pos, int width)
+		public ConsoleMessage(GuiWindowConsole console, Message message)
 		{
 			this.message = message;
-			this.pos = pos.copy();
-			this.dim = new Vector2(width,message.getRenderHeight(width,20));
+			this.dim = new Vector2(console.dim.x,message.getRenderHeight((int) console.dim.x,20));
+			this.console = console;
 		}
 		
-		public void render(float interpolation)
+		public void render(Vector2 pos, float interpolation)
 		{
+			if(dim.x != console.dim.x)
+				this.dim = new Vector2(console.dim.x,message.getRenderHeight((int) console.dim.x,20));
 			message.render(pos,20,(int)dim.x);
 			Renderer.drawLine(new Vector2(pos.x,pos.y+dim.y), pos.add(dim), 0xffffff, 1.0f);
 		}

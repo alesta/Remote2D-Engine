@@ -25,7 +25,10 @@ public class ConsoleLogger extends Logger {
 			color = 0xbbbbbb;
 		else if(level == Log.LEVEL_WARN)
 			color = 0xffff44;
-		Console.pushMessage(new Message(category,message,color));
+		else if(level == Log.LEVEL_TRACE)
+			return;
+		
+		Console.pushMessage(new Message(category,message,color,level));
 	}
 
 }

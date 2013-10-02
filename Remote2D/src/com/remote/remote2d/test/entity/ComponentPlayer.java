@@ -123,11 +123,9 @@ public class ComponentPlayer extends Component {
 				
 		}
 		
-		
 		testParticles.pos = new Vector2(i,j).add(entity.getMap().camera.pos);
 		if(particleTest)
 			testParticles.tick(false);
-			
 	}
 
 	@Override

@@ -30,13 +30,11 @@ public class EntityList {
 	public void addEntityToList(Entity e)
 	{
 		entityList.add(e);
-		spawn();
 	}
 	
 	public void addEntityToList(Entity e,int i)
 	{
 		entityList.add(i,e);
-		spawn();
 	}
 	
 	public void spawn()
@@ -133,7 +131,7 @@ public class EntityList {
 		}
 		if(mapLoad)
 		{
-			Entity newEnt = new Entity(map,uuid);
+			Entity newEnt = new Entity(map,"",uuid);
 			entityList.add(newEnt);
 			return newEnt;
 		}

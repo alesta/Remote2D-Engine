@@ -21,6 +21,7 @@ public class GuiEditorHeirarchySection {
 	
 	public String content;
 	public boolean selected = false;
+	public boolean dragSelected = false;
 	public GuiEditorHeirarchy heirarchy;
 	
 	
@@ -46,11 +47,7 @@ public class GuiEditorHeirarchySection {
 		if(Remote2D.getInstance().hasMouseBeenPressed())
 		{
 			if(pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)))
-			{
-				heirarchy.setAllUnselected();
-				selected = true;
-				heirarchy.updateSelected();
-				
+			{	
 				if(lastClickEvent != -1 && time-lastClickEvent <= 500)
 				{
 					//TODO: Enable entity focusing on double click
@@ -62,17 +59,25 @@ public class GuiEditorHeirarchySection {
 			} else
 			{
 				lastClickEvent = -1;
+				
 			}
 		} else if(Mouse.isButtonDown(0) && pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)) && heirarchy.getEditor().dragObject == null)
 		{
 			String uuid = heirarchy.getEntityForSec(this).getUUID();
 			heirarchy.getEditor().dragObject = new DraggableObjectEntity(heirarchy.getEditor(),content,uuid,pos,dim,new Vector2(i,j).subtract(pos));
-		}
+		} else if(pos.getColliderWithDim(dim).isPointInside(new Vector2(i,j)) && Remote2D.getInstance().hasMouseBeenReleased())
+		{
+			heirarchy.setAllUnselected();
+			selected = true;
+			dragSelected = false;
+			heirarchy.updateSelected();
+		} else
+			dragSelected = false;
 	}
 
 	public void render(float interpolation) {
 		Vector2 truePos = Interpolator.linearInterpolate(oldPos, pos, interpolation);
-		if(selected)
+		if(selected || dragSelected)
 			Renderer.drawRect(truePos, dim, 0xffffff, 0.5f);
 		Fonts.get("Arial").drawString(content, truePos.x, truePos.y, 20, 0xffffff);
 	}

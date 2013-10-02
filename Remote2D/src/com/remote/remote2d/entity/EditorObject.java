@@ -32,6 +32,7 @@ public abstract class EditorObject implements R2DFileSaver {
 		this.uuid = uuid;
 		if(this.uuid == null)
 			this.uuid = UUID.randomUUID().toString();
+		this.map = map;
 	}
 	
 	/**
@@ -124,8 +125,8 @@ public abstract class EditorObject implements R2DFileSaver {
 						String uuid = collection.getString(field.getName());
 						Entity e = null;
 						if(!uuid.trim().equals(""))
-							Remote2D.getInstance().getMap().getEntityList().getEntityWithUUID(uuid,true);
-						field.set(this, uuid);
+							e = map.getEntityList().getEntityWithUUID(uuid,true);
+						field.set(this, e);
 					}
 					else
 					{

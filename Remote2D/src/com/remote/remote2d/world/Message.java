@@ -9,13 +9,31 @@ import com.remote.remote2d.logic.Vector2;
 public class Message {
 	
 	private String prefix;
+	private int minlogType;
 	private String message;
 	private int color;
 
-	public Message(String prefix, String message, int color) {
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public int getMinlogType() {
+		return minlogType;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public int getColor() {
+		return color;
+	}
+
+	public Message(String prefix, String message, int color, int minlogType) {
 		this.prefix = prefix;
 		this.message = message;
 		this.color = color;
+		this.minlogType = minlogType;
 	}
 	
 	/**
@@ -45,7 +63,29 @@ public class Message {
 	
 	public String toString()
 	{
-		return "["+prefix+"]"+" "+message;
+		String str = "";
+		switch(minlogType)
+		{
+		case Log.LEVEL_TRACE:
+			str += "[TRACE]";
+			break;
+		case Log.LEVEL_DEBUG:
+			str += "[DEBUG]";
+			break;
+		case Log.LEVEL_ERROR:
+			str += "[ERROR]";
+			break;
+		case Log.LEVEL_INFO:
+			str += "[INFO]";
+			break;
+		case Log.LEVEL_WARN:
+			str += "[WARN]";
+			break;
+		}
+		if(prefix != null)
+			str += "["+prefix+"]";
+		str += " "+message;
+		return str;
 	}
 
 	public int getRenderHeight(int width, int size) {

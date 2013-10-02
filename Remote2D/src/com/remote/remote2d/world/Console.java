@@ -3,6 +3,8 @@ package com.remote.remote2d.world;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import com.esotericsoftware.minlog.Log;
+
 public class Console {
 	
 	private static ArrayList<Message> messageStack = new ArrayList<Message>();
@@ -16,17 +18,17 @@ public class Console {
 	
 	public static void pushError(String message)
 	{
-		pushMessage("ERROR",message,0xff0000);
+		pushMessage(null,message,0xff0000,Log.LEVEL_ERROR);
 	}
 	
 	public static void pushMessage(String message)
 	{
-		pushMessage("INFO",message,0xffffff);
+		pushMessage(null,message,0xffffff,Log.LEVEL_INFO);
 	}
 	
-	public static void pushMessage(String prefix, String message, int color)
+	public static void pushMessage(String prefix, String message, int color, int minlogType)
 	{
-		pushMessage(new Message(prefix,message,color));
+		pushMessage(new Message(prefix,message,color,minlogType));
 	}
 	
 	public static void pushMessage(Message message)
@@ -62,7 +64,9 @@ public class Console {
 	private static void updateMessageCount()
 	{
 		while(messageStack.size() > maxMessages)
-			messageStack.get(messageStack.size()-1);
+		{
+			messageStack.remove(messageStack.size()-1);
+		}
 	}
 	
 	public static void clear()

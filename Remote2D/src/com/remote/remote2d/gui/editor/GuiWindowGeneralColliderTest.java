@@ -97,5 +97,11 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 			holder.closeWindow(this);
 		}
 	}
+	
+	@Override
+	public boolean canResize()
+	{
+		return false;
+	}
 
 }
