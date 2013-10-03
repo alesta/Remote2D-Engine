@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.lwjgl.opengl.GL11;
+
+import com.remote.remote2d.Remote2DException;
+import com.remote.remote2d.art.Renderer;
 import com.remote.remote2d.entity.component.Component;
 import com.remote.remote2d.world.Map;
 
@@ -61,13 +65,31 @@ public class EntityList {
 	{
 		for(int i=0;i<entityList.size();i++)
 		{
-			ArrayList<Component> components = entityList.get(i).getComponents();
-			for(int x=0;x<components.size();x++)
-				components.get(x).renderBefore(editor, interpolation);
-			entityList.get(i).render(editor,interpolation);
-			for(int x=components.size()-1;x>=0;x--)
-				components.get(x).renderAfter(editor, interpolation);
+			try
+			{
+				renderEntity(entityList.get(i),editor,interpolation);
+			} catch(Exception e)
+			{
+				if(editor)
+				{
+					GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR);
+					Renderer.drawCrossRect(entityList.get(i).pos, entityList.get(i).dim, 0xffffff, 1.0f);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				}
+				else
+					throw new Remote2DException(e);
+			}
 		}
+	}
+	
+	private void renderEntity(Entity e, boolean editor, float interpolation)
+	{
+		ArrayList<Component> components = e.getComponents();
+		for(int x=0;x<components.size();x++)
+			components.get(x).renderBefore(editor, interpolation);
+		e.render(editor,interpolation);
+		for(int x=components.size()-1;x>=0;x--)
+			components.get(x).renderAfter(editor, interpolation);
 	}
 	
 	public void tick(int i, int j, int k)

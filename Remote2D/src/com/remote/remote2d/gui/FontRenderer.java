@@ -55,7 +55,10 @@ public class FontRenderer {
 		int height = 0;
 		for(String str : returnSplit)
 		{
-			width += (int) sizedFont.getStringBounds(str, frc).getWidth();
+			
+			int w = (int) sizedFont.getStringBounds(str, frc).getWidth();
+			if(w > width)
+				width = w;
 			height += (int) sizedFont.getStringBounds(str, frc).getHeight();
 		}
 		

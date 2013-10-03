@@ -166,7 +166,7 @@ public class Remote2D {
 							guiList.pop();
 						}
 						editor.pushWindow(new GuiWindowConsole(editor,new Vector2(100),new Vector2(300),editor.getWindowBounds()));
-					} else
+					} else if(!(e instanceof Remote2DException))
 						throw new Remote2DException(e);
 				}
 				lastUpdateTime += TIME_BETWEEN_UPDATES;
@@ -194,7 +194,7 @@ public class Remote2D {
 						guiList.pop();
 					}
 					editor.pushWindow(new GuiWindowConsole(editor,new Vector2(100),new Vector2(300),editor.getWindowBounds()));
-				} else
+				} else if(!(e instanceof Remote2DException))
 					throw new Remote2DException(e);
 			}
 			Display.update();

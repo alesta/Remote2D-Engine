@@ -7,9 +7,11 @@ import com.remote.remote2d.world.Message;
 
 public class ConsoleLogger extends Logger {
 	
+	private static Logger logger = new Logger();
+	
 	public void log(int level, String category, String message, Throwable ex)
 	{
-		new Logger().log(level, category, message, ex);
+		logger.log(level, category, message, ex);
 		int color = 0xffffff;
 		if(level == Log.LEVEL_ERROR)
 		{

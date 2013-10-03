@@ -368,11 +368,19 @@ public class Entity extends EditorObject {
 	public void renderPreview(float interpolation) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-pos.x, -pos.y, 0);
-		for(int x=0;x<getComponents().size();x++)
-			getComponents().get(x).renderBefore(false,interpolation);
-		render(false,interpolation);
-		for(int x=0;x<getComponents().size();x++)
-			getComponents().get(x).renderAfter(false,interpolation);
+		try
+		{
+			for(int x=0;x<getComponents().size();x++)
+				getComponents().get(x).renderBefore(false,interpolation);
+			render(false,interpolation);
+			for(int x=0;x<getComponents().size();x++)
+				getComponents().get(x).renderAfter(false,interpolation);
+		} catch(Exception e)
+		{
+			GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR);
+			Renderer.drawCrossRect(pos, dim, 0xffffff, 1.0f);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		}
 		GL11.glPopMatrix();
 	}
 

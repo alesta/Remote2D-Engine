@@ -12,6 +12,10 @@ public class Message {
 	private int minlogType;
 	private String message;
 	private int color;
+	
+	private int cachedRenderHeight = -1;
+	private int cachedWidth = -1;
+	private int cachedSize = -1;
 
 	public String getPrefix() {
 		return prefix;
@@ -89,17 +93,23 @@ public class Message {
 	}
 
 	public int getRenderHeight(int width, int size) {
-		if(width > 0)
+		if(cachedRenderHeight == -1 || cachedWidth == -1 || cachedSize == -1 || width != cachedWidth || size != cachedSize)
 		{
-			ArrayList<String> set = new ArrayList<String>();
-			int h = 0;
-			set = Fonts.get("Arial").getStringSet(toString(), size, width);
-			for(String s : set)
-				h += Fonts.get("Arial").getStringDim(s, size)[1];
-			return h;
+			cachedWidth = width;
+			cachedSize = size;
+			if(width > 0)
+			{
+				ArrayList<String> set = new ArrayList<String>();
+				int h = 0;
+				set = Fonts.get("Arial").getStringSet(toString(), size, width);
+				for(String s : set)
+					h += Fonts.get("Arial").getStringDim(s, size)[1];
+				cachedRenderHeight = h;
+			}
+			else
+				cachedRenderHeight = Fonts.get("Arial").getStringDim(toString(), size)[1];
 		}
-		else
-			return Fonts.get("Arial").getStringDim(toString(), size)[1];
+		return cachedRenderHeight;
 	}
 
 }

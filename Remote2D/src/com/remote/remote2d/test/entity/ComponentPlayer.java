@@ -31,7 +31,7 @@ public class ComponentPlayer extends Component {
 	private long lastLand = 0;
 	private long timerLength = -1;
 	
-	private ParticleSystem testParticles;
+	private ParticleSystem testParticles = new ParticleSystem(entity.getMap());
 	
 	private Vector2 velocity = new Vector2(0,0);		//Physics stuff - simple velocity and acceleration
 	private Vector2 acceleration = new Vector2(0,2);
@@ -125,7 +125,7 @@ public class ComponentPlayer extends Component {
 				
 		}
 		
-		testParticles.pos = new Vector2(i,j).add(entity.getMap().camera.pos);
+		testParticles.pos = entity.getMap().screenToWorldCoords(new Vector2(i,j));
 		if(particleTest)
 			testParticles.tick(false);
 	}
@@ -138,7 +138,6 @@ public class ComponentPlayer extends Component {
 	@Override
 	public void onEntitySpawn() {
 		Log.debug(testEntity.name);
-		testParticles = new ParticleSystem(entity.getMap());
 	}
 	
 	public Animation getAnim()
@@ -148,19 +147,24 @@ public class ComponentPlayer extends Component {
 		{
 		case IDLE:
 			anim = idleAnimation;
+			break;
 		case WALK:
 			anim = walkAnimation;
+			break;
 		case JUMP:
 			anim = jumpAnimation;
+			break;
 		case FALL:
 			anim = fallAnimation;
+			break;
 		case LAND:
 			anim = landAnimation;
+			break;
 		}
 		
 		if(anim != null)
 			anim.flippedX = spriteFacesRight ? (facing == FacingState.LEFT) : (facing == FacingState.RIGHT);
-		return null;
+		return anim;
 	}
 
 	@Override
@@ -179,7 +183,7 @@ public class ComponentPlayer extends Component {
 			posVec.x = entity.getPos(interpolation).x+entity.getDim().x/2-anim.getSpriteDim().x/2;
 			posVec.y = entity.getPos(interpolation).y+entity.getDim().y/2-anim.getSpriteDim().y/2;
 			anim.render(posVec, new Vector2(anim.getSpriteDim().getElements()));
-		}
+		} //else Log.debug("anim == null!");
 		
 		if(particleTest)
 			testParticles.render();
