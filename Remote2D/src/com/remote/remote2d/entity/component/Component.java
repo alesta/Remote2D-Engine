@@ -54,6 +54,10 @@ public abstract class Component extends EditorObject{
 	 * after; other components may get in between).
 	 */
 	public abstract void renderAfter(boolean editor, float interpolation);
+	/**
+	 * Called upon initializing this Component.  Use this instead of a constructor!
+	 */
+	public abstract void init();
 	
 	public static Component newInstanceWithEntity(Class<?> componentClass, Entity entity)
 	{
@@ -65,6 +69,7 @@ public abstract class Component extends EditorObject{
 			{
 				Component ret = (Component)instance;
 	        	ret.setEntity(entity);
+	        	ret.init();
 				return ret;
 			}
 		} catch (Exception e) {
@@ -80,7 +85,7 @@ public abstract class Component extends EditorObject{
 		saveR2DFile(compile);
 		Component clone = newInstanceWithEntity(getComponentClass(),entity);
 		clone.loadR2DFile(compile);
-		return clone;
+  		return clone;
 	}
 		
 	public void setEntity(Entity e)

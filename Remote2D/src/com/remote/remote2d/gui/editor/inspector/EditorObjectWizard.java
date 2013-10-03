@@ -134,7 +134,6 @@ public class EditorObjectWizard {
 		try {
 			Field field = object.getClass().getField(sections.get(x).name);
 			field.set(object, sections.get(x).getData());
-			Log.debug((sections.get(x).getData() == null)+"");
 		} catch (NoSuchFieldException e) {
 			Log.error("Field doesn't exist: "+sections.get(x).name);
 		} catch (Exception e) {

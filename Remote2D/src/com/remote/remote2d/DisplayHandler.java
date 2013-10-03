@@ -73,6 +73,14 @@ public class DisplayHandler {
 			return new Vector2(screenWidth,screenHeight);
 	}
 	
+	public Vector2 getGameDimensions()
+	{
+		if(Remote2D.getInstance().getGame().getDefaultStretchType() != StretchType.NONE)
+			return new Vector2(gameWidth,gameHeight);
+		else
+			return new Vector2(screenWidth,screenHeight);
+	}
+	
 	public Vector2 getScreenDimensions()
 	{
 		return new Vector2(screenWidth,screenHeight);

@@ -35,7 +35,7 @@ public class ComponentCamera extends Component {
 	public void renderAfter(boolean editor, float interpolation) {
 		if(editor)
 		{
-			Vector2 dim = Remote2D.getInstance().displayHandler.getDimensions();
+			Vector2 dim = Remote2D.getInstance().displayHandler.getGameDimensions();
 			Renderer.drawLineRect(new Vector2(entity.pos.x-dim.x/2,entity.pos.y-dim.y/2), dim, 0, 0, 1, 1);
 		}
 	}
@@ -44,6 +44,11 @@ public class ComponentCamera extends Component {
 	public void apply() {
 		
 		
+		
+	}
+
+	@Override
+	public void init() {
 		
 	}
 

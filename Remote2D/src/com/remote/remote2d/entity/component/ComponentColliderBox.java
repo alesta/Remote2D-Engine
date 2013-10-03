@@ -41,4 +41,9 @@ public class ComponentColliderBox extends Component implements ComponentCollider
 	public Collider getCollider() {
 		return pos.getColliderWithDim(dim);
 	}
+
+	@Override
+	public void init() {
+		
+	}
 }

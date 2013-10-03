@@ -1,77 +1,107 @@
 package com.remote.remote2d.gui.editor.inspector;
 
+import java.awt.Color;
+
+import com.remote.remote2d.art.Animation;
 import com.remote.remote2d.art.Fonts;
+import com.remote.remote2d.art.Texture;
+import com.remote.remote2d.entity.Entity;
 import com.remote.remote2d.gui.editor.GuiEditor;
 import com.remote.remote2d.logic.Vector2;
 
-public class GuiEditorInspectorSectionSet extends GuiEditorInspectorSection {
+public abstract class GuiEditorInspectorSectionSet extends GuiEditorInspectorSection {
 	
-	GuiEditorInspectorSection[] set;
+	protected GuiEditorInspectorSection[] set;
+	private int height;
 	
-	
-	public GuiEditorInspectorSectionSet(String name, GuiEditor inspector, Vector2 pos, int width) {
+	public GuiEditorInspectorSectionSet(String name, GuiEditor inspector, Vector2 pos, int width, String[] names, Class[] objects) {
 		super(name, inspector, pos, width);
 		
+		set = new GuiEditorInspectorSection[objects.length];
+		int currentY = 20;
+		for(int x=0;x<set.length;x++)
+		{
+			if(objects[x] == Animation.class)
+				set[x] = new GuiEditorInspectorSectionAnimation(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Boolean.class)
+				set[x] = new GuiEditorInspectorSectionBoolean(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Color.class)
+				set[x] = new GuiEditorInspectorSectionColor(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Entity.class)
+				set[x] = new GuiEditorInspectorSectionEntity(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Float.class)
+				set[x] = new GuiEditorInspectorSectionFloat(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Integer.class)
+				set[x] = new GuiEditorInspectorSectionInt(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Texture.class)
+				set[x] = new GuiEditorInspectorSectionTexture(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == String.class)
+				set[x] = new GuiEditorInspectorSectionString(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			if(objects[x] == Vector2.class)
+				set[x] = new GuiEditorInspectorSectionVec2D(names[x], inspector, new Vector2(pos.x,pos.y+currentY), width);
+			currentY += set[x].sectionHeight();
+		}
+		height = currentY;
 	}
 
 	@Override
 	public int sectionHeight() {
-		// TODO Auto-generated method stub
-		return 120;
-	}
-
-	@Override
-	public Object getData() {
-		// TODO Auto-generated method stub
-		return null;
+		return height;
 	}
 
 	@Override
 	public void initSection() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setData(Object o) {
-		// TODO Auto-generated method stub
-		
+		for(GuiEditorInspectorSection sec : set)
+			sec.initSection();
 	}
 
 	@Override
 	public void deselect() {
-		// TODO Auto-generated method stub
-		
+		for(GuiEditorInspectorSection sec : set)
+			sec.deselect();
 	}
 
 	@Override
 	public boolean isSelected() {
-		// TODO Auto-generated method stub
+		for(GuiEditorInspectorSection sec : set)
+			if(sec.isSelected())
+				return true;
 		return false;
 	}
 
 	@Override
 	public boolean isComplete() {
-		// TODO Auto-generated method stub
-		return false;
+		for(GuiEditorInspectorSection sec : set)
+			if(!sec.isComplete())
+				return false;
+		return true;
 	}
 
 	@Override
 	public boolean hasFieldBeenChanged() {
-		// TODO Auto-generated method stub
+		for(GuiEditorInspectorSection sec : set)
+			if(sec.hasFieldBeenChanged())
+				return true;
 		return false;
 	}
 
 	@Override
 	public void tick(int i, int j, int k) {
-		// TODO Auto-generated method stub
-		
+		for(GuiEditorInspectorSection sec : set)
+			sec.tick(i, j, k);
 	}
 
 	@Override
 	public void render(float interpolation) {
 		Fonts.get("Arial").drawString(renderName, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
-		
+		for(GuiEditorInspectorSection sec : set)
+			sec.render(interpolation);
+	}
+	
+	public void getDataWithName(String name)
+	{
+//		for(GuiEditorInspectorSection sec : set)
+//			if(sec.name.equals(name))
 	}
 
 }
