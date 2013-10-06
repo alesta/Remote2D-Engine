@@ -25,6 +25,7 @@ public class GuiWindowGeneralColliderTest extends GuiWindow {
 		super(holder, pos, new Vector2(500,500), allowedBounds, "Collider Test");
 	}
 		
+	@Override
 	public void initGui()
 	{
 		buttonList.clear();

@@ -39,7 +39,7 @@ public class GuiWindowCollisionTest extends GuiWindow {
 			collider.setScale(new Vector2(y,y));
 		} else
 		{
-			float x = collider.getScale().x+(float)((scaleUp ? 0.05f : -0.05f));
+			float x = collider.getScale().x+((scaleUp ? 0.05f : -0.05f));
 			collider.setScale(new Vector2(x,x));
 		}
 			

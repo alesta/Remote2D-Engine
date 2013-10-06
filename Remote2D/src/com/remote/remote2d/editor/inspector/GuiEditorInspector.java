@@ -123,7 +123,7 @@ public class GuiEditorInspector extends GuiMenu {
 		wizards.add(ew);
 		currentPos.y += ew.getHeight();
 		
-		Entity e = (Entity)o;
+		Entity e = o;
 		
 		for(int x=0;x<e.getComponents().size();x++)
 		{

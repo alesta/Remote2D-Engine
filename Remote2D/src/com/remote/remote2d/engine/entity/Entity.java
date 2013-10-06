@@ -286,8 +286,8 @@ public class Entity extends EditorObject {
 					selected = true;
 		if(editor)
 		{
-			float maxX = ((float)dim.x)/32f;
-			float maxY = ((float)dim.y)/32f;
+			float maxX = (dim.x)/32f;
+			float maxY = (dim.y)/32f;
 			int color = 0xffffff;
 			if(selected)
 				color = 0xff0000;
@@ -304,8 +304,8 @@ public class Entity extends EditorObject {
 			float maxY = 1;
 			if(repeatTex)
 			{
-				maxX = ((float)dim.x)/((float)tex.image.getWidth());
-				maxY = ((float)dim.y)/((float)tex.image.getHeight());
+				maxX = (dim.x)/(tex.image.getWidth());
+				maxY = (dim.y)/(tex.image.getHeight());
 			}
 			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color.getRGB(), 1);
 		} else if(Remote2D.getInstance().artLoader.R2DExists(resourcePath))
@@ -317,6 +317,7 @@ public class Entity extends EditorObject {
 			Renderer.drawLineRect(pos, dim, 1, 0, 0, 1);
 	}
 	
+	@Override
 	public Entity clone()
 	{
 		R2DTypeCollection compile = new R2DTypeCollection("Entity Clone");

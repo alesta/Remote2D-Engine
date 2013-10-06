@@ -49,7 +49,7 @@ public class EditorObjectWizard {
 					{
 						GuiEditorInspectorSectionInt sec = new GuiEditorInspectorSectionInt(name,editor,currentPos,width);
 						if(o != null)
-							sec.textField.text = (Integer)o+"";
+							sec.textField.text = o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == String.class)
@@ -63,7 +63,7 @@ public class EditorObjectWizard {
 					{
 						GuiEditorInspectorSectionFloat sec = new GuiEditorInspectorSectionFloat(name,editor,currentPos,width);
 						if(o != null)
-							sec.textField.text = (Float)o+"";
+							sec.textField.text = o+"";
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Vector2.class)
@@ -86,7 +86,7 @@ public class EditorObjectWizard {
 					} else if(type == boolean.class)
 					{
 						GuiEditorInspectorSectionBoolean sec = new GuiEditorInspectorSectionBoolean(name,editor,currentPos,width);
-						sec.setData((Boolean)o);
+						sec.setData(o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Animation.class)
@@ -99,13 +99,13 @@ public class EditorObjectWizard {
 					} else if(type == Color.class)
 					{
 						GuiEditorInspectorSectionColor sec = new GuiEditorInspectorSectionColor(name,editor,currentPos,width);
-						sec.setData((Color)o);
+						sec.setData(o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					} else if(type == Entity.class)
 					{
 						GuiEditorInspectorSectionEntity sec = new GuiEditorInspectorSectionEntity(name,editor,currentPos,width);
-						sec.setData((Entity)o);
+						sec.setData(o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
 					}

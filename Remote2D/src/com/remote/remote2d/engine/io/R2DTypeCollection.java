@@ -50,7 +50,7 @@ public class R2DTypeCollection extends R2DType {
 		Iterator<Entry<String, R2DType>> dataIterator = data.entrySet().iterator();
 		while(dataIterator.hasNext())
 		{
-			Map.Entry<String, R2DType> pairs = (Map.Entry<String, R2DType>)dataIterator.next();
+			Map.Entry<String, R2DType> pairs = dataIterator.next();
 			writeNamedType(pairs.getValue(),d);
 		}
 		d.writeByte(0);
@@ -77,7 +77,7 @@ public class R2DTypeCollection extends R2DType {
 		indentString+="    ";
 		while(dataIterator.hasNext())
 		{
-			Map.Entry<String, R2DType> pairs = (Map.Entry<String, R2DType>)dataIterator.next();
+			Map.Entry<String, R2DType> pairs = dataIterator.next();
 			
 			if(pairs.getValue().getId() == getId())
 			{

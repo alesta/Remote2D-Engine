@@ -44,6 +44,7 @@ public abstract class EditorObject implements R2DFileSaver {
 	public abstract void apply();
 	
 	
+	@Override
 	public void saveR2DFile(R2DTypeCollection collection)
 	{
 		collection.setString("uuid", uuid);
@@ -85,7 +86,7 @@ public abstract class EditorObject implements R2DFileSaver {
 					{
 						Material mat = (Material)o;
 						R2DTypeCollection matColl = new R2DTypeCollection(fields[x].getName());
-						matColl.setByte("RenderType", mat.renderTypeToByte(mat.getRenderType()));
+						matColl.setByte("RenderType", Material.renderTypeToByte(mat.getRenderType()));
 						matColl.setInteger("Color", mat.getColor());
 						if(mat.getTexture() != null)
 							matColl.setString("Texture", mat.getTexture().getTextureLocation());
@@ -107,6 +108,7 @@ public abstract class EditorObject implements R2DFileSaver {
 			}
 		}
 	}
+	@Override
 	public void loadR2DFile(R2DTypeCollection collection)
 	{
 		uuid = collection.getString("uuid");

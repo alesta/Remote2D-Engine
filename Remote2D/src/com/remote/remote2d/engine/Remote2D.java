@@ -221,7 +221,7 @@ public class Remote2D {
 	{
 		Vector2 scale = displayHandler.getRenderScale();
 		ColliderBox renderArea = displayHandler.getScreenRenderArea();
-		int[] r = {(int) (Mouse.getX()),(int) (Mouse.getY())};
+		int[] r = {(Mouse.getX()),(Mouse.getY())};
 		r[0] -= renderArea.pos.x;
 		r[1] -= renderArea.pos.y;
 		r[0] /= scale.x;

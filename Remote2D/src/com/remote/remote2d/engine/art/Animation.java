@@ -200,6 +200,7 @@ public class Animation implements R2DFileSaver {
 		return ".anim";
 	}
 	
+	@Override
 	public Animation clone()
 	{
 		Animation newAnim = new Animation(texPath, startPos.copy(), spriteDim.copy(), padding.copy(), frames.copy(), framelength);

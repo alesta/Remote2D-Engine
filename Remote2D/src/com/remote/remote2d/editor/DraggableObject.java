@@ -62,7 +62,7 @@ public class DraggableObject extends Gui {
 			long timesinceletgo = System.currentTimeMillis()-letGoTime;
 			if(timesinceletgo > 200)
 				shouldDelete = true;
-			float time = (float)Math.min(200, timesinceletgo)/200f;
+			float time = Math.min(200, timesinceletgo)/200f;
 			pos = Interpolator.linearInterpolate(interpolatePos, origPos, time);
 		}
 	}

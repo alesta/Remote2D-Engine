@@ -20,6 +20,7 @@ public class GuiWindowViewArtAsset extends GuiWindow {
 		field = new GuiTextField(new Vector2(10,10), new Vector2(380,40), 20);
 	}
 	
+	@Override
 	public void initGui()
 	{
 		buttonList.clear();

@@ -165,8 +165,8 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 				GL11.glBegin(GL11.GL_LINES);
 					int y = screenHeight()-Mouse.getY();
 					int x = Mouse.getX();
-					boolean right = ((float)(x-offset.x)%scale)/((float)scale) >= 0.5;
-					boolean bottom = ((float)(y-offset.y)%scale)/((float)scale) >= 0.5;
+					boolean right = ((x-offset.x)%scale)/(scale) >= 0.5;
+					boolean bottom = ((y-offset.y)%scale)/(scale) >= 0.5;
 					GL11.glVertex2f(0, y-(y-offset.y)%scale+(bottom?scale:0));
 					GL11.glVertex2f(screenWidth(), y-(y-offset.y)%scale+(bottom?scale:0));
 					
@@ -191,8 +191,8 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 		
 		if(i > 300 && activeDefiner != null)
 		{
-			boolean right = ((float)(i-offset.x)%scale)/((float)scale) >= 0.5;
-			boolean bottom = ((float)(j-offset.y)%scale)/((float)scale) >= 0.5;
+			boolean right = ((i-offset.x)%scale)/(scale) >= 0.5;
+			boolean bottom = ((j-offset.y)%scale)/(scale) >= 0.5;
 			
 			activeDefiner.hover((i-offset.x)/scale+(right?1:0), (j-offset.y)/scale+(bottom?1:0));
 			if(Remote2D.getInstance().hasMouseBeenPressed())

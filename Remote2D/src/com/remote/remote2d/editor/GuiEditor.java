@@ -351,6 +351,7 @@ public class GuiEditor extends GuiMenu implements WindowHolder,MapHolder {
 			windowStack.peek().setSelected(true);
 	}
 	
+	@Override
 	public Map getMap()
 	{
 		return map;

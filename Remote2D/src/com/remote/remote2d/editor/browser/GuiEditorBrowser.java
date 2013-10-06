@@ -83,7 +83,7 @@ public class GuiEditorBrowser extends Gui {
 			pushFolder(new Folder(file.getPath()));
 		else if(file.isFile())
 		{
-			String localPath = file.getPath().substring((int) (Remote2D.getJarPath().getPath().length()));
+			String localPath = file.getPath().substring((Remote2D.getJarPath().getPath().length()));
 			if(localPath.endsWith(Animation.getExtension()))
 				Remote2D.getInstance().guiList.push(new GuiCreateSpriteSheet(new Animation(localPath)));
 			else if(localPath.endsWith(Entity.getExtension()))

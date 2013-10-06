@@ -35,6 +35,7 @@ public class GuiButton extends Gui {
 		tex = new Texture("/res/gui/controls.png");
 	}
 	
+	@Override
 	public void render(float interpolation)
 	{
 		renderControlElement(tex,pos,dim,selectState,0);
@@ -118,6 +119,7 @@ public class GuiButton extends Gui {
 		return coords;
 	}
 	
+	@Override
 	public void tick(int i, int j, int k)
 	{
 		if(i > pos.x && j > pos.y && i < pos.x+dim.x && j < pos.y+dim.y && selectState != 0)

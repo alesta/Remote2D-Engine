@@ -74,6 +74,7 @@ public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection 
 		return textField.isSelected() && isComplete() && Remote2D.getInstance().getIntegerKeyboardList().contains(Keyboard.KEY_RETURN);
 	}
 	
+	@Override
 	public boolean acceptsDraggableObject(DraggableObject object)
 	{
 		if(object instanceof DraggableObjectFile)
@@ -88,6 +89,7 @@ public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection 
 		return false;
 	}
 	
+	@Override
 	public void acceptDraggableObject(DraggableObject object)
 	{
 		if(object instanceof DraggableObjectFile)
@@ -99,7 +101,7 @@ public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection 
 				{
 					textField.text = fileobj.file.getPath();
 					if(textField.text.startsWith(Remote2D.getJarPath().getAbsolutePath()))
-						textField.text = textField.text.substring((int) Remote2D.getJarPath().getAbsolutePath().length());
+						textField.text = textField.text.substring(Remote2D.getJarPath().getAbsolutePath().length());
 					textField.text.replace('\\', '/');
 				}
 			}

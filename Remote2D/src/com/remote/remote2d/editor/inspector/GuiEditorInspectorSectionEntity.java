@@ -78,6 +78,7 @@ public class GuiEditorInspectorSectionEntity extends GuiEditorInspectorSection {
 		return c;
 	}
 	
+	@Override
 	public boolean acceptsDraggableObject(DraggableObject object)
 	{
 		if(object instanceof DraggableObjectEntity)
@@ -92,6 +93,7 @@ public class GuiEditorInspectorSectionEntity extends GuiEditorInspectorSection {
 		return false;
 	}
 	
+	@Override
 	public void acceptDraggableObject(DraggableObject object)
 	{
 		if(object instanceof DraggableObjectEntity)
