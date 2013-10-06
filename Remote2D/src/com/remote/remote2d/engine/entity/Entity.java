@@ -2,20 +2,15 @@ package com.remote.remote2d.engine.entity;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
-import com.remote.remote2d.engine.art.Animation;
-import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.entity.component.ComponentCollider;
-import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.io.R2DTypeCollection;
 import com.remote.remote2d.engine.logic.Collider;
 import com.remote.remote2d.engine.logic.Collision;

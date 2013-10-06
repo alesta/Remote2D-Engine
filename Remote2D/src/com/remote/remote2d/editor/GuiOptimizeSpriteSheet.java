@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -13,7 +12,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.Remote2DException;
 import com.remote.remote2d.engine.StretchType;
@@ -26,7 +24,6 @@ import com.remote.remote2d.engine.gui.GuiTextField;
 import com.remote.remote2d.engine.gui.TextLimiter;
 import com.remote.remote2d.engine.logic.ColliderBox;
 import com.remote.remote2d.engine.logic.Interpolator;
-import com.remote.remote2d.engine.logic.Matrix;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class GuiOptimizeSpriteSheet extends GuiMenu {

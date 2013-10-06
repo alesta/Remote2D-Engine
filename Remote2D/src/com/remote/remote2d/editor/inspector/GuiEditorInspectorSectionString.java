@@ -6,10 +6,8 @@ import com.remote.remote2d.editor.DraggableObject;
 import com.remote.remote2d.editor.DraggableObjectFile;
 import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
-import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.gui.GuiTextField;
-import com.remote.remote2d.engine.gui.TextLimiter;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class GuiEditorInspectorSectionString extends GuiEditorInspectorSection {

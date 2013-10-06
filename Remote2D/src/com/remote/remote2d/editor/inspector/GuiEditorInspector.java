@@ -4,16 +4,12 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.editor.DraggableObject;
 import com.remote.remote2d.editor.GuiEditor;
-import com.remote.remote2d.editor.GuiWindowInsertComponent;
 import com.remote.remote2d.editor.operation.OperationEditEntity;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Renderer;
-import com.remote.remote2d.engine.entity.EditorObject;
 import com.remote.remote2d.engine.entity.Entity;
-import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.gui.GuiButton;
 import com.remote.remote2d.engine.gui.GuiMenu;
 import com.remote.remote2d.engine.logic.Interpolator;

@@ -1,6 +1,5 @@
 package com.remote.remote2d.editor.inspector;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.editor.DraggableObject;
 import com.remote.remote2d.editor.DraggableObjectEntity;
 import com.remote.remote2d.editor.GuiEditor;

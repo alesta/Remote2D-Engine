@@ -1,7 +1,5 @@
 package com.remote.remote2d.editor;
 
-import org.lwjgl.opengl.GL11;
-
 import com.remote.remote2d.engine.gui.GuiWindow;
 import com.remote.remote2d.engine.gui.WindowHolder;
 import com.remote.remote2d.engine.logic.ColliderBox;

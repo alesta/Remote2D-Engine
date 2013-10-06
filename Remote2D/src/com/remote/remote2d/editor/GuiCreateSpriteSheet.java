@@ -3,7 +3,6 @@ package com.remote.remote2d.editor;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.StretchType;
 import com.remote.remote2d.engine.art.Animation;

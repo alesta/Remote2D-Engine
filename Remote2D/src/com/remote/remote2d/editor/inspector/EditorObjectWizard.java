@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-
 import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.editor.DraggableObject;
 import com.remote.remote2d.editor.GuiEditor;
@@ -18,8 +16,6 @@ import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.EditorObject;
 import com.remote.remote2d.engine.entity.Entity;
-import com.remote.remote2d.engine.entity.component.Component;
-import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class EditorObjectWizard {

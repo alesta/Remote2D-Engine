@@ -1,6 +1,5 @@
 package com.remote.remote2d.engine.gui;
 
-import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.logic.Vector2;

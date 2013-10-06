@@ -1,6 +1,5 @@
 package com.remote.remote2d.engine.io;
 
-import java.awt.Color;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -9,11 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.esotericsoftware.minlog.Log;
-import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.Remote2DException;
-import com.remote.remote2d.engine.art.Animation;
-import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class R2DTypeCollection extends R2DType {
