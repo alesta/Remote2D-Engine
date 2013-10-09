@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
+import com.remote.remote2d.engine.art.Material;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.component.Component;
