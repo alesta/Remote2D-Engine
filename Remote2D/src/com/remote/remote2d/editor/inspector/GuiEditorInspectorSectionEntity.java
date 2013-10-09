@@ -102,7 +102,7 @@ public class GuiEditorInspectorSectionEntity extends GuiEditorInspectorSection {
 			{
 				if(!fileobj.uuid.trim().equals(""))
 				{
-					setData(inspector.getMap().getEntityList().getEntityWithUUID(fileobj.uuid));
+					setData(editor.getMap().getEntityList().getEntityWithUUID(fileobj.uuid));
 					changed = true;
 				}
 			}

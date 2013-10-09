@@ -12,14 +12,14 @@ public abstract class GuiEditorInspectorSection extends Gui {
 	protected String name;
 	public String renderName;
 	protected int width;
-	protected GuiEditor inspector;
+	protected GuiEditor editor;
 	
-	public GuiEditorInspectorSection(String name, GuiEditor inspector, Vector2 pos, int width)
+	public GuiEditorInspectorSection(String name, GuiEditor editor, Vector2 pos, int width)
 	{
 		this.pos = pos.copy();
 		this.name = name;
 		this.width = width;
-		this.inspector = inspector;
+		this.editor = editor;
 		
 		renderName = splitCamelCase(name);
 		if(Character.isLowerCase(renderName.charAt(0)))

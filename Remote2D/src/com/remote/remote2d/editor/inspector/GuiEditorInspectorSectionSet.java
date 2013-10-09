@@ -2,9 +2,13 @@ package com.remote.remote2d.editor.inspector;
 
 import java.awt.Color;
 
+import com.remote.remote2d.editor.DraggableObject;
+import com.remote.remote2d.editor.DraggableObjectFile;
 import com.remote.remote2d.editor.GuiEditor;
+import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Fonts;
+import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.logic.Vector2;
@@ -13,6 +17,7 @@ public abstract class GuiEditorInspectorSectionSet extends GuiEditorInspectorSec
 	
 	protected GuiEditorInspectorSection[] set;
 	private int height;
+	private int dragObject = -1;
 	
 	public GuiEditorInspectorSectionSet(String name, GuiEditor inspector, Vector2 pos, int width, String[] names, Class[] objects) {
 		super(name, inspector, pos, width);
@@ -76,6 +81,14 @@ public abstract class GuiEditorInspectorSectionSet extends GuiEditorInspectorSec
 				return false;
 		return true;
 	}
+	
+	public boolean isComplete(String name)
+	{
+		for(GuiEditorInspectorSection sec : set)
+			if(sec.name.equals(name))
+				return sec.isComplete();
+		return false;
+	}
 
 	@Override
 	public boolean hasFieldBeenChanged() {
@@ -96,12 +109,57 @@ public abstract class GuiEditorInspectorSectionSet extends GuiEditorInspectorSec
 		Fonts.get("Arial").drawString(renderName, pos.x, pos.y, 20, isComplete() ? 0xffffff : 0xff7777);
 		for(GuiEditorInspectorSection sec : set)
 			sec.render(interpolation);
+		
+		int[] mouse = Remote2D.getInstance().getMouseCoords();
+		Vector2 mouseVec = new Vector2(mouse[0],mouse[1]).add(new Vector2(0,editor.getInspector().offset));
+		
+		if(dragObject != -1)
+		{
+			Vector2 secDim = new Vector2(width,set[dragObject].sectionHeight());
+			boolean inside = set[dragObject].pos.getColliderWithDim(secDim).isPointInside(mouseVec);
+			if(inside)
+				Renderer.drawRect(set[dragObject].pos, new Vector2(width,set[dragObject].sectionHeight()), 0xffffff, 0.5f);
+		}
 	}
 	
-	public void getDataWithName(String name)
+	public Object getDataWithName(String name)
 	{
-//		for(GuiEditorInspectorSection sec : set)
-//			if(sec.name.equals(name))
+		for(GuiEditorInspectorSection sec : set)
+			if(sec.name.equals(name))
+				return sec.getData();
+		return null;
+	}
+	
+	public void setDataWithName(String name,Object o)
+	{
+		for(GuiEditorInspectorSection sec : set)
+			if(sec.name.equals(name))
+				sec.setData(o);
+	}
+	
+	@Override
+	public boolean acceptsDraggableObject(DraggableObject object)
+	{
+		for(int x=0;x<set.length;x++)
+		{
+			if(set[x].acceptsDraggableObject(object))
+			{
+				dragObject = x;
+				return true;
+			}
+		}
+		dragObject = -1;
+		return false;
+	}
+	
+	@Override
+	public void acceptDraggableObject(DraggableObject object)
+	{
+		for(int x=0;x<set.length;x++)
+		{
+			if(set[x].acceptsDraggableObject(object))
+				set[x].acceptDraggableObject(object);
+		}
 	}
 
 }

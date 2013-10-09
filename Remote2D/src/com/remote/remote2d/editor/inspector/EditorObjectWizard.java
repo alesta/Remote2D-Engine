@@ -14,6 +14,7 @@ import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.Remote2DException;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Fonts;
+import com.remote.remote2d.engine.art.Material;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.EditorObject;
@@ -112,6 +113,12 @@ public class EditorObjectWizard {
 						sec.setData((Entity)o);
 						sections.add(sec);
 						currentPos.y += sec.sectionHeight();
+					} else if(type == Material.class)
+					{
+						GuiEditorInspectorSectionSetMaterial sec = new GuiEditorInspectorSectionSetMaterial(name,editor,currentPos,width);
+						sec.setData((Material)o);
+						sections.add(sec);
+						currentPos.y += sec.sectionHeight();
 					}
 				} catch (Exception e) {}
 				
@@ -137,7 +144,7 @@ public class EditorObjectWizard {
 		} catch (NoSuchFieldException e) {
 			Log.error("Field doesn't exist: "+sections.get(x).name);
 		} catch (Exception e) {
-			throw new Remote2DException(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -203,7 +210,7 @@ public class EditorObjectWizard {
 			
 			Vector2 secDim = new Vector2(width,sections.get(x).sectionHeight());
 			boolean inside = sections.get(x).pos.getColliderWithDim(secDim).isPointInside(mouseVec);
-			if(editor.dragObject != null && sections.get(x).acceptsDraggableObject(editor.dragObject) && inside)
+			if(editor.dragObject != null && sections.get(x).acceptsDraggableObject(editor.dragObject) && inside && !(sections.get(x) instanceof GuiEditorInspectorSectionSet))
 			{
 				Renderer.drawRect(sections.get(x).pos, new Vector2(width,sections.get(x).sectionHeight()), 0xffffff, 0.5f);
 			}

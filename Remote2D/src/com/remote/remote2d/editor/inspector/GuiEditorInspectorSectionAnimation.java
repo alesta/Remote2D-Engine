@@ -30,7 +30,9 @@ public class GuiEditorInspectorSectionAnimation extends GuiEditorInspectorSectio
 
 	@Override
 	public Object getData() {
-		return Remote2D.getInstance().artLoader.getAnimation(textField.text);
+		if(Remote2D.getInstance().artLoader.R2DExists(textField.text))
+			return Remote2D.getInstance().artLoader.getAnimation(textField.text);
+		return null;
 	}
 
 	@Override
@@ -54,7 +56,9 @@ public class GuiEditorInspectorSectionAnimation extends GuiEditorInspectorSectio
 		if(o instanceof Animation)
 		{
 			textField.text = ((Animation)o).getPath();
-		}
+		} else if(o instanceof String)
+			if(Remote2D.getInstance().artLoader.R2DExists((String)o))
+				textField.text = (String)o;
 	}
 
 	@Override

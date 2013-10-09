@@ -21,6 +21,7 @@ public class GuiEditorInspectorSectionColor extends GuiEditorInspectorSection {
 		textField = new GuiTextField(pos.add(new Vector2(10,20)), new Vector2(width-20,20), 20);
 		textField.limitToDigits = TextLimiter.LIMIT_TO_HEX;
 		textField.prefix = "0x";
+		textField.text = "ffffff";
 		textField.maxLength = 6;
 	}
 
@@ -52,9 +53,8 @@ public class GuiEditorInspectorSectionColor extends GuiEditorInspectorSection {
 	
 	@Override
 	public void setData(Object o) {
-		if(o instanceof Color)
+		if(o != null && (o instanceof Color))
 		{
-			
 			textField.text = Integer.toHexString(((Color)o).getRGB()).substring(2);
 		}
 	}

@@ -7,9 +7,12 @@ public class Remote2DException extends RuntimeException {
 	 public Remote2DException(Exception e, String s)
 	 {
 		 Log.error("REMOTE2D HANDLED ERROR: "+s);
-		 Log.error("Here is the stack trace:\n");
+		 Log.error("Here is the stack trace:");
 		 if(e != null)
+		 {
+			 Log.error(e.getClass().toString());
 			 e.printStackTrace();
+		 }
 		 else
 			 System.err.println("-----No stack trace provided-----");
 	 }

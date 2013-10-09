@@ -11,6 +11,7 @@ import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Fonts;
+import com.remote.remote2d.engine.art.Material;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.component.Component;
@@ -36,16 +37,11 @@ public class Entity extends EditorObject {
 	public String name;
 	public Vector2 pos;
 	public Vector2 dim;
-	public String resourcePath = "";
+	public Material material;
 	public boolean repeatTex = false;
 	public boolean linearScaling = false;
-	public Color color = new Color(0xaaaaaa);
-	public float alpha = 1.0f;
 	
 	private Texture slashTex;
-	//TODO: Allow for changing textures on the fly
-	//TODO: Use an all-encompassing Material system instead of this resourcePath bullshit.
-	private Texture tex;
 	
 	private Vector2 oldPos;
 	
@@ -63,8 +59,7 @@ public class Entity extends EditorObject {
 		components = new ArrayList<Component>();
 		
 		slashTex = new Texture(slashLoc,false,true);
-		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
-			tex = new Texture(resourcePath,linearScaling,repeatTex);
+		material = new Material(0xaaaaaa,1);
 		
 		pos = new Vector2(0,0);
 		oldPos = new Vector2(0,0);
@@ -301,22 +296,7 @@ public class Entity extends EditorObject {
 			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), slashTex, color, 1);
 		}
 		
-		if(Remote2D.getInstance().artLoader.textureExists(resourcePath))
-		{
-			if(tex == null)
-				tex = new Texture(resourcePath);
-			float maxX = 1;
-			float maxY = 1;
-			if(repeatTex)
-			{
-				maxX = ((float)dim.x)/((float)tex.image.getWidth());
-				maxY = ((float)dim.y)/((float)tex.image.getHeight());
-			}
-			Renderer.drawRect(pos, dim, new Vector2(0,0), new Vector2(maxX, maxY), tex, color.getRGB(), 1);
-		} else if(Remote2D.getInstance().artLoader.R2DExists(resourcePath))
-			Remote2D.getInstance().artLoader.getAnimation(resourcePath).render(pos, dim);
-		else
-			Renderer.drawRect(pos, dim, color.getRGB(), alpha);
+		material.render(pos, dim);
 		
 		if(editor && selected)
 			Renderer.drawLineRect(pos, dim, 1, 0, 0, 1);

@@ -2,6 +2,7 @@ package com.remote.remote2d.editor.inspector;
 
 import org.lwjgl.input.Keyboard;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;

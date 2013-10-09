@@ -29,7 +29,10 @@ public class GuiEditorInspectorSectionTexture extends GuiEditorInspectorSection 
 
 	@Override
 	public Object getData() {
-		return new Texture(textField.text);
+		if(Remote2D.getInstance().artLoader.textureExists(textField.text))
+			return new Texture(textField.text);
+		else
+			return null;
 	}
 
 	@Override
