@@ -349,6 +349,8 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 				 case RIGHT:
 					 startPos.x += frameSize.x-coll.dim.x;
 					 break;
+				default:
+					break;
 				 }
 				 
 				 switch(vertical)
@@ -359,6 +361,8 @@ public class GuiOptimizeSpriteSheet extends GuiMenu {
 				 case BOTTOM:
 					 startPos.y += frameSize.y-coll.dim.y;
 					 break;
+				default:
+					break;
 				 }
 				 
 				 for(int i=(int)startPos.x;i<frameSize.x;i++)

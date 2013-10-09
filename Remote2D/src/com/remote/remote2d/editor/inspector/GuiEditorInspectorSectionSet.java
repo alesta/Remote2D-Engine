@@ -3,7 +3,6 @@ package com.remote.remote2d.editor.inspector;
 import java.awt.Color;
 
 import com.remote.remote2d.editor.DraggableObject;
-import com.remote.remote2d.editor.DraggableObjectFile;
 import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Animation;
@@ -19,7 +18,7 @@ public abstract class GuiEditorInspectorSectionSet extends GuiEditorInspectorSec
 	private int height;
 	private int dragObject = -1;
 	
-	public GuiEditorInspectorSectionSet(String name, GuiEditor inspector, Vector2 pos, int width, String[] names, Class[] objects) {
+	public GuiEditorInspectorSectionSet(String name, GuiEditor inspector, Vector2 pos, int width, String[] names, Class<?>[] objects) {
 		super(name, inspector, pos, width);
 		
 		set = new GuiEditorInspectorSection[objects.length];

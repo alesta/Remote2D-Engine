@@ -7,7 +7,7 @@ public class Interpolator {
 		return(y1*(1-mu)+y2*mu);
 	}
 	
-	private static float[] linearInterpolate(float[] y1, float[] y2, double mu)
+	public static float[] linearInterpolate(float[] y1, float[] y2, double mu)
 	{
 		float[] interp = new float[Math.max(y1.length, y2.length)];
 		int max = Math.min(y1.length, y2.length);

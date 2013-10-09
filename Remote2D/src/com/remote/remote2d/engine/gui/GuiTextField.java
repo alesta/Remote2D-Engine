@@ -68,7 +68,7 @@ public class GuiTextField extends Gui {
 		
 		if(isSelected)
 		{
-			ArrayList<Character> typedChars = (ArrayList<Character>) Remote2D.getInstance().getLimitedKeyboardList().clone();
+			ArrayList<Character> typedChars = Remote2D.getInstance().getLimitedKeyboardList();
 			for(char c : paste.toCharArray())
 				typedChars.add(c);
 			for(int x=0;x<typedChars.size();x++)

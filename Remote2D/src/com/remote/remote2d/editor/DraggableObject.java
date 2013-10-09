@@ -14,7 +14,6 @@ public class DraggableObject extends Gui {
 	public Vector2 dim;
 	private boolean hasShown = false; // If it has been dragged past a certian threshold, usually 20 pixels.
 	private GuiEditor editor;
-	private long dragTime = 0;
 	private long letGoTime = 0;
 	private Vector2 interpolatePos;
 	private Vector2 mouseOffset = null;

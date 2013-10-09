@@ -13,7 +13,6 @@ import com.remote.remote2d.engine.logic.Vector2;
 
 public class GuiWindowPerlin2D extends GuiWindow {
 	
-	private Noise2D perlin;
 	private BufferedImage values;
 	private Texture tex;
 

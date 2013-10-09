@@ -12,7 +12,7 @@ public class ColliderMatrixBox extends Collider {
 	
 	private float angle = 0;
 	private Vector2 scale = new Vector2(1,1);
-	private Vector2 translate = new Vector2(0,0);//used to rotate/scale around something that isn't the origin
+	//private Vector2 translate = new Vector2(0,0);//used to rotate/scale around something that isn't the origin
 	private Matrix matrix;
 	private Matrix inverse;
 	

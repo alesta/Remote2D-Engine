@@ -295,14 +295,16 @@ public class Remote2D {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ArrayList<Character> getKeyboardList()
 	{
-		return charList;
+		return (ArrayList<Character>) charList.clone();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ArrayList<Character> getLimitedKeyboardList()
 	{
-		return charListLimited;
+		return (ArrayList<Character>) charListLimited.clone();
 	}
 	
 	public ArrayList<Integer> getIntegerKeyboardList()

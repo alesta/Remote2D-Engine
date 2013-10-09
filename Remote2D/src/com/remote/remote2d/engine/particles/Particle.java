@@ -5,7 +5,6 @@ import java.awt.Color;
 import org.lwjgl.opengl.GL11;
 
 import com.remote.remote2d.engine.art.Renderer;
-import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.logic.Interpolator;
 import com.remote.remote2d.engine.logic.Vector2;
 import com.remote.remote2d.engine.world.Map;
@@ -79,7 +78,6 @@ public class Particle {
 	
 	public void render()
 	{
-		float[] color = Gui.getRGB(this.color.getRGB());
 		Renderer.drawRect(new Vector2(pos.x-dim/2,pos.y-dim/2), new Vector2(dim), this.color.getRGB(), alpha);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}

@@ -1,6 +1,5 @@
 package com.remote.remote2d.engine.entity;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;

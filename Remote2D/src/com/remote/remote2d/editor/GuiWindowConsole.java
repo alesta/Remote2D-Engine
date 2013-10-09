@@ -69,12 +69,10 @@ public class GuiWindowConsole extends GuiWindow {
 	public void updateEntries()
 	{
 		messages.clear();
-		int ypos = 0;
 		for(int x=0;x<Console.size();x++)
 		{
 			ConsoleMessage mess = new ConsoleMessage(this,Console.getMessage(x));
 			messages.add(mess);
-			ypos += mess.getDim().y;
 		}
 	}
 	
