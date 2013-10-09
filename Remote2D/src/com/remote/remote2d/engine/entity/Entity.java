@@ -2,21 +2,15 @@ package com.remote.remote2d.engine.entity;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
-import com.remote.remote2d.engine.art.Animation;
-import com.remote.remote2d.engine.art.Fonts;
-import com.remote.remote2d.engine.art.Material;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.entity.component.ComponentCollider;
-import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.io.R2DTypeCollection;
 import com.remote.remote2d.engine.logic.Collider;
 import com.remote.remote2d.engine.logic.Collision;
@@ -286,8 +280,8 @@ public class Entity extends EditorObject {
 					selected = true;
 		if(editor)
 		{
-			float maxX = ((float)dim.x)/32f;
-			float maxY = ((float)dim.y)/32f;
+			float maxX = (dim.x)/32f;
+			float maxY = (dim.y)/32f;
 			int color = 0xffffff;
 			if(selected)
 				color = 0xff0000;
@@ -302,6 +296,7 @@ public class Entity extends EditorObject {
 			Renderer.drawLineRect(pos, dim, 1, 0, 0, 1);
 	}
 	
+	@Override
 	public Entity clone()
 	{
 		R2DTypeCollection compile = new R2DTypeCollection("Entity Clone");
