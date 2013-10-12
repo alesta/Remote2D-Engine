@@ -4,6 +4,7 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.Remote2DGame;
 import com.remote.remote2d.extras.test.entity.ComponentPlayer;
+import com.remote.remote2d.extras.test.entity.ComponentTopDownPlayer;
 import com.remote.remote2d.extras.test.gui.GuiMainMenu;
 
 public class Remote2DTest extends Remote2DGame {
@@ -18,6 +19,7 @@ public class Remote2DTest extends Remote2DGame {
 		Log.TRACE();
 		Remote2D.getInstance().guiList.push(new GuiMainMenu());
 		Remote2D.getInstance().componentList.addInsertableComponent("Player", ComponentPlayer.class);
+		Remote2D.getInstance().componentList.addInsertableComponent("Top Down Player", ComponentTopDownPlayer.class);
 	}
 	
 	@Override

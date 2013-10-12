@@ -21,6 +21,7 @@ public class Animation implements R2DFileSaver {
 	private String path;
 	private Texture tex;
 	
+	public boolean animate = true;
 	public boolean flippedX = false;
 	public boolean flippedY = false;
 	
@@ -99,6 +100,8 @@ public class Animation implements R2DFileSaver {
 			Log.debug("framePos == null!");
 			return;
 		}
+		if(!animate)
+			lastFrameTime += System.currentTimeMillis()-lastFrameTime;
 		if(System.currentTimeMillis()-lastFrameTime > framelength)
 		{
 			currentframe++;
@@ -170,7 +173,7 @@ public class Animation implements R2DFileSaver {
 		this.framelength = framelength;
 		generateFrames();
 	}
-	
+		
 	public String getTexPath()
 	{
 		return texPath;
@@ -193,6 +196,15 @@ public class Animation implements R2DFileSaver {
 		for(int x = 0;x<framePos.length;x++)
 		{
 			framePos[x].drawCollider(0x00ff00);
+		}
+	}
+	
+	public void setCurrentFrame(int frame)
+	{
+		if(frame < frames.x*frames.y && frame >= 0)
+		{
+			lastFrameTime = System.currentTimeMillis();
+			currentframe = frame;
 		}
 	}
 

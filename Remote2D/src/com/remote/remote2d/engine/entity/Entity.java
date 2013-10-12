@@ -150,12 +150,11 @@ public class Entity extends EditorObject {
 	}
 	
 	/**
-	 * Basically the broad phase of the collision detection algorithm.  Note that if
-	 * this Entity is non-static it isn't counted in the algorithm (we don't know
-	 * which collider to correct).
-	 * @param coll The moving collider
+	 * Assuming this Entity is STATIC (not moving):
+	 * Calculates any potential colliders from this Entity that would collide with the given Collider
+	 * @param coll Any moving collider
 	 * @param movement The movement vector of said collider
-	 * @return If it passes, list of all colliders involved with this WorldElement.  Otherwise, null.
+	 * @return If this Entity collides with coll, list of all colliders involved with this Entity.  Otherwise, null.
 	 */
 	public ArrayList<Collider> getPossibleColliders(Collider coll, Vector2 movement)
 	{
@@ -184,7 +183,7 @@ public class Entity extends EditorObject {
 		return parent;
 	}
 	
-	public boolean isPointColliding(Vector2 vec)
+	public boolean isPointInside(Vector2 vec)
 	{
 		Collider mainCollider = getBroadPhaseCollider().getTransformedCollider(pos);
 		if(mainCollider.isPointInside(vec))
@@ -213,7 +212,7 @@ public class Entity extends EditorObject {
 	}
 	
 	/**
-	 * All of this Entity's colliders are guaranteed to be inside this broad collider.
+	 * All of this Entity's colliders are guaranteed to be inside this collider.
 	 * 
 	 * @return null if there are no colliders, otherwise the broad phase collider.
 	 */

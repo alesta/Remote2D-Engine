@@ -105,20 +105,30 @@ public class Map implements R2DFileSaver {
 			entities.tick(i, j, k);
 	}
 	
+	public Vector2 getCorrection(Entity e, Vector2 movement)
+	{
+		Vector2 ret = movement.copy();
+		for(Collider c : e.getColliders())
+		{
+			ret = ret.add(getCorrection(c,movement));
+		}
+		return ret;
+	}
+	
 	/**
 	 * Gives you the correction if you have a moving collider somewhere in the map.
 	 * @param coll The moving collider (before moving)
-	 * @param vec Said collider's movement vector
+	 * @param velocity Said collider's movement vector
 	 * @return The "correction" - just add this to your movement vector and you won't collide with anything
 	 */
-	public Vector2 getCorrection(Collider coll,Vector2 vec)
+	public Vector2 getCorrection(Collider coll,Vector2 velocity)
 	{
 		ArrayList<Collider> allColliders = new ArrayList<Collider>();
 		
 		//Broad phase: check the main collider of each worldelement.
 		for(int x=0;x<entities.size();x++)
 		{
-			ArrayList<Collider> elementColliders = entities.get(x).getPossibleColliders(coll, vec);
+			ArrayList<Collider> elementColliders = entities.get(x).getPossibleColliders(coll, velocity);
 			if(elementColliders != null)
 			{
 				allColliders.addAll(elementColliders);
@@ -130,7 +140,7 @@ public class Map implements R2DFileSaver {
 		for(int x=0;x<allColliders.size();x++)
 		{
 			Collider other = allColliders.get(x);
-			Collision collision = coll.getCollision(other, vec);
+			Collision collision = coll.getCollision(other, velocity);
 			if(collision.collides)
 				allCollision.add(collision);
 		}
@@ -142,7 +152,7 @@ public class Map implements R2DFileSaver {
 		for(int x=0;x<allCollision.size();x++)
 		{
 			Collider other = allCollision.get(x).idle;
-			Collision collision = coll.getCollision(other, vec.add(correction));
+			Collision collision = coll.getCollision(other, velocity.add(correction));
 			if(collision.collides)
 			{
 				correction = correction.add(collision.correction);
