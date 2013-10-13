@@ -195,7 +195,6 @@ public class Remote2D {
 				} else if(!(e instanceof Remote2DException))
 					throw new Remote2DException(e);
 			}
-			
 			Display.update();
 			lastRenderTime = now;
 			   
@@ -206,7 +205,7 @@ public class Remote2D {
 				fpsCounter = 0;
 				lastSecondTime = thisSecond;
 			}
-		
+			   
 			while ( now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < TIME_BETWEEN_UPDATES)
 			{
 				Thread.yield();
