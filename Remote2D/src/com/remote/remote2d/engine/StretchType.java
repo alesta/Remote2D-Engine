@@ -9,8 +9,8 @@ package com.remote.remote2d.engine;
  * <li>{@link StretchType#NONE}: Completely ignores the target Window Size.  No resolution independence at all.</li>
  * </ul>
  */
-public enum StretchType {
-	
+
+public enum StretchType
+{
 	NONE, SCALE, STRETCH, MULTIPLES;
-	
 }

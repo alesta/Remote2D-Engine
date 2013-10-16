@@ -8,7 +8,8 @@ import javax.swing.JFrame;
 
 import com.remote.remote2d.engine.logic.Vector2;
 
-public abstract class Remote2DGame {
+public abstract class Remote2DGame
+{
 	
 	/**
 	 * This is called when the Remote2D instance starts up.  Put any Remote2D-based initialization code here.
@@ -37,6 +38,7 @@ public abstract class Remote2DGame {
 	 * @return The default Stretch Type - {@link StretchType#MULTIPLES} by default.
 	 * @see StretchType
 	 */
+	 
 	public StretchType getDefaultStretchType()
 	{
 		return StretchType.MULTIPLES;
