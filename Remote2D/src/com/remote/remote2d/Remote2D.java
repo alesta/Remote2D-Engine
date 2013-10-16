@@ -26,7 +26,8 @@ import com.remote.remote2d.logic.Vector2;
 import com.remote.remote2d.world.Console;
 import com.remote.remote2d.world.Map;
 
-public class Remote2D {
+public class Remote2D
+{
 	
 	/*----------CORE VARIABLES--------------*/
 	public DisplayHandler displayHandler;
@@ -80,9 +81,11 @@ public class Remote2D {
 	private ArrayList<Integer> keyboardList;
 	private String allowedChars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_=+\\][';:\"/.,?><`~ ";
 	
-	public static void startRemote2D(Remote2DGame game) {
+	public static void startRemote2D(Remote2DGame game)
+	{
 				
-		Thread thread = new Thread("Remote2D Thread") {
+		Thread thread = new Thread("Remote2D Thread")
+		{
 			
 			@Override
 			public void run()
